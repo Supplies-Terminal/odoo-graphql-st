@@ -146,7 +146,7 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
             headers={'Content-Type': 'application/json'},
         )
 
-    @http.route('/vsf/redirects', type='http', auth='public', csrf=False)
+    @http.route('/vsf/redirects', type='http', auth='public', csrf=False, cors="*")
     def vsf_redirects(self):
         redirects = []
 
