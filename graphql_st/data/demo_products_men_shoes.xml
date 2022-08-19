@@ -8,7 +8,7 @@
     <!-- Products men-shoes-sneakers -->
     <record id="men_shoes_sneakers_1" model="product.template">
         <field name="name">Sneaker – Lotto “Tokyo“</field>
-        <field name="categ_id" ref="graphql_vuestorefront.product_category_pants"/>
+        <field name="categ_id" ref="graphql_st.product_category_pants"/>
         <field name="list_price">137.50</field>
         <field name="is_published" eval="True"/>
         <field name="standard_price">137.50</field>
@@ -19,8 +19,8 @@
         <field name="description_sale">The Karissa V-Neck Tee features a semi-fitted shape that's flattering for every figure. You can hit the gym with confidence while it hugs curves and hides common "problem" areas. Find stunning women's cocktail dresses and party dresses.</field>
         <field name="default_code">578902-00</field>
         <field name="invoice_policy">delivery</field>
-        <field name="public_categ_ids" eval="[(6, 0, [ref('graphql_vuestorefront.public_category_men'), ref('graphql_vuestorefront.public_category_men_shoes_all'), ref('graphql_vuestorefront.public_category_men_shoes_sneakers')])]"/>
-        <field name="image_1920" type="base64" file="graphql_vuestorefront/static/men/shoes/sneakers/sneakers-1.jpg"/>
+        <field name="public_categ_ids" eval="[(6, 0, [ref('graphql_st.public_category_men'), ref('graphql_st.public_category_men_shoes_all'), ref('graphql_st.public_category_men_shoes_sneakers')])]"/>
+        <field name="image_1920" type="base64" file="graphql_st/static/men/shoes/sneakers/sneakers-1.jpg"/>
     </record>
 
     <!-- Attribute Values -->
@@ -37,28 +37,28 @@
 
     <function model="ir.model.data" name="_update_xmlids">
         <value model="base" eval="[{
-            'xml_id': 'graphql_vuestorefront.men_shoes_sneakers_1_attribute_1_value_1',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_1_attribute_1').product_template_value_ids[0],
+            'xml_id': 'graphql_st.men_shoes_sneakers_1_attribute_1_value_1',
+            'record': obj().env.ref('graphql_st.men_shoes_sneakers_1_attribute_1').product_template_value_ids[0],
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_sneakers_1_attribute_2_value_1',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_1_attribute_2').product_template_value_ids[0],
+            'xml_id': 'graphql_st.men_shoes_sneakers_1_attribute_2_value_1',
+            'record': obj().env.ref('graphql_st.men_shoes_sneakers_1_attribute_2').product_template_value_ids[0],
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_sneakers_1_attribute_2_value_2',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_1_attribute_2').product_template_value_ids[1],
+            'xml_id': 'graphql_st.men_shoes_sneakers_1_attribute_2_value_2',
+            'record': obj().env.ref('graphql_st.men_shoes_sneakers_1_attribute_2').product_template_value_ids[1],
             'noupdate': True,
         },]"/>
     </function>
 
     <function model="ir.model.data" name="_update_xmlids">
         <value model="base" eval="[{
-            'xml_id': 'graphql_vuestorefront.men_shoes_sneakers_1a',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_1')._get_variant_for_combination(obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_1_attribute_1_value_1') + obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_1_attribute_2_value_1')),
+            'xml_id': 'graphql_st.men_shoes_sneakers_1a',
+            'record': obj().env.ref('graphql_st.men_shoes_sneakers_1')._get_variant_for_combination(obj().env.ref('graphql_st.men_shoes_sneakers_1_attribute_1_value_1') + obj().env.ref('graphql_st.men_shoes_sneakers_1_attribute_2_value_1')),
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_sneakers_1b',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_1')._get_variant_for_combination(obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_1_attribute_1_value_1') + obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_1_attribute_2_value_2')),
+            'xml_id': 'graphql_st.men_shoes_sneakers_1b',
+            'record': obj().env.ref('graphql_st.men_shoes_sneakers_1')._get_variant_for_combination(obj().env.ref('graphql_st.men_shoes_sneakers_1_attribute_1_value_1') + obj().env.ref('graphql_st.men_shoes_sneakers_1_attribute_2_value_2')),
             'noupdate': True,
         },]"/>
     </function>
@@ -76,7 +76,7 @@
 
     <record id="men_shoes_sneakers_2" model="product.template">
         <field name="name">Sneakers “Spot“ Springa multi</field>
-        <field name="categ_id" ref="graphql_vuestorefront.product_category_pants"/>
+        <field name="categ_id" ref="graphql_st.product_category_pants"/>
         <field name="list_price">186.25</field>
         <field name="is_published" eval="True"/>
         <field name="standard_price">186.25</field>
@@ -87,8 +87,8 @@
         <field name="description_sale">The Karissa V-Neck Tee features a semi-fitted shape that's flattering for every figure. You can hit the gym with confidence while it hugs curves and hides common "problem" areas. Find stunning women's cocktail dresses and party dresses.</field>
         <field name="default_code">578902-00</field>
         <field name="invoice_policy">delivery</field>
-        <field name="public_categ_ids" eval="[(6, 0, [ref('graphql_vuestorefront.public_category_men'), ref('graphql_vuestorefront.public_category_men_shoes_all'), ref('graphql_vuestorefront.public_category_men_shoes_sneakers')])]"/>
-        <field name="image_1920" type="base64" file="graphql_vuestorefront/static/men/shoes/sneakers/sneakers-2.jpg"/>
+        <field name="public_categ_ids" eval="[(6, 0, [ref('graphql_st.public_category_men'), ref('graphql_st.public_category_men_shoes_all'), ref('graphql_st.public_category_men_shoes_sneakers')])]"/>
+        <field name="image_1920" type="base64" file="graphql_st/static/men/shoes/sneakers/sneakers-2.jpg"/>
     </record>
 
     <!-- Attribute Values -->
@@ -105,28 +105,28 @@
 
     <function model="ir.model.data" name="_update_xmlids">
         <value model="base" eval="[{
-            'xml_id': 'graphql_vuestorefront.men_shoes_sneakers_2_attribute_1_value_1',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_2_attribute_1').product_template_value_ids[0],
+            'xml_id': 'graphql_st.men_shoes_sneakers_2_attribute_1_value_1',
+            'record': obj().env.ref('graphql_st.men_shoes_sneakers_2_attribute_1').product_template_value_ids[0],
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_sneakers_2_attribute_2_value_1',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_2_attribute_2').product_template_value_ids[0],
+            'xml_id': 'graphql_st.men_shoes_sneakers_2_attribute_2_value_1',
+            'record': obj().env.ref('graphql_st.men_shoes_sneakers_2_attribute_2').product_template_value_ids[0],
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_sneakers_2_attribute_2_value_2',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_2_attribute_2').product_template_value_ids[1],
+            'xml_id': 'graphql_st.men_shoes_sneakers_2_attribute_2_value_2',
+            'record': obj().env.ref('graphql_st.men_shoes_sneakers_2_attribute_2').product_template_value_ids[1],
             'noupdate': True,
         },]"/>
     </function>
 
     <function model="ir.model.data" name="_update_xmlids">
         <value model="base" eval="[{
-            'xml_id': 'graphql_vuestorefront.men_shoes_sneakers_2a',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_2')._get_variant_for_combination(obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_2_attribute_1_value_1') + obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_2_attribute_2_value_1')),
+            'xml_id': 'graphql_st.men_shoes_sneakers_2a',
+            'record': obj().env.ref('graphql_st.men_shoes_sneakers_2')._get_variant_for_combination(obj().env.ref('graphql_st.men_shoes_sneakers_2_attribute_1_value_1') + obj().env.ref('graphql_st.men_shoes_sneakers_2_attribute_2_value_1')),
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_sneakers_2b',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_2')._get_variant_for_combination(obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_2_attribute_1_value_1') + obj().env.ref('graphql_vuestorefront.men_shoes_sneakers_2_attribute_2_value_2')),
+            'xml_id': 'graphql_st.men_shoes_sneakers_2b',
+            'record': obj().env.ref('graphql_st.men_shoes_sneakers_2')._get_variant_for_combination(obj().env.ref('graphql_st.men_shoes_sneakers_2_attribute_1_value_1') + obj().env.ref('graphql_st.men_shoes_sneakers_2_attribute_2_value_2')),
             'noupdate': True,
         },]"/>
     </function>
@@ -145,7 +145,7 @@
     <!-- Products men-shoes-lace-up_shoes -->
     <record id="men_shoes_lace-up_shoes_1" model="product.template">
         <field name="name">Lace up shoes Tods dark blue</field>
-        <field name="categ_id" ref="graphql_vuestorefront.product_category_pants"/>
+        <field name="categ_id" ref="graphql_st.product_category_pants"/>
         <field name="list_price">462.50</field>
         <field name="is_published" eval="True"/>
         <field name="standard_price">462.50</field>
@@ -156,8 +156,8 @@
         <field name="description_sale">The Karissa V-Neck Tee features a semi-fitted shape that's flattering for every figure. You can hit the gym with confidence while it hugs curves and hides common "problem" areas. Find stunning women's cocktail dresses and party dresses.</field>
         <field name="default_code">578902-00</field>
         <field name="invoice_policy">delivery</field>
-        <field name="public_categ_ids" eval="[(6, 0, [ref('graphql_vuestorefront.public_category_men'), ref('graphql_vuestorefront.public_category_men_shoes_all'), ref('graphql_vuestorefront.public_category_men_shoes_lace-up_shoes')])]"/>
-        <field name="image_1920" type="base64" file="graphql_vuestorefront/static/men/shoes/lace-up_shoes/lace-up_shoes-1.jpg"/>
+        <field name="public_categ_ids" eval="[(6, 0, [ref('graphql_st.public_category_men'), ref('graphql_st.public_category_men_shoes_all'), ref('graphql_st.public_category_men_shoes_lace-up_shoes')])]"/>
+        <field name="image_1920" type="base64" file="graphql_st/static/men/shoes/lace-up_shoes/lace-up_shoes-1.jpg"/>
     </record>
 
     <!-- Attribute Values -->
@@ -174,28 +174,28 @@
 
     <function model="ir.model.data" name="_update_xmlids">
         <value model="base" eval="[{
-            'xml_id': 'graphql_vuestorefront.men_shoes_lace-up_shoes_1_attribute_1_value_1',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_1_attribute_1').product_template_value_ids[0],
+            'xml_id': 'graphql_st.men_shoes_lace-up_shoes_1_attribute_1_value_1',
+            'record': obj().env.ref('graphql_st.men_shoes_lace-up_shoes_1_attribute_1').product_template_value_ids[0],
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_lace-up_shoes_1_attribute_2_value_1',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_1_attribute_2').product_template_value_ids[0],
+            'xml_id': 'graphql_st.men_shoes_lace-up_shoes_1_attribute_2_value_1',
+            'record': obj().env.ref('graphql_st.men_shoes_lace-up_shoes_1_attribute_2').product_template_value_ids[0],
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_lace-up_shoes_1_attribute_2_value_2',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_1_attribute_2').product_template_value_ids[1],
+            'xml_id': 'graphql_st.men_shoes_lace-up_shoes_1_attribute_2_value_2',
+            'record': obj().env.ref('graphql_st.men_shoes_lace-up_shoes_1_attribute_2').product_template_value_ids[1],
             'noupdate': True,
         },]"/>
     </function>
 
     <function model="ir.model.data" name="_update_xmlids">
         <value model="base" eval="[{
-            'xml_id': 'graphql_vuestorefront.men_shoes_lace-up_shoes_1a',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_1')._get_variant_for_combination(obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_1_attribute_1_value_1') + obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_1_attribute_2_value_1')),
+            'xml_id': 'graphql_st.men_shoes_lace-up_shoes_1a',
+            'record': obj().env.ref('graphql_st.men_shoes_lace-up_shoes_1')._get_variant_for_combination(obj().env.ref('graphql_st.men_shoes_lace-up_shoes_1_attribute_1_value_1') + obj().env.ref('graphql_st.men_shoes_lace-up_shoes_1_attribute_2_value_1')),
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_lace-up_shoes_1b',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_1')._get_variant_for_combination(obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_1_attribute_1_value_1') + obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_1_attribute_2_value_2')),
+            'xml_id': 'graphql_st.men_shoes_lace-up_shoes_1b',
+            'record': obj().env.ref('graphql_st.men_shoes_lace-up_shoes_1')._get_variant_for_combination(obj().env.ref('graphql_st.men_shoes_lace-up_shoes_1_attribute_1_value_1') + obj().env.ref('graphql_st.men_shoes_lace-up_shoes_1_attribute_2_value_2')),
             'noupdate': True,
         },]"/>
     </function>
@@ -213,7 +213,7 @@
 
     <record id="men_shoes_lace-up_shoes_2" model="product.template">
         <field name="name">Lace up shoes Tods blue</field>
-        <field name="categ_id" ref="graphql_vuestorefront.product_category_pants"/>
+        <field name="categ_id" ref="graphql_st.product_category_pants"/>
         <field name="list_price">362.50</field>
         <field name="is_published" eval="True"/>
         <field name="standard_price">362.50</field>
@@ -224,8 +224,8 @@
         <field name="description_sale">The Karissa V-Neck Tee features a semi-fitted shape that's flattering for every figure. You can hit the gym with confidence while it hugs curves and hides common "problem" areas. Find stunning women's cocktail dresses and party dresses.</field>
         <field name="default_code">578902-00</field>
         <field name="invoice_policy">delivery</field>
-        <field name="public_categ_ids" eval="[(6, 0, [ref('graphql_vuestorefront.public_category_men'), ref('graphql_vuestorefront.public_category_men_shoes_all'), ref('graphql_vuestorefront.public_category_men_shoes_lace-up_shoes')])]"/>
-        <field name="image_1920" type="base64" file="graphql_vuestorefront/static/men/shoes/lace-up_shoes/lace-up_shoes-2.jpg"/>
+        <field name="public_categ_ids" eval="[(6, 0, [ref('graphql_st.public_category_men'), ref('graphql_st.public_category_men_shoes_all'), ref('graphql_st.public_category_men_shoes_lace-up_shoes')])]"/>
+        <field name="image_1920" type="base64" file="graphql_st/static/men/shoes/lace-up_shoes/lace-up_shoes-2.jpg"/>
     </record>
 
     <!-- Attribute Values -->
@@ -242,28 +242,28 @@
 
     <function model="ir.model.data" name="_update_xmlids">
         <value model="base" eval="[{
-            'xml_id': 'graphql_vuestorefront.men_shoes_lace-up_shoes_2_attribute_1_value_1',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_2_attribute_1').product_template_value_ids[0],
+            'xml_id': 'graphql_st.men_shoes_lace-up_shoes_2_attribute_1_value_1',
+            'record': obj().env.ref('graphql_st.men_shoes_lace-up_shoes_2_attribute_1').product_template_value_ids[0],
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_lace-up_shoes_2_attribute_2_value_1',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_2_attribute_2').product_template_value_ids[0],
+            'xml_id': 'graphql_st.men_shoes_lace-up_shoes_2_attribute_2_value_1',
+            'record': obj().env.ref('graphql_st.men_shoes_lace-up_shoes_2_attribute_2').product_template_value_ids[0],
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_lace-up_shoes_2_attribute_2_value_2',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_2_attribute_2').product_template_value_ids[1],
+            'xml_id': 'graphql_st.men_shoes_lace-up_shoes_2_attribute_2_value_2',
+            'record': obj().env.ref('graphql_st.men_shoes_lace-up_shoes_2_attribute_2').product_template_value_ids[1],
             'noupdate': True,
         },]"/>
     </function>
 
     <function model="ir.model.data" name="_update_xmlids">
         <value model="base" eval="[{
-            'xml_id': 'graphql_vuestorefront.men_shoes_lace-up_shoes_2a',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_2')._get_variant_for_combination(obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_2_attribute_1_value_1') + obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_2_attribute_2_value_1')),
+            'xml_id': 'graphql_st.men_shoes_lace-up_shoes_2a',
+            'record': obj().env.ref('graphql_st.men_shoes_lace-up_shoes_2')._get_variant_for_combination(obj().env.ref('graphql_st.men_shoes_lace-up_shoes_2_attribute_1_value_1') + obj().env.ref('graphql_st.men_shoes_lace-up_shoes_2_attribute_2_value_1')),
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_lace-up_shoes_2b',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_2')._get_variant_for_combination(obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_2_attribute_1_value_1') + obj().env.ref('graphql_vuestorefront.men_shoes_lace-up_shoes_2_attribute_2_value_2')),
+            'xml_id': 'graphql_st.men_shoes_lace-up_shoes_2b',
+            'record': obj().env.ref('graphql_st.men_shoes_lace-up_shoes_2')._get_variant_for_combination(obj().env.ref('graphql_st.men_shoes_lace-up_shoes_2_attribute_1_value_1') + obj().env.ref('graphql_st.men_shoes_lace-up_shoes_2_attribute_2_value_2')),
             'noupdate': True,
         },]"/>
     </function>
@@ -282,7 +282,7 @@
     <!-- Products men-shoes-loafers -->
     <record id="men_shoes_loafers_1" model="product.template">
         <field name="name">Mokassins “Daime“ Doucals brown</field>
-        <field name="categ_id" ref="graphql_vuestorefront.product_category_pants"/>
+        <field name="categ_id" ref="graphql_st.product_category_pants"/>
         <field name="list_price">343.75</field>
         <field name="is_published" eval="True"/>
         <field name="standard_price">343.75</field>
@@ -293,8 +293,8 @@
         <field name="description_sale">The Karissa V-Neck Tee features a semi-fitted shape that's flattering for every figure. You can hit the gym with confidence while it hugs curves and hides common "problem" areas. Find stunning women's cocktail dresses and party dresses.</field>
         <field name="default_code">578902-00</field>
         <field name="invoice_policy">delivery</field>
-        <field name="public_categ_ids" eval="[(6, 0, [ref('graphql_vuestorefront.public_category_men'), ref('graphql_vuestorefront.public_category_men_shoes_all'), ref('graphql_vuestorefront.public_category_men_shoes_loafers')])]"/>
-        <field name="image_1920" type="base64" file="graphql_vuestorefront/static/men/shoes/loafers/loafers-1.jpg"/>
+        <field name="public_categ_ids" eval="[(6, 0, [ref('graphql_st.public_category_men'), ref('graphql_st.public_category_men_shoes_all'), ref('graphql_st.public_category_men_shoes_loafers')])]"/>
+        <field name="image_1920" type="base64" file="graphql_st/static/men/shoes/loafers/loafers-1.jpg"/>
     </record>
 
     <!-- Attribute Values -->
@@ -311,28 +311,28 @@
 
     <function model="ir.model.data" name="_update_xmlids">
         <value model="base" eval="[{
-            'xml_id': 'graphql_vuestorefront.men_shoes_loafers_1_attribute_1_value_1',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_loafers_1_attribute_1').product_template_value_ids[0],
+            'xml_id': 'graphql_st.men_shoes_loafers_1_attribute_1_value_1',
+            'record': obj().env.ref('graphql_st.men_shoes_loafers_1_attribute_1').product_template_value_ids[0],
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_loafers_1_attribute_2_value_1',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_loafers_1_attribute_2').product_template_value_ids[0],
+            'xml_id': 'graphql_st.men_shoes_loafers_1_attribute_2_value_1',
+            'record': obj().env.ref('graphql_st.men_shoes_loafers_1_attribute_2').product_template_value_ids[0],
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_loafers_1_attribute_2_value_2',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_loafers_1_attribute_2').product_template_value_ids[1],
+            'xml_id': 'graphql_st.men_shoes_loafers_1_attribute_2_value_2',
+            'record': obj().env.ref('graphql_st.men_shoes_loafers_1_attribute_2').product_template_value_ids[1],
             'noupdate': True,
         },]"/>
     </function>
 
     <function model="ir.model.data" name="_update_xmlids">
         <value model="base" eval="[{
-            'xml_id': 'graphql_vuestorefront.men_shoes_loafers_1a',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_loafers_1')._get_variant_for_combination(obj().env.ref('graphql_vuestorefront.men_shoes_loafers_1_attribute_1_value_1') + obj().env.ref('graphql_vuestorefront.men_shoes_loafers_1_attribute_2_value_1')),
+            'xml_id': 'graphql_st.men_shoes_loafers_1a',
+            'record': obj().env.ref('graphql_st.men_shoes_loafers_1')._get_variant_for_combination(obj().env.ref('graphql_st.men_shoes_loafers_1_attribute_1_value_1') + obj().env.ref('graphql_st.men_shoes_loafers_1_attribute_2_value_1')),
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_loafers_1b',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_loafers_1')._get_variant_for_combination(obj().env.ref('graphql_vuestorefront.men_shoes_loafers_1_attribute_1_value_1') + obj().env.ref('graphql_vuestorefront.men_shoes_loafers_1_attribute_2_value_2')),
+            'xml_id': 'graphql_st.men_shoes_loafers_1b',
+            'record': obj().env.ref('graphql_st.men_shoes_loafers_1')._get_variant_for_combination(obj().env.ref('graphql_st.men_shoes_loafers_1_attribute_1_value_1') + obj().env.ref('graphql_st.men_shoes_loafers_1_attribute_2_value_2')),
             'noupdate': True,
         },]"/>
     </function>
@@ -350,7 +350,7 @@
 
     <record id="men_shoes_loafers_2" model="product.template">
         <field name="name">Flip Flops “Top Mix“ Havaianas dark blue</field>
-        <field name="categ_id" ref="graphql_vuestorefront.product_category_pants"/>
+        <field name="categ_id" ref="graphql_st.product_category_pants"/>
         <field name="list_price">27.50</field>
         <field name="is_published" eval="True"/>
         <field name="standard_price">27.50</field>
@@ -361,8 +361,8 @@
         <field name="description_sale">The Karissa V-Neck Tee features a semi-fitted shape that's flattering for every figure. You can hit the gym with confidence while it hugs curves and hides common "problem" areas. Find stunning women's cocktail dresses and party dresses.</field>
         <field name="default_code">578902-00</field>
         <field name="invoice_policy">delivery</field>
-        <field name="public_categ_ids" eval="[(6, 0, [ref('graphql_vuestorefront.public_category_men'), ref('graphql_vuestorefront.public_category_men_shoes_all'), ref('graphql_vuestorefront.public_category_men_shoes_loafers')])]"/>
-        <field name="image_1920" type="base64" file="graphql_vuestorefront/static/men/shoes/loafers/loafers-2.jpg"/>
+        <field name="public_categ_ids" eval="[(6, 0, [ref('graphql_st.public_category_men'), ref('graphql_st.public_category_men_shoes_all'), ref('graphql_st.public_category_men_shoes_loafers')])]"/>
+        <field name="image_1920" type="base64" file="graphql_st/static/men/shoes/loafers/loafers-2.jpg"/>
     </record>
 
     <!-- Attribute Values -->
@@ -379,28 +379,28 @@
 
     <function model="ir.model.data" name="_update_xmlids">
         <value model="base" eval="[{
-            'xml_id': 'graphql_vuestorefront.men_shoes_loafers_2_attribute_1_value_1',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_loafers_2_attribute_1').product_template_value_ids[0],
+            'xml_id': 'graphql_st.men_shoes_loafers_2_attribute_1_value_1',
+            'record': obj().env.ref('graphql_st.men_shoes_loafers_2_attribute_1').product_template_value_ids[0],
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_loafers_2_attribute_2_value_1',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_loafers_2_attribute_2').product_template_value_ids[0],
+            'xml_id': 'graphql_st.men_shoes_loafers_2_attribute_2_value_1',
+            'record': obj().env.ref('graphql_st.men_shoes_loafers_2_attribute_2').product_template_value_ids[0],
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_loafers_2_attribute_2_value_2',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_loafers_2_attribute_2').product_template_value_ids[1],
+            'xml_id': 'graphql_st.men_shoes_loafers_2_attribute_2_value_2',
+            'record': obj().env.ref('graphql_st.men_shoes_loafers_2_attribute_2').product_template_value_ids[1],
             'noupdate': True,
         },]"/>
     </function>
 
     <function model="ir.model.data" name="_update_xmlids">
         <value model="base" eval="[{
-            'xml_id': 'graphql_vuestorefront.men_shoes_loafers_2a',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_loafers_2')._get_variant_for_combination(obj().env.ref('graphql_vuestorefront.men_shoes_loafers_2_attribute_1_value_1') + obj().env.ref('graphql_vuestorefront.men_shoes_loafers_2_attribute_2_value_1')),
+            'xml_id': 'graphql_st.men_shoes_loafers_2a',
+            'record': obj().env.ref('graphql_st.men_shoes_loafers_2')._get_variant_for_combination(obj().env.ref('graphql_st.men_shoes_loafers_2_attribute_1_value_1') + obj().env.ref('graphql_st.men_shoes_loafers_2_attribute_2_value_1')),
             'noupdate': True,
         }, {
-            'xml_id': 'graphql_vuestorefront.men_shoes_loafers_2b',
-            'record': obj().env.ref('graphql_vuestorefront.men_shoes_loafers_2')._get_variant_for_combination(obj().env.ref('graphql_vuestorefront.men_shoes_loafers_2_attribute_1_value_1') + obj().env.ref('graphql_vuestorefront.men_shoes_loafers_2_attribute_2_value_2')),
+            'xml_id': 'graphql_st.men_shoes_loafers_2b',
+            'record': obj().env.ref('graphql_st.men_shoes_loafers_2')._get_variant_for_combination(obj().env.ref('graphql_st.men_shoes_loafers_2_attribute_1_value_1') + obj().env.ref('graphql_st.men_shoes_loafers_2_attribute_2_value_2')),
             'noupdate': True,
         },]"/>
     </function>

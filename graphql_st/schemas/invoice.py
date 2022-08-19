@@ -7,7 +7,7 @@ from graphql import GraphQLError
 from odoo.http import request
 from odoo import _
 
-from odoo.addons.st_graphql_vuestorefront.schemas.objects import (
+from odoo.addons.graphql_st.schemas.objects import (
     SortEnum, Invoice,
     get_document_with_check_access,
     get_document_count_with_check_access

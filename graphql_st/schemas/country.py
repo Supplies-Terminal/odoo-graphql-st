@@ -6,7 +6,7 @@ import graphene
 from graphql import GraphQLError
 from odoo import _
 
-from odoo.addons.st_graphql_vuestorefront.schemas.objects import (
+from odoo.addons.graphql_st.schemas.objects import (
     SortEnum, Country
 )
 

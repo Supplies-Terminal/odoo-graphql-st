@@ -7,7 +7,7 @@ from graphql import GraphQLError
 from odoo.http import request
 from odoo import _
 from odoo.addons.website_mass_mailing.controllers.main import MassMailController
-from odoo.addons.st_graphql_vuestorefront.schemas.objects import (
+from odoo.addons.graphql_st.schemas.objects import (
     SortEnum, MailingContact, MailingList
 )
 

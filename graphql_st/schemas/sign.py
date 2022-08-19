@@ -9,7 +9,7 @@ from odoo import _
 from odoo.http import request
 from odoo.exceptions import UserError
 from odoo.addons.auth_signup.models.res_users import SignupError
-from odoo.addons.st_graphql_vuestorefront.schemas.objects import User
+from odoo.addons.graphql_st.schemas.objects import User
 
 
 class Login(graphene.Mutation):

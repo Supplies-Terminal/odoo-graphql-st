@@ -3,7 +3,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import graphene
-from odoo.addons.st_graphql_vuestorefront.schemas.objects import Order, Partner
+from odoo.addons.graphql_st.schemas.objects import Order, Partner
 from odoo.addons.website_mass_mailing.controllers.main import MassMailController
 from odoo.http import request
 

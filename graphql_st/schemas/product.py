@@ -8,7 +8,7 @@ from odoo.http import request
 from odoo import _
 from odoo.osv import expression
 
-from odoo.addons.st_graphql_vuestorefront.schemas.objects import (
+from odoo.addons.graphql_st.schemas.objects import (
     SortEnum, Product, Attribute, AttributeValue
 )
 

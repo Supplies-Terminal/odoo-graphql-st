@@ -3,10 +3,10 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 {
-    'name': 'ST Vue Storefront Api',
+    'name': 'ST Api',
     'version': '15.0.1.0.0',
-    'summary': 'Vue Storefront API for ST',
-    'description': """Vue Storefront API Integration""",
+    'summary': 'ST API',
+    'description': """ST API Integration""",
     'category': 'Website',
     'license': 'LGPL-3',
     'author': 'ST',

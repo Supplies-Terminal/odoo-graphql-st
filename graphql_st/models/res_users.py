@@ -28,7 +28,7 @@ class ResUsers(models.Model):
         self.mapped('partner_id').signup_prepare(signup_type="reset", expiration=expiration)
 
         # send email to users with their signup url
-        template = self.env.ref('graphql_vuestorefront.website_reset_password_email')
+        template = self.env.ref('graphql_st.website_reset_password_email')
 
         assert template._name == 'mail.template'
 
