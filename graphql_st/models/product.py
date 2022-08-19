@@ -11,7 +11,7 @@ from odoo.exceptions import ValidationError
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    def _get_vsf_tags(self):
+    def _get_st_tags(self):
         product_tag = 'P%s' % self.id
         tags = '%s' % product_tag
         category_ids = self.public_categ_ids.ids
@@ -20,15 +20,15 @@ class ProductTemplate(models.Model):
             tags = '%s,%s' % (tags, category_tag)
         return tags
 
-    def _vsf_request_cache_invalidation(self):
+    def _st_request_cache_invalidation(self):
         ICP = self.env['ir.config_parameter'].sudo()
-        url = ICP.get_param('vsf_cache_invalidation_url', False)
-        key = ICP.get_param('vsf_cache_invalidation_key', False)
+        url = ICP.get_param('st_cache_invalidation_url', False)
+        key = ICP.get_param('st_cache_invalidation_key', False)
 
         if url and key:
             try:
                 for product in self:
-                    tags = product._get_vsf_tags()
+                    tags = product._get_st_tags()
 
                     # Make the GET request to the /cache-invalidate
                     requests.get(url, params={'key': key, 'tags': tags}, timeout=5)
@@ -108,11 +108,11 @@ class ProductTemplate(models.Model):
 
     def write(self, vals):
         res = super(ProductTemplate, self).write(vals)
-        self._vsf_request_cache_invalidation()
+        self._st_request_cache_invalidation()
         return res
 
     def unlink(self):
-        self._vsf_request_cache_invalidation()
+        self._st_request_cache_invalidation()
         return super(ProductTemplate, self).unlink()
 
     def _get_combination_info(self, combination=False, product_id=False, add_qty=1, pricelist=False,
@@ -232,19 +232,19 @@ class ProductPublicCategory(models.Model):
 
     website_slug = fields.Char('Website Slug', translate=True)
 
-    def _get_vsf_tags(self):
+    def _get_st_tags(self):
         tags = 'C%s' % self.id
         return tags
 
-    def _vsf_request_cache_invalidation(self):
+    def _st_request_cache_invalidation(self):
         ICP = self.env['ir.config_parameter'].sudo()
-        url = ICP.get_param('vsf_cache_invalidation_url', False)
-        key = ICP.get_param('vsf_cache_invalidation_key', False)
+        url = ICP.get_param('st_cache_invalidation_url', False)
+        key = ICP.get_param('st_cache_invalidation_key', False)
 
         if url and key:
             try:
                 for category in self:
-                    tags = category._get_vsf_tags()
+                    tags = category._get_st_tags()
 
                     # Make the GET request to the /cache-invalidate
                     requests.get(url, params={'key': key, 'tags': tags}, timeout=5)
@@ -266,9 +266,9 @@ class ProductPublicCategory(models.Model):
         res = super(ProductPublicCategory, self).write(vals)
         if vals.get('website_slug', False):
             self._validate_website_slug()
-        self._vsf_request_cache_invalidation()
+        self._st_request_cache_invalidation()
         return res
 
     def unlink(self):
-        self._vsf_request_cache_invalidation()
+        self._st_request_cache_invalidation()
         return super(ProductPublicCategory, self).unlink()

@@ -14,7 +14,7 @@ class PaymentTransactionInherit(models.Model):
         """
 
         for record in self:
-            if not record.created_on_vsf:
+            if not record.created_on_st:
                 super(PaymentTransactionInherit, record)._set_pending(state_message=state_message)
             else:
                 allowed_states = ('draft',)

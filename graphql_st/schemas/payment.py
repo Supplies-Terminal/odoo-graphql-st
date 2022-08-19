@@ -69,7 +69,7 @@ class PaymentQuery(graphene.ObjectType):
         PaymentTransaction = env['payment.transaction']
         Order = env['sale.order']
 
-        # Pass in the session the sale_order created in vsf
+        # Pass in the session the sale_order created in st
         payment_transaction_id = request.session.get('__payment_monitored_tx_ids__')
 
         if payment_transaction_id and payment_transaction_id[0]:
@@ -270,8 +270,8 @@ class AdyenTransaction(graphene.Mutation):
 
         transaction_id = PaymentTransaction.search([('reference', '=', transaction['reference'])], limit=1)
 
-        # Update the field created_on_vsf
-        transaction_id.created_on_vsf = True
+        # Update the field created_on_st
+        transaction_id.created_on_st = True
 
         return AdyenTransactionResult(transaction=transaction)
 

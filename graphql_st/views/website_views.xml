@@ -11,10 +11,10 @@
         <field name="inherit_id" ref="website.view_website_form"/>
         <field name="arch" type="xml">
             <xpath expr="//div[@name='other']" position="after">
-                <div name="vsf_info">
-                    <group name="vsf_info">
-                        <field name="vsf_payment_success_return_url"/>
-                        <field name="vsf_payment_error_return_url"/>
+                <div name="st_info">
+                    <group name="st_info">
+                        <field name="st_payment_success_return_url"/>
+                        <field name="st_payment_error_return_url"/>
                     </group>
                 </div>
             </xpath>

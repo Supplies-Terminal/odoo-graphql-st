@@ -167,8 +167,8 @@ class NewsletterSubscribe(graphene.Mutation):
         env = info.context['env']
         website = env['website'].get_current_website()
 
-        if website.vsf_mailing_list_id:
-            MassMailController().subscribe(website.vsf_mailing_list_id.id, email)
+        if website.st_mailing_list_id:
+            MassMailController().subscribe(website.st_mailing_list_id.id, email)
             return NewsletterSubscribe(subscribed=True)
 
         return NewsletterSubscribe(subscribed=False)

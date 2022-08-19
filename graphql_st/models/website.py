@@ -9,13 +9,13 @@ from odoo import models, fields, api
 class Website(models.Model):
     _inherit = 'website'
 
-    vsf_payment_success_return_url = fields.Char(
+    st_payment_success_return_url = fields.Char(
         'Payment Success Return Url', required=True, translate=True, default='Dummy'
     )
-    vsf_payment_error_return_url = fields.Char(
+    st_payment_error_return_url = fields.Char(
         'Payment Error Return Url', required=True,  translate=True, default='Dummy'
     )
-    vsf_mailing_list_id = fields.Many2one('mailing.list', 'Newsletter', domain=[('is_public', '=', True)])
+    st_mailing_list_id = fields.Many2one('mailing.list', 'Newsletter', domain=[('is_public', '=', True)])
 
     @api.model
     def enable_b2c_reset_password(self):
@@ -32,19 +32,19 @@ class Website(models.Model):
 class WebsiteRewrite(models.Model):
     _inherit = 'website.rewrite'
 
-    def _get_vsf_tags(self):
+    def _get_st_tags(self):
         tags = 'WR%s' % self.id
         return tags
 
-    def _vsf_request_cache_invalidation(self):
+    def _st_request_cache_invalidation(self):
         ICP = self.env['ir.config_parameter'].sudo()
-        url = ICP.get_param('vsf_cache_invalidation_url', False)
-        key = ICP.get_param('vsf_cache_invalidation_key', False)
+        url = ICP.get_param('st_cache_invalidation_url', False)
+        key = ICP.get_param('st_cache_invalidation_key', False)
 
         if url and key:
             try:
                 for website_rewrite in self:
-                    tags = website_rewrite._get_vsf_tags()
+                    tags = website_rewrite._get_st_tags()
 
                     # Make the GET request to the /cache-invalidate
                     requests.get(url, params={'key': key, 'tags': tags}, timeout=5)
@@ -53,9 +53,9 @@ class WebsiteRewrite(models.Model):
 
     def write(self, vals):
         res = super(WebsiteRewrite, self).write(vals)
-        self._vsf_request_cache_invalidation()
+        self._st_request_cache_invalidation()
         return res
 
     def unlink(self):
-        self._vsf_request_cache_invalidation()
+        self._st_request_cache_invalidation()
         return super(WebsiteRewrite, self).unlink()

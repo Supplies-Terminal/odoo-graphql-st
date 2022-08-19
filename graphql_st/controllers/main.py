@@ -14,7 +14,7 @@ from urllib.parse import urlparse
 from ..schema import schema
 
 
-class VSFBinary(Binary):
+class STBinary(Binary):
     @http.route(['/web/image',
                  '/web/image/<string:xmlid>',
                  '/web/image/<string:xmlid>/<string:filename>',
@@ -40,7 +40,7 @@ class VSFBinary(Binary):
         """ Validate width and height against a whitelist """
         try:
             ICP = request.env['ir.config_parameter'].sudo()
-            resize_whitelist = safe_eval(ICP.get_param('vsf_image_resize_whitelist', '[]'))
+            resize_whitelist = safe_eval(ICP.get_param('stimage_resize_whitelist', '[]'))
 
             if resize_whitelist and width and height and \
                     (int(width) not in resize_whitelist or int(height) not in resize_whitelist):
@@ -48,7 +48,7 @@ class VSFBinary(Binary):
         except Exception:
             return request.not_found()
 
-        return super(VSFBinary, self).content_image(
+        return super(STBinary, self).content_image(
             xmlid=xmlid, model=model, id=id, field=field, filename_field=filename_field, unique=unique,
             filename=filename, mimetype=mimetype, download=download, width=width, height=height, crop=crop,
             access_token=access_token, **kwargs)
@@ -79,7 +79,7 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
             pass
 
     # The GraphiQL route, providing an IDE for developers
-    @http.route("/graphiql/vsf", auth="user")
+    @http.route("/graphiql/st", auth="user")
     def graphiql(self, **kwargs):
         self._set_website_context()
         return self._handle_graphiql_request(schema.graphql_schema)
@@ -88,18 +88,18 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
     # requests. If you only need to accept GET requests or POST
     # with application/x-www-form-urlencoded content,
     # this is not necessary.
-    GraphQLControllerMixin.patch_for_json("^/graphql/vsf/?$")
+    GraphQLControllerMixin.patch_for_json("^/graphql/st/?$")
 
     # The graphql route, for applications.
     # Note csrf=False: you may want to apply extra security
     # (such as origin restrictions) to this route.
-    @http.route("/graphql/vsf", auth="public", csrf=False)
+    @http.route("/graphql/st", auth="public", csrf=False)
     def graphql(self, **kwargs):
         self._set_website_context()
         return self._handle_graphql_request(schema.graphql_schema)
 
-    @http.route('/vsf/categories', type='http', auth='public', csrf=False)
-    def vsf_categories(self):
+    @http.route('/st/categories', type='http', auth='public', csrf=False)
+    def stcategories(self):
         self._set_website_context()
         website = request.env['website'].get_current_website()
 
@@ -118,8 +118,8 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
             headers={'Content-Type': 'application/json'},
         )
 
-    @http.route('/vsf/products', type='http', auth='public', csrf=False)
-    def vsf_products(self):
+    @http.route('/st/products', type='http', auth='public', csrf=False)
+    def stproducts(self):
         self._set_website_context()
         website = request.env['website'].get_current_website()
 
@@ -146,8 +146,8 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
             headers={'Content-Type': 'application/json'},
         )
 
-    @http.route('/vsf/redirects', type='http', auth='public', csrf=False, cors="*")
-    def vsf_redirects(self):
+    @http.route('/st/redirects', type='http', auth='public', csrf=False, cors="*")
+    def stredirects(self):
         redirects = []
 
         for redirect in request.env['website.rewrite'].sudo().search([]):

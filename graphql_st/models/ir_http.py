@@ -34,7 +34,7 @@ class Http(models.AbstractModel):
 
                 # Get background color from settings
                 try:
-                    background_rgba = safe_eval(ICP.get_param('vsf_image_background_rgba', '(255, 255, 255, 255)'))
+                    background_rgba = safe_eval(ICP.get_param('st_image_background_rgba', '(255, 255, 255, 255)'))
                 except:
                     background_rgba = (255, 255, 255, 255)
 
@@ -46,7 +46,7 @@ class Http(models.AbstractModel):
                 background.paste(img, offset)
 
                 # Get compression quality from settings
-                quality = ICP.get_param('vsf_image_quality', 100)
+                quality = ICP.get_param('st_image_quality', 100)
 
                 stream = io.BytesIO()
                 background.save(stream, format='WEBP', quality=quality, subsampling=0)

@@ -13,71 +13,71 @@
         <field name="arch" type="xml">
             <xpath expr="//div[@id='seo_settings']" position="after">
                 <h2>Vue Storefront</h2>
-                <div class="row mt16 o_settings_container" id="vsf_settings">
-                    <div class="col-12 col-lg-6 o_setting_box" id="vsf_payment_return_url_settings">
+                <div class="row mt16 o_settings_container" id="st_settings">
+                    <div class="col-12 col-lg-6 o_setting_box" id="st_payment_return_url_settings">
                         <div class="o_setting_right_pane">
-                            <label for="vsf_payment_success_return_url"/>
+                            <label for="st_payment_success_return_url"/>
                             <div class="content-group">
-                                <field name="vsf_payment_success_return_url"/>
+                                <field name="st_payment_success_return_url"/>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-6 o_setting_box" id="vsf_payment_return_url_settings">
+                    <div class="col-12 col-lg-6 o_setting_box" id="st_payment_return_url_settings">
                         <div class="o_setting_right_pane">
-                            <label for="vsf_payment_error_return_url"/>
+                            <label for="st_payment_error_return_url"/>
                             <div class="content-group">
-                                <field name="vsf_payment_error_return_url"/>
+                                <field name="st_payment_error_return_url"/>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-6 o_setting_box" id="vsf_cache_invalidation_key_settings">
+                    <div class="col-12 col-lg-6 o_setting_box" id="st_cache_invalidation_key_settings">
                         <div class="o_setting_right_pane">
-                            <label for="vsf_cache_invalidation_key"/>
+                            <label for="st_cache_invalidation_key"/>
                             <div class="content-group">
-                                <field name="vsf_cache_invalidation_key"/>
+                                <field name="st_cache_invalidation_key"/>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-6 o_setting_box" id="vsf_cache_invalidation_url_settings">
+                    <div class="col-12 col-lg-6 o_setting_box" id="st_cache_invalidation_url_settings">
                         <div class="o_setting_right_pane">
-                            <label for="vsf_cache_invalidation_url"/>
+                            <label for="st_cache_invalidation_url"/>
                             <div class="content-group">
-                                <field name="vsf_cache_invalidation_url"/>
+                                <field name="st_cache_invalidation_url"/>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-6 o_setting_box" id="vsf_mailing_list_id_settings">
+                    <div class="col-12 col-lg-6 o_setting_box" id="st_mailing_list_id_settings">
                         <div class="o_setting_right_pane">
-                            <label for="vsf_mailing_list_id"/>
+                            <label for="st_mailing_list_id"/>
                             <div class="content-group">
-                                <field name="vsf_mailing_list_id"/>
+                                <field name="st_mailing_list_id"/>
                             </div>
                         </div>
                     </div>
                 </div>
                 <h2>Vue Storefront Images</h2>
-                <div class="row mt16 o_settings_container" id="vsf_images_settings">
-                    <div class="col-12 col-lg-6 o_setting_box" id="vsf_image_quality_settings">
+                <div class="row mt16 o_settings_container" id="st_images_settings">
+                    <div class="col-12 col-lg-6 o_setting_box" id="st_image_quality_settings">
                         <div class="o_setting_right_pane">
-                            <label for="vsf_image_quality"/>
+                            <label for="st_image_quality"/>
                             <div class="content-group">
-                                <field name="vsf_image_quality"/> %
+                                <field name="st_image_quality"/> %
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-6 o_setting_box" id="vsf_image_background_rgba_settings">
+                    <div class="col-12 col-lg-6 o_setting_box" id="st_image_background_rgba_settings">
                         <div class="o_setting_right_pane">
-                            <label for="vsf_image_background_rgba"/>
+                            <label for="st_image_background_rgba"/>
                             <div class="content-group">
-                                <field name="vsf_image_background_rgba"/>
+                                <field name="st_image_background_rgba"/>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-6 o_setting_box" id="vsf_image_resize_whitelist_settings">
+                    <div class="col-12 col-lg-6 o_setting_box" id="st_image_resize_whitelist_settings">
                         <div class="o_setting_right_pane">
-                            <label for="vsf_image_resize_whitelist"/>
+                            <label for="st_image_resize_whitelist"/>
                             <div class="content-group">
-                                <field name="vsf_image_resize_whitelist"/>
+                                <field name="st_image_resize_whitelist"/>
                             </div>
                         </div>
                     </div>

@@ -121,9 +121,9 @@ class AdyenControllerInherit(AdyenController):
 
         # Get Website
         website = sale_order.website_id
-        # Redirect to VSF
-        vsf_payment_success_return_url = website.vsf_payment_success_return_url
-        vsf_payment_error_return_url = website.vsf_payment_error_return_url
+        # Redirect to ST
+        st_payment_success_return_url = website.st_payment_success_return_url
+        st_payment_error_return_url = website.st_payment_error_return_url
 
         request.session["__payment_monitored_tx_ids__"] = [payment_transaction.id]
 
@@ -157,12 +157,12 @@ class AdyenControllerInherit(AdyenController):
                 # Confirm sale order
                 PaymentPostProcessing().poll_status()
 
-                return werkzeug.utils.redirect(vsf_payment_success_return_url)
+                return werkzeug.utils.redirect(st_payment_success_return_url)
 
             # For Redirect 3DS2 and MobilePay (Cancel/Error flow)
             elif result and result.get('resultCode') and result['resultCode'] in ['Refused', 'Cancelled']:
 
-                return werkzeug.utils.redirect(vsf_payment_error_return_url)
+                return werkzeug.utils.redirect(st_payment_error_return_url)
 
         elif acquirer.provider == 'adyen_og':
             # Get the route payment/adyen/return of the v14
@@ -172,7 +172,7 @@ class AdyenControllerInherit(AdyenController):
             if data.get('authResult') and data['authResult'] == 'REFUSED':
                 request.env['payment.transaction'].sudo()._handle_feedback_data('adyen_og', data)
 
-                return werkzeug.utils.redirect(vsf_payment_error_return_url)
+                return werkzeug.utils.redirect(st_payment_error_return_url)
 
             # For Adyen Hosted (Success flow)
             elif data.get('authResult') not in ['CANCELLED']:
@@ -181,7 +181,7 @@ class AdyenControllerInherit(AdyenController):
                 # Confirm sale order
                 PaymentPostProcessing().poll_status()
 
-                return werkzeug.utils.redirect(vsf_payment_success_return_url)
+                return werkzeug.utils.redirect(st_payment_success_return_url)
 
     @http.route('/payment/adyen/notification', type='json', auth='public')
     def adyen_notification(self):
@@ -225,8 +225,8 @@ class AdyenControllerInherit(AdyenController):
                     if event_code == 'AUTHORISATION' and success:
                         notification_data['resultCode'] = 'Authorised'
 
-                        # Case the transaction was created on vsf (Success flow)
-                        if payment_transaction.created_on_vsf:
+                        # Case the transaction was created on st (Success flow)
+                        if payment_transaction.created_on_st:
 
                             # Check the Order and respective website related with the transaction
                             # Check the payment_return url for the success and error pages
@@ -237,15 +237,15 @@ class AdyenControllerInherit(AdyenController):
 
                             # Get Website
                             website = sale_order.website_id
-                            # Redirect to VSF
-                            vsf_payment_success_return_url = website.vsf_payment_success_return_url
+                            # Redirect to ST
+                            st_payment_success_return_url = website.st_payment_success_return_url
 
                             request.session["__payment_monitored_tx_ids__"] = [payment_transaction.id]
 
                             # Confirm sale order
                             PaymentPostProcessing().poll_status()
 
-                            return werkzeug.utils.redirect(vsf_payment_success_return_url)
+                            return werkzeug.utils.redirect(st_payment_success_return_url)
 
                     elif event_code == 'CANCELLATION' and success:
                         notification_data['resultCode'] = 'Cancelled'

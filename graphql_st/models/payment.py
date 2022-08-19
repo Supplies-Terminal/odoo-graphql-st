@@ -8,4 +8,4 @@ from odoo import models, fields, api
 class PaymentTransaction(models.Model):
     _inherit = 'payment.transaction'
 
-    created_on_vsf = fields.Boolean(string='Created on Vsf?', default=False)
+    created_on_st = fields.Boolean(string='Created on ST?', default=False)

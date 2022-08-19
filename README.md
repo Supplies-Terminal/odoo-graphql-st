@@ -1,4 +1,4 @@
-# Vuestorefront2 - Odoo Backend Modules
+# ST GraphQL API - Odoo Backend Modules
 
 ## Overview
 
@@ -13,7 +13,7 @@ This is not another sync between Odoo and other eCommerce, data will always be i
 
 ## Purpose
 
-You will need these modules installed in your Odoo to publish the GraphQL endpoints that VSF2 needs.
+You will need these modules installed in your Odoo to publish the GraphQL endpoints that ST needs.
 
 ## How to install
 

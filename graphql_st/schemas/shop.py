@@ -235,8 +235,8 @@ class CreateUpdatePartner(graphene.Mutation):
 
         # Subscribe to newsletter
         if subscribe_newsletter:
-            if website.vsf_mailing_list_id:
-                MassMailController().subscribe(website.vsf_mailing_list_id.id, email)
+            if website.st_mailing_list_id:
+                MassMailController().subscribe(website.st_mailing_list_id.id, email)
 
         return partner
 
