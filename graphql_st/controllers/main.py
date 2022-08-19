@@ -79,7 +79,7 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
             pass
 
     # The GraphiQL route, providing an IDE for developers
-    @http.route("/graphiql/st", auth="user")
+    @http.route("/graphiql/st", auth="user", cors="*")
     def graphiql(self, **kwargs):
         self._set_website_context()
         return self._handle_graphiql_request(schema.graphql_schema)
@@ -93,12 +93,12 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
     # The graphql route, for applications.
     # Note csrf=False: you may want to apply extra security
     # (such as origin restrictions) to this route.
-    @http.route("/graphql/st", auth="public", csrf=False)
+    @http.route("/graphql/st", auth="public", csrf=False, cors="*")
     def graphql(self, **kwargs):
         self._set_website_context()
         return self._handle_graphql_request(schema.graphql_schema)
 
-    @http.route('/st/categories', type='http', auth='public', csrf=False)
+    @http.route('/st/categories', type='http', auth='public', csrf=False, cors="*")
     def stcategories(self):
         self._set_website_context()
         website = request.env['website'].get_current_website()
@@ -118,7 +118,7 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
             headers={'Content-Type': 'application/json'},
         )
 
-    @http.route('/st/products', type='http', auth='public', csrf=False)
+    @http.route('/st/products', type='http', auth='public', csrf=False, cors="*")
     def stproducts(self):
         self._set_website_context()
         website = request.env['website'].get_current_website()
