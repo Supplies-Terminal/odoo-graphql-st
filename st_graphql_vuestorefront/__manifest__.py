@@ -3,14 +3,14 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 {
-    'name': 'Vue Storefront Api',
+    'name': 'ST Vue Storefront Api',
     'version': '15.0.1.0.0',
-    'summary': 'Vue Storefront API',
+    'summary': 'Vue Storefront API for ST',
     'description': """Vue Storefront API Integration""",
     'category': 'Website',
     'license': 'LGPL-3',
-    'author': 'OdooGap',
-    'website': 'https://www.odoogap.com/',
+    'author': 'ST',
+    'website': 'https://suppliesterminal.com/',
     'depends': [
         'graphql_base',
         'website_sale_wishlist',
@@ -19,7 +19,6 @@
         'website_sale_gift_card',
         'auth_signup',
         'contacts',
-        'crm',
         'theme_default',
         'payment_adyen_og',
     ],

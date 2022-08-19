@@ -1,5 +1,5 @@
 ======================
-Graphql Vue Storefront
+ST Graphql Vue Storefront
 ======================
 
 Login

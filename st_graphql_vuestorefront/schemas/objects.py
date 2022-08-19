@@ -87,31 +87,6 @@ def product_is_in_wishlist(env, product):
 #       Objects         #
 # --------------------- #
 
-class Lead(OdooObjectType):
-    id = graphene.Int(required=True)
-    name = graphene.String()
-    email = graphene.String()
-    phone = graphene.String()
-    company = graphene.String()
-    subject = graphene.String()
-    message = graphene.String()
-
-    def resolve_name(self, info):
-        return self.contact_name
-
-    def resolve_email(self, info):
-        return self.email_from
-
-    def resolve_company(self, info):
-        return self.partner_name
-
-    def resolve_subject(self, info):
-        return self.name
-
-    def resolve_message(self, info):
-        return self.description
-
-
 class State(OdooObjectType):
     id = graphene.Int(required=True)
     name = graphene.String(required=True)
