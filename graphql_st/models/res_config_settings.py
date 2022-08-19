@@ -21,8 +21,6 @@ class ResConfigSettings(models.TransientModel):
     )
     st_cache_invalidation_key = fields.Char('Cache Invalidation Key', required=True)
     st_cache_invalidation_url = fields.Char('Cache Invalidation Url', required=True)
-    st_mailing_list_id = fields.Many2one('mailing.list', 'Newsletter', domain=[('is_public', '=', True)],
-                                          related='website_id.st_mailing_list_id', readonly=False, required=True)
 
     # ST Images
     st_image_quality = fields.Integer('Quality', required=True)

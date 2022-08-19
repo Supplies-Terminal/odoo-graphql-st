@@ -9,7 +9,6 @@ from odoo.addons.graphql_st.schemas import (
     country, category, product, order, invoice,
     user_profile, sign,
     address, wishlist, shop, payment,
-    mailing_list,
 )
 
 
@@ -25,8 +24,6 @@ class Query(
     wishlist.WishlistQuery,
     shop.ShoppingCartQuery,
     payment.PaymentQuery,
-    mailing_list.MailingContactQuery,
-    mailing_list.MailingListQuery,
 ):
     pass
 
@@ -40,7 +37,6 @@ class Mutation(
     shop.ShopMutation,
     payment.PaymentMutation,
     payment.AdyenPaymentMutation,
-    mailing_list.NewsletterSubscribeMutation,
     order.OrderMutation,
 ):
     pass
@@ -50,6 +46,5 @@ schema = graphene.Schema(
     query=Query,
     mutation=Mutation,
     types=[country.CountryList, category.CategoryList, product.ProductList, product.ProductVariantData, order.OrderList,
-           invoice.InvoiceList, wishlist.WishlistData, shop.CartData, mailing_list.MailingContactList,
-           mailing_list.MailingListList]
+           invoice.InvoiceList, wishlist.WishlistData, shop.CartData]
 )

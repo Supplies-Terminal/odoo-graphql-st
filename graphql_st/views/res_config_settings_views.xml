@@ -46,14 +46,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-6 o_setting_box" id="st_mailing_list_id_settings">
-                        <div class="o_setting_right_pane">
-                            <label for="st_mailing_list_id"/>
-                            <div class="content-group">
-                                <field name="st_mailing_list_id"/>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <h2>Vue Storefront Images</h2>
                 <div class="row mt16 o_settings_container" id="st_images_settings">

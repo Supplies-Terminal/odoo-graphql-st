@@ -13,4 +13,3 @@ from . import address
 from . import shop
 from . import payment
 from . import wishlist
-from . import mailing_list

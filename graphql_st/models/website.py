@@ -15,8 +15,6 @@ class Website(models.Model):
     st_payment_error_return_url = fields.Char(
         'Payment Error Return Url', required=True,  translate=True, default='Dummy'
     )
-    st_mailing_list_id = fields.Many2one('mailing.list', 'Newsletter', domain=[('is_public', '=', True)])
-
     @api.model
     def enable_b2c_reset_password(self):
         """ Enable sign up and reset password on default website """

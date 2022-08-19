@@ -4,7 +4,7 @@
 
 {
     'name': 'ST Api',
-    'version': '15.0.1.0.0',
+    'version': '15.0.2.0.0',
     'summary': 'ST API',
     'description': """ST API Integration""",
     'category': 'Website',
@@ -15,7 +15,6 @@
         'graphql_base',
         'website_sale_wishlist',
         'website_sale_delivery',
-        'website_mass_mailing',
         'website_sale_gift_card',
         'auth_signup',
         'contacts',

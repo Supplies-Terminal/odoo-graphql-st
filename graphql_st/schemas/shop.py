@@ -4,7 +4,6 @@
 
 import graphene
 from odoo.addons.graphql_st.schemas.objects import Order, Partner
-from odoo.addons.website_mass_mailing.controllers.main import MassMailController
 from odoo.http import request
 
 
@@ -232,11 +231,6 @@ class CreateUpdatePartner(graphene.Mutation):
             })
         else:
             order.partner_id.write(data)
-
-        # Subscribe to newsletter
-        if subscribe_newsletter:
-            if website.st_mailing_list_id:
-                MassMailController().subscribe(website.st_mailing_list_id.id, email)
 
         return partner
 
