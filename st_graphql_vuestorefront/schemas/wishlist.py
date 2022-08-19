@@ -8,7 +8,7 @@ from odoo.http import request
 from odoo import _
 
 from odoo.addons.website_sale_wishlist.controllers.main import WebsiteSaleWishlist
-from odoo.addons.graphql_vuestorefront.schemas.objects import WishlistItem
+from odoo.addons.st_graphql_vuestorefront.schemas.objects import WishlistItem
 
 
 class WishlistItems(graphene.Interface):

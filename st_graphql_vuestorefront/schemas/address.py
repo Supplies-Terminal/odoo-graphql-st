@@ -7,7 +7,7 @@ from graphql import GraphQLError
 
 from odoo import _
 from odoo.http import request
-from odoo.addons.graphql_vuestorefront.schemas.objects import Partner
+from odoo.addons.st_graphql_vuestorefront.schemas.objects import Partner
 
 
 def get_partner(env, partner_id, order, website):
