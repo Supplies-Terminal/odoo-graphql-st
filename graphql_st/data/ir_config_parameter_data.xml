@@ -4,8 +4,22 @@
     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 -->
 <odoo noupdate="1">
-
     <function model="res.config.settings" name="create_st_cache_invalidation_key"/>
+
+    <record id="stsms_api_url" model="ir.config_parameter">
+        <field name="key">st_sms_api_url</field>
+        <field name="value">http://suppliesterminal.api.genvoice.net</field>
+    </record>
+
+    <record id="stsms_api_key" model="ir.config_parameter">
+        <field name="key">st_sms_api_key</field>
+        <field name="value">53f88bc22a4ca1613ddcd1568b4fff02</field>
+    </record>
+
+    <record id="stsms_number" model="ir.config_parameter">
+        <field name="key">st_sms_number</field>
+        <field name="value"></field>
+    </record>
 
     <record id="stcache_invalidation_url" model="ir.config_parameter">
         <field name="key">st_cache_invalidation_url</field>

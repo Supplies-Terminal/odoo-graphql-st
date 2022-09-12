@@ -19,6 +19,11 @@ class ResConfigSettings(models.TransientModel):
         'Payment Error Return Url', related='website_id.st_payment_error_return_url', readonly=False,
         required=True
     )
+
+    st_sms_api_url = fields.Char('SMS API Url', required=True)
+    st_sms_api_key = fields.Char('SMS API Key', required=True)
+    st_sms_number = fields.Char('SMS API Out Number', required=True)
+
     st_cache_invalidation_key = fields.Char('Cache Invalidation Key', required=True)
     st_cache_invalidation_url = fields.Char('Cache Invalidation Url', required=True)
 
@@ -32,6 +37,9 @@ class ResConfigSettings(models.TransientModel):
         res = super(ResConfigSettings, self).get_values()
         ICP = self.env['ir.config_parameter'].sudo()
         res.update(
+            st_sms_api_url=ICP.get_param('st_sms_api_url'),
+            st_sms_api_key=ICP.get_param('st_sms_api_key'),
+            st_sms_number=ICP.get_param('st_sms_number'),
             st_cache_invalidation_key=ICP.get_param('st_cache_invalidation_key'),
             st_cache_invalidation_url=ICP.get_param('st_cache_invalidation_url'),
             st_image_quality=int(ICP.get_param('st_image_quality', 100)),
@@ -50,6 +58,9 @@ class ResConfigSettings(models.TransientModel):
 
         super(ResConfigSettings, self).set_values()
         ICP = self.env['ir.config_parameter'].sudo()
+        ICP.set_param('st_sms_api_url', self.st_sms_api_url)
+        ICP.set_param('st_sms_api_key', self.st_sms_api_key)
+        ICP.set_param('st_sms_number', self.st_sms_number)
         ICP.set_param('st_cache_invalidation_key', self.st_cache_invalidation_key)
         ICP.set_param('st_cache_invalidation_url', self.st_cache_invalidation_url)
         ICP.set_param('st_image_quality', self.st_image_quality)
