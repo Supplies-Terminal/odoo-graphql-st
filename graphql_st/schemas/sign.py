@@ -10,7 +10,7 @@ from odoo.http import request
 from odoo.exceptions import UserError
 from odoo.addons.auth_signup.models.res_users import SignupError
 from odoo.addons.graphql_st.schemas.objects import User
-
+import json
 
 class Login(graphene.Mutation):
     class Arguments:
@@ -149,6 +149,38 @@ class UpdatePassword(graphene.Mutation):
             raise GraphQLError(_('You must be logged in.'))
 
 
+class SendSMS(graphene.Mutation):
+    class Arguments:
+        cellphone = graphene.String(required=True)
+        message = graphene.String(required=True)
+
+    Output = graphene.Boolean
+
+    @staticmethod
+    def mutate(self, info, cellphone, message):
+        env = info.context['env']
+        ICP = env['ir.config_parameter'].sudo()
+        apiUrl = ICP.get_param('st_sms_api_url', False)
+        apiKey = ICP.get_param('st_sms_api_key', False)
+        number = ICP.get_param('st_sms_number', False)
+
+        # https://api.genvoice.net/docs/#api-SMS-SendSMSwithoutFrom
+        url = apiUrl + '/api/sms/send/'
+        if (number):
+            url = url + "/" + number
+        url = url + "/" + cellphone
+            
+        data = {'text': message, 'sign': 'ST'}
+        
+        headers = {'Content-type': 'application/json', 'x-app-key': apiKey}
+        
+        r = requests.post(url, data=json.dumps(data), headers=headers)
+
+        if r.status_code == '200':
+            return True
+        else:
+            raise GraphQLError(_('SMS failed.'))
+
 class SignMutation(graphene.ObjectType):
     login = Login.Field(description='Authenticate user with email and password and retrieves token.')
     logout = Logout.Field(description='Logout user')
@@ -157,3 +189,5 @@ class SignMutation(graphene.ObjectType):
     change_password = ChangePassword.Field(description="Set new user's password with the token from the change "
                                                        "password url received in the email.")
     update_password = UpdatePassword.Field(description="Update user password.")
+    send_sms = SendSMS.Field(description="Send SMS.")
+
