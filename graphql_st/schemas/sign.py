@@ -165,27 +165,27 @@ class SendSMS(graphene.Mutation):
         apiKey = ICP.get_param('st_sms_api_key', False)
         number = ICP.get_param('st_sms_number', False)
 
-        try:
-            # https://api.genvoice.net/docs/#api-SMS-SendSMSwithoutFrom
-            url = apiUrl + '/api/sms/send/'
-            if (number):
-                url = url + "/" + number
-            url = url + "/" + cellphone
-                
-            data = {'text': message, 'sign': 'ST'}
+        # try:
+        # https://api.genvoice.net/docs/#api-SMS-SendSMSwithoutFrom
+        url = apiUrl + '/api/sms/send/'
+        if (number):
+            url = url + "/" + number
+        url = url + "/" + cellphone
             
-            headers = {'Content-type': 'application/json', 'x-app-key': apiKey}
-            
-            r = requests.post(url, data=json.dumps(data), headers=headers)
+        data = {'text': message, 'sign': 'ST'}
+        
+        headers = {'Content-type': 'application/json', 'x-app-key': apiKey}
+        
+        r = requests.post(url, data=json.dumps(data), headers=headers)
 
-            if r.status_code == '200':
-                return True
-            else:
-                raise GraphQLError(_('SMS failed.'))
-        except requests.exceptions.Timeout:
-            raise GraphQLError(_('Failed: SMS Gateway Timeout'))
-        except requests.exceptions.RequestException as e:
-            raise GraphQLError(_(string.format('Failed: %s', str(e)))
+        if r.status_code == '200':
+            return True
+        else:
+            raise GraphQLError(_('SMS failed.'))
+        # except requests.exceptions.Timeout:
+        #     raise GraphQLError(_('Failed: SMS Gateway Timeout'))
+        # except requests.exceptions.RequestException as e:
+        #     raise GraphQLError(_(string.format('Failed: %s', str(e)))
             
 
 class SignMutation(graphene.ObjectType):
