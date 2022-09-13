@@ -10,6 +10,7 @@ from odoo.http import request
 from odoo.exceptions import UserError
 from odoo.addons.auth_signup.models.res_users import SignupError
 from odoo.addons.graphql_st.schemas.objects import User
+import requests
 import json
 
 class Login(graphene.Mutation):
