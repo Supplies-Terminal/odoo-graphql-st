@@ -159,6 +159,8 @@ class SendSMS(graphene.Mutation):
 
     @staticmethod
     def mutate(self, info, cellphone, message):
+        print('SendSMS')
+        
         env = info.context['env']
         ICP = env['ir.config_parameter'].sudo()
         apiUrl = ICP.get_param('st_sms_api_url', False)
@@ -167,10 +169,11 @@ class SendSMS(graphene.Mutation):
 
         try:
             # https://api.genvoice.net/docs/#api-SMS-SendSMSwithoutFrom
-            url = apiUrl + '/api/sms/send'
+            url = '{}{}'.format(apiUrl, '/api/sms/send')
             if apiNumber != "":
-                url = url + "/" + apiNumber
-            url = url + "/" + cellphone
+                url = "{}/{}".format(url, apiNumber)
+            url = "{}/{}".format(url, cellphone)
+
             print(url)
             data = {'text': message, 'sign': 'ST'}
             print(data)
@@ -195,5 +198,5 @@ class SignMutation(graphene.ObjectType):
     change_password = ChangePassword.Field(description="Set new user's password with the token from the change "
                                                        "password url received in the email.")
     update_password = UpdatePassword.Field(description="Update user password.")
-    send_sms = SendSMS.Field(description="Send SMS.")
+    send_sms = SendSMS.Field(description="Send SMS out by genvoice API.")
 
