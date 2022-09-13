@@ -171,9 +171,9 @@ class SendSMS(graphene.Mutation):
             if apiNumber != "":
                 url = url + "/" + apiNumber
             url = url + "/" + cellphone
-            print url;
+            print url
             data = {'text': message, 'sign': 'ST'}
-            print data;
+            print data
             
             headers = {'Content-type': 'application/json', 'x-app-key': apiKey}
             
