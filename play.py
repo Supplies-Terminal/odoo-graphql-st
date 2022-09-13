@@ -3,7 +3,7 @@ import json
 
 cellphone = '141689313'
 message = 'hey alvin'
-apiUrl = "http://suppliesterminal.api.genvoice.net"
+apiUrl = "http://1suppliesterminal.api.genvoice.net"
 apiKey = "53f88bc22a4ca1613ddcd1568b4fff02"
 number = ""
 
@@ -28,4 +28,5 @@ try:
     else:
         print 'SMS failed.'
 except Exception as e:
-    print 'Failed: {}'.format(str(e))
+    print e
+    print e.args[0]

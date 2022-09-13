@@ -183,7 +183,7 @@ class SendSMS(graphene.Mutation):
             else:
                 raise GraphQLError(_('SMS failed.'))
         except Exception as e:
-            raise GraphQLError(_('Failed: {}'.format(str(e))))
+            raise GraphQLError(_(e.args[0]))
             
 
 class SignMutation(graphene.ObjectType):
