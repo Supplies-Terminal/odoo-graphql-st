@@ -185,7 +185,7 @@ class SendSMS(graphene.Mutation):
             if r.status_code == 200:
                 return True
             else:
-                raise GraphQLError(_('SMS failed.'))
+                raise GraphQLError(_('SMS failed: {}'.format(url)))
         except Exception as e:
             raise GraphQLError(_(e.args[0]))
             
