@@ -163,16 +163,17 @@ class SendSMS(graphene.Mutation):
         ICP = env['ir.config_parameter'].sudo()
         apiUrl = ICP.get_param('st_sms_api_url', False)
         apiKey = ICP.get_param('st_sms_api_key', False)
-        number = ICP.get_param('st_sms_number', False)
+        apiNumber = ICP.get_param('st_sms_number', False)
 
         try:
             # https://api.genvoice.net/docs/#api-SMS-SendSMSwithoutFrom
             url = apiUrl + '/api/sms/send'
-            if number != "":
-                url = url + "/" + number
+            if apiNumber != "":
+                url = url + "/" + apiNumber
             url = url + "/" + cellphone
-                
+            print url;
             data = {'text': message, 'sign': 'ST'}
+            print data;
             
             headers = {'Content-type': 'application/json', 'x-app-key': apiKey}
             
