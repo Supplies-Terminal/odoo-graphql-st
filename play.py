@@ -5,12 +5,12 @@ cellphone = '14168931320'
 message = 'hey alvin'
 apiUrl = "http://suppliesterminal.api.genvoice.net"
 apiKey = "53f88bc22a4ca1613ddcd1568b4fff02"
-apiNumber = ""
+apiNumber = False
 
 try:
     # https://api.genvoice.net/docs/#api-SMS-SendSMSwithoutFrom
     url = '{}{}'.format(apiUrl, '/api/sms/send')
-    if apiNumber != "":
+    if !apiNumber:
         url = "{}/{}".format(url, apiNumber)
     url = "{}/{}".format(url, cellphone)
 
