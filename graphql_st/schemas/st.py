@@ -89,10 +89,10 @@ class UpdatePurchasecard(graphene.Mutation):
 
 ### preference ###
 class UpdatePreferenceParams(graphene.InputObjectType):
-    preferred_language = graphene.String()
-    subscribe_order_notice = graphene.Boolean()
-    subscribe_other = graphene.Boolean()
-    subscribe_to = graphene.String()
+    preferredLanguage = graphene.String()
+    subscribeOrderNotice = graphene.Boolean()
+    subscribeOther = graphene.Boolean()
+    subscribeTo = graphene.String()
 
 class UpdatePreference(graphene.Mutation):
     class Arguments:
@@ -113,14 +113,14 @@ class UpdatePreference(graphene.Mutation):
             raise GraphQLError(_('Partner does not exist.'))
         
         values = {}
-        if params.get('preferred_language'):
-            values.update({'preferred_language': params['preferred_language']})
-        if params.get('subscribe_order_notice'):
-            values.update({'subscribe_order_notice': params['subscribe_order_notice']})
-        if params.get('subscribe_other'):
-            values.update({'subscribe_other': params['subscribe_other']})
-        if params.get('subscribe_to'):
-            values.update({'subscribe_to': params['subscribe_to']})
+        if params.get('preferredLanguage'):
+            values.update({'preferred_language': params['preferredLanguage']})
+        if params.get('subscribeOrderNotice'):
+            values.update({'subscribe_order_notice': params['subscribeOrderNotice']})
+        if params.get('subscribeOther'):
+            values.update({'subscribe_other': params['subscribeOther']})
+        if params.get('subscribeTo'):
+            values.update({'subscribe_to': params['subscribeTo']})
 
         preference = env['st.preference'].search([('member_id', '=', partner.id)], limit=1)
         if not purchasecard:
