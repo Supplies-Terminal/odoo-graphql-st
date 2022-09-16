@@ -54,6 +54,7 @@ class StQuery(graphene.ObjectType):
         purchasecard = env['st.purchasecard'].search([('member_id', '=', partner), ('supplier_id', '=', supplier_id)], limit=1)
         return purchasecard
 
+### purchase card ###
 class UpdatePurchasecardParams(graphene.InputObjectType):
     supplier_id = graphene.Int(required=True)
     data = graphene.String(required=True)
@@ -83,6 +84,7 @@ class UpdatePurchasecard(graphene.Mutation):
         purchasecard.write(values)
         return purchasecard
 
+### preference ###
 class UpdatePreferenceParams(graphene.InputObjectType):
     preferred_language = graphene.String()
     subscribe_order_notice = graphene.Boolean()
@@ -91,7 +93,7 @@ class UpdatePreferenceParams(graphene.InputObjectType):
 
 class UpdatePreference(graphene.Mutation):
     class Arguments:
-        params = UpdatePreferenceParams()
+        params = UpdatePreferenceParams(required=True)
 
     Output = StPreference
 
