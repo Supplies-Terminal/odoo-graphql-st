@@ -30,11 +30,7 @@ class StQuery(graphene.ObjectType):
         if not user:
             raise GraphQLError(_('User does not exist.'))
 
-        partner = user.partner_id
-        if not partner:
-            raise GraphQLError(_('Partner does not exist.'))
-
-        preference = env['st.preference'].search([('member_id', '=', partner)], limit=1)
+        preference = env['st.preference'].search([('member_id', '=', user.partner_id)], limit=1)
         return preference
 
     @staticmethod
@@ -47,11 +43,7 @@ class StQuery(graphene.ObjectType):
         if not user:
             raise GraphQLError(_('User does not exist.'))
 
-        partner = user.partner_id
-        if not partner:
-            raise GraphQLError(_('Partner does not exist.'))
-
-        purchasecard = env['st.purchasecard'].search([('member_id', '=', partner), ('supplier_id', '=', supplier_id)], limit=1)
+        purchasecard = env['st.purchasecard'].search([('member_id', '=', user.partner_id), ('supplier_id', '=', supplier_id)], limit=1)
         return purchasecard
 
 ### purchase card ###
