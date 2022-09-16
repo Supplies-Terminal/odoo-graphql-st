@@ -127,8 +127,10 @@ class UpdatePreference(graphene.Mutation):
         if preference:
             preference.write(values)
         else:
+            values.update({'member_id': partner.id})
             preference = env['st.preference'].create(values)
 
+        preference = env['st.preference'].search([('member_id', '=', partner.id)], limit=1)
         return preference
     
 class StMutation(graphene.ObjectType):
