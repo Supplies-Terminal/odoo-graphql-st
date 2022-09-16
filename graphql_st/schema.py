@@ -8,7 +8,7 @@ from odoo.addons.graphql_base import OdooObjectType
 from odoo.addons.graphql_st.schemas import (
     country, category, product, order, invoice,
     user_profile, sign,
-    address, wishlist, shop, payment,
+    address, wishlist, shop, payment, st
 )
 
 
