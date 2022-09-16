@@ -82,6 +82,19 @@ def product_is_in_wishlist(env, product):
     request.website = website
     return product._is_in_wishlist()
 
+def product_is_in_cart(env, product):
+    website = env['website'].get_current_website()
+    request.website = website
+    order = website.sale_get_order(force_create=True)
+
+    filteredArr = []
+    if order and order.state != 'draft':
+        request.session['sale_order_id'] = None
+        order = website.sale_get_order(force_create=True)
+    if order:
+        filteredArr = order.order_line.filtered(lambda l: l.product.id == product.id)
+
+    return filteredArr.length > 0
 
 # --------------------- #
 #       Objects         #
@@ -286,6 +299,7 @@ class Product(OdooObjectType):
     ribbon = graphene.Field(lambda: Ribbon)
     is_in_stock = graphene.Boolean()
     is_in_wishlist = graphene.Boolean()
+    is_in_cart = graphene.Boolean()
     media_gallery = graphene.List(graphene.NonNull(lambda: ProductImage))
     qty = graphene.Float()
     slug = graphene.String()
@@ -380,6 +394,11 @@ class Product(OdooObjectType):
         env = info.context["env"]
         is_in_wishlist = product_is_in_wishlist(env, self)
         return bool(is_in_wishlist)
+
+    def resolve_is_in_cart(self, info):
+        env = info.context["env"]
+        is_in_cart = product_is_in_cart(env, self)
+        return bool(is_in_cart)
 
     def resolve_media_gallery(self, info):
         if self._name == 'product.template':
