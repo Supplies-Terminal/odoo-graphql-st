@@ -91,7 +91,7 @@ class UpdatePreferenceParams(graphene.InputObjectType):
 
 class UpdatePreference(graphene.Mutation):
     class Arguments:
-        params = UpdatePurchasecardParams()
+        params = UpdatePreferenceParams()
 
     Output = StPreference
 
