@@ -5,6 +5,7 @@
 import graphene
 from graphql import GraphQLError
 from odoo import _
+from odoo.http import request
 
 from odoo.addons.graphql_st.schemas.objects import (
     StPreference, StPurchasecard
@@ -22,28 +23,32 @@ class StQuery(graphene.ObjectType):
 
     @staticmethod
     def resolve_preference(self, info):
+        uid = request.session.uid
         env = info.context["env"]
-        if not env.uid:
-            raise GraphQLError(_('You must be logged in.'))
-
-        user = env['res.users'].search([('id', '=', env.uid)])
+        user = env['res.users'].sudo().browse(uid)
         if not user:
             raise GraphQLError(_('User does not exist.'))
 
-        preference = env['st.preference'].search([('member_id', '=', user.partner_id)], limit=1)
+        partner = user.partner_id
+        if not partner:
+            raise GraphQLError(_('Partner does not exist.'))
+        
+        preference = env['st.preference'].search([('member_id', '=', partner.id)], limit=1)
         return preference
 
     @staticmethod
     def resolve_purchasecard(self, info, supplier_id):
+        uid = request.session.uid
         env = info.context["env"]
-        if not env.uid:
-            raise GraphQLError(_('You must be logged in.'))
-
-        user = env['res.users'].search([('id', '=', env.uid)])
+        user = env['res.users'].sudo().browse(uid)
         if not user:
             raise GraphQLError(_('User does not exist.'))
 
-        purchasecard = env['st.purchasecard'].search([('member_id', '=', user.partner_id), ('supplier_id', '=', supplier_id)], limit=1)
+        partner = user.partner_id
+        if not partner:
+            raise GraphQLError(_('Partner does not exist.'))
+
+        purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('supplier_id', '=', supplier_id)], limit=1)
         return purchasecard
 
 ### purchase card ###
@@ -59,18 +64,24 @@ class UpdatePurchasecard(graphene.Mutation):
 
     @staticmethod
     def mutate(self, info, params):
-        partner = request.env.user.partner_id
+        uid = request.session.uid
+        env = info.context["env"]
+        user = env['res.users'].sudo().browse(uid)
+        if not user:
+            raise GraphQLError(_('User does not exist.'))
+
+        partner = user.partner_id
         if not partner:
             raise GraphQLError(_('Partner does not exist.'))
 
         values = {}
         values.update({'data': params['data']})
             
-        purchasecard = env['st.purchasecard'].search([('member_id', '=', partner), ('supplier_id', '=', params.supplier_id)], limit=1)
+        purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('supplier_id', '=', params.supplier_id)], limit=1)
         if not purchasecard:
             purchasecard = StPurchasecard()
             values.update({'uuid': ''})
-            values.update({'member_id': partner})
+            values.update({'member_id': partner.id})
             values.update({'supplier_id': params.supplier_id})
             
         purchasecard.write(values)
@@ -91,7 +102,13 @@ class UpdatePreference(graphene.Mutation):
 
     @staticmethod
     def mutate(self, info, params):
-        partner = request.env.user.partner_id
+        uid = request.session.uid
+        env = info.context["env"]
+        user = env['res.users'].sudo().browse(uid)
+        if not user:
+            raise GraphQLError(_('User does not exist.'))
+
+        partner = user.partner_id
         if not partner:
             raise GraphQLError(_('Partner does not exist.'))
         
@@ -105,10 +122,10 @@ class UpdatePreference(graphene.Mutation):
         if params.get('subscribe_to'):
             values.update({'subscribe_to': params['subscribe_to']})
 
-        preference = env['st.preference'].search([('member_id', '=', partner)], limit=1)
+        preference = env['st.preference'].search([('member_id', '=', partner.id)], limit=1)
         if not purchasecard:
             purchasecard = StPreference()
-            values.update({'member_id': partner})
+            values.update({'member_id': partner.id})
 
         preference.write(values)
         return preference
