@@ -84,7 +84,7 @@ class UpdatePurchasecard(graphene.Mutation):
             values.update({'uuid': ''})
             values.update({'member_id': partner.id})
             values.update({'supplier_id': params.supplier_id})
-            purchasecard = StPurchasecard.create(values)
+            purchasecard = env['st.purchasecard'].create(values)
             
         return purchasecard
 
@@ -127,7 +127,7 @@ class UpdatePreference(graphene.Mutation):
         if preference:
             preference.write(values)
         else:
-            preference = StPreference.create(values)
+            preference = env['st.preference'].create(values)
 
         return preference
     
