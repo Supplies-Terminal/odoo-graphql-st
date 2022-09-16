@@ -78,13 +78,14 @@ class UpdatePurchasecard(graphene.Mutation):
         values.update({'data': params['data']})
             
         purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('supplier_id', '=', params.supplier_id)], limit=1)
-        if not purchasecard:
-            purchasecard = StPurchasecard()
+        if purchasecard:
+            purchasecard.write(values)
+        else:
             values.update({'uuid': ''})
             values.update({'member_id': partner.id})
             values.update({'supplier_id': params.supplier_id})
+            purchasecard = StPurchasecard.create(values)
             
-        purchasecard.write(values)
         return purchasecard
 
 ### preference ###
@@ -112,22 +113,22 @@ class UpdatePreference(graphene.Mutation):
         if not partner:
             raise GraphQLError(_('Partner does not exist.'))
         
-        preference = env['st.preference'].search([('member_id', '=', partner.id)], limit=1)
-        if not preference:
-            preference = StPreference()
-            preference.member_id = partner.id
-
+        values = {}
         if params.get('preferredLanguage'):
-            preference.preferred_language = params['preferredLanguage']
+            values.update({'preferred_language': params['preferredLanguage']})
         if params.get('subscribeOrderNotice'):
-            preference.subscribe_order_notice = params['subscribeOrderNotice']
+            values.update({'subscribe_order_notice': params['subscribeOrderNotice']})
         if params.get('subscribeOther'):
-            preference.subscribe_other = params['subscribeOther']
+            values.update({'subscribe_other': params['subscribeOther']})
         if params.get('subscribeTo'):
-            preference.subscribe_to = params['subscribeTo']
+            values.update({'subscribe_to': params['subscribeTo']})
 
+        preference = env['st.preference'].search([('member_id', '=', partner.id)], limit=1)
+        if preference:
+            preference.write(values)
+        else:
+            preference = StPreference.create(values)
 
-        preference.save();
         return preference
     
 class StMutation(graphene.ObjectType):
