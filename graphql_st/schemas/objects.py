@@ -117,6 +117,18 @@ class Country(OdooObjectType):
         return self.state_ids or None
 
 
+class StPreference(OdooObjectType):
+    id = graphene.Int(required=True)
+    preferred_language = graphene.String()
+    subscribe_order_notice = graphene.Boolean()
+    subscribe_other = graphene.Boolean()
+    subscribe_to = graphene.String()
+
+class StPurchasecard(OdooObjectType):
+    id = graphene.Int(required=True)
+    uuid = graphene.String()
+    data = graphene.String()
+
 class Partner(OdooObjectType):
     id = graphene.Int(required=True)
     name = graphene.String()

@@ -24,6 +24,7 @@ class Query(
     wishlist.WishlistQuery,
     shop.ShoppingCartQuery,
     payment.PaymentQuery,
+    st.StQuery
 ):
     pass
 
@@ -38,6 +39,7 @@ class Mutation(
     payment.PaymentMutation,
     payment.AdyenPaymentMutation,
     order.OrderMutation,
+    st.StMutation
 ):
     pass
 
