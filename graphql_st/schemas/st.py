@@ -112,22 +112,22 @@ class UpdatePreference(graphene.Mutation):
         if not partner:
             raise GraphQLError(_('Partner does not exist.'))
         
-        values = {}
-        if params.get('preferredLanguage'):
-            values.update({'preferred_language': params['preferredLanguage']})
-        if params.get('subscribeOrderNotice'):
-            values.update({'subscribe_order_notice': params['subscribeOrderNotice']})
-        if params.get('subscribeOther'):
-            values.update({'subscribe_other': params['subscribeOther']})
-        if params.get('subscribeTo'):
-            values.update({'subscribe_to': params['subscribeTo']})
-
         preference = env['st.preference'].search([('member_id', '=', partner.id)], limit=1)
         if not preference:
             preference = StPreference()
-            values.update({'member_id': partner.id})
+            preference.member_id = partner.id
 
-        preference.write(values)
+        if params.get('preferredLanguage'):
+            preference.preferred_language = params['preferredLanguage']
+        if params.get('subscribeOrderNotice'):
+            preference.subscribe_order_notice = params['subscribeOrderNotice']
+        if params.get('subscribeOther'):
+            preference.subscribe_other = params['subscribeOther']
+        if params.get('subscribeTo'):
+            preference.subscribe_to = params['subscribeTo']
+
+
+        preference.save();
         return preference
     
 class StMutation(graphene.ObjectType):
