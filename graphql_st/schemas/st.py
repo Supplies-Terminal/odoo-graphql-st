@@ -123,8 +123,8 @@ class UpdatePreference(graphene.Mutation):
             values.update({'subscribe_to': params['subscribeTo']})
 
         preference = env['st.preference'].search([('member_id', '=', partner.id)], limit=1)
-        if not purchasecard:
-            purchasecard = StPreference()
+        if not preference:
+            preference = StPreference()
             values.update({'member_id': partner.id})
 
         preference.write(values)
