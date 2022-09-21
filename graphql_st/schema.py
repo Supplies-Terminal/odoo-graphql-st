@@ -8,7 +8,7 @@ from odoo.addons.graphql_base import OdooObjectType
 from odoo.addons.graphql_st.schemas import (
     country, category, product, order, invoice,
     user_profile, sign,
-    address, wishlist, shop, payment, st, company, website
+    address, wishlist, shop, payment, st, website
 )
 
 
@@ -25,7 +25,6 @@ class Query(
     shop.ShoppingCartQuery,
     payment.PaymentQuery,
     st.StQuery,
-    company.CompanyQuery,
     website.WebsiteQuery
 ):
     pass
@@ -49,6 +48,6 @@ class Mutation(
 schema = graphene.Schema(
     query=Query,
     mutation=Mutation,
-    types=[website.WebsiteList, company.CompanyList, country.CountryList, category.CategoryList, product.ProductList, product.ProductVariantData, order.OrderList,
+    types=[website.WebsiteList, country.CountryList, category.CategoryList, product.ProductList, product.ProductVariantData, order.OrderList,
            invoice.InvoiceList, wishlist.WishlistData, shop.CartData]
 )
