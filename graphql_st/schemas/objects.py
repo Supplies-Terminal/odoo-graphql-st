@@ -717,12 +717,16 @@ class WishlistItem(OdooObjectType):
     id = graphene.Int(required=True)
     partner = graphene.Field(lambda: Partner)
     product = graphene.Field(lambda: Product)
+    website = graphene.Field(lambda: Website)
 
     def resolve_partner(self, info):
         return self.partner_id or None
 
     def resolve_product(self, info):
         return self.product_id or None
+
+    def resolve_website(self, info):
+        return self.website_id or None
 
 
 class PaymentIcon(OdooObjectType):
