@@ -25,7 +25,7 @@ class Query(
     shop.ShoppingCartQuery,
     payment.PaymentQuery,
     st.StQuery,
-    company.CompanyQuery
+    company.CompanyQuery,
     website.WebsiteQuery
 ):
     pass
