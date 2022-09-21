@@ -40,8 +40,7 @@ class Mutation(
     payment.PaymentMutation,
     payment.AdyenPaymentMutation,
     order.OrderMutation,
-    st.StMutation,
-    company.CompanyMutation
+    st.StMutation
 ):
     pass
 
