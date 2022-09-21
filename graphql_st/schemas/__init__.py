@@ -13,3 +13,5 @@ from . import address
 from . import shop
 from . import payment
 from . import wishlist
+from . import website
+from . import company
