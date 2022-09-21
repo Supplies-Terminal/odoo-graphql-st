@@ -29,9 +29,15 @@ class WishlistQuery(graphene.ObjectType):
     def resolve_wishlist_items(root, info):
         """ Get current user wishlist items """
         env = info.context['env']
-        website = env['website'].get_current_website()
-        request.website = website
-        wishlist_items = env['product.wishlist'].current()
+
+        # 改为不根据website来获取
+        # website = env['website'].get_current_website()
+        # request.website = website
+        # wishlist_items = env['product.wishlist'].current()
+
+        wish = self.search([("partner_id", "=", env.user.partner_id.id)])
+        wishlist_items.filtered(lambda x: x.sudo().product_id.product_tmpl_id.website_published and x.sudo().product_id.product_tmpl_id.sale_ok)
+        
         return WishlistData(wishlist_items=wishlist_items)
 
 
