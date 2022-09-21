@@ -120,6 +120,15 @@ class Company(OdooObjectType):
     id = graphene.Int()
     name = graphene.String()
 
+class Website(OdooObjectType):
+    id = graphene.Int()
+    name = graphene.String()
+    domain = graphene.String()
+    company_id = graphene.String()
+
+    def resolve_company(self, info):
+        return self.company_id or None
+    
 class StPreference(OdooObjectType):
     id = graphene.Int(required=True)
     preferred_language = graphene.String()
