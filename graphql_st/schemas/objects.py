@@ -116,6 +116,9 @@ class Country(OdooObjectType):
     def resolve_states(self, info):
         return self.state_ids or None
 
+class Company(OdooObjectType):
+    id = graphene.Int()
+    name = graphene.String()
 
 class StPreference(OdooObjectType):
     id = graphene.Int(required=True)
@@ -296,6 +299,7 @@ class Product(OdooObjectType):
     barcode = graphene.String()
     description = graphene.String()
     currency = graphene.Field(lambda: Currency)
+    company = graphene.Field(lambda: Company)
     weight = graphene.Float()
     meta_title = graphene.String()
     meta_keyword = graphene.String()
@@ -361,6 +365,9 @@ class Product(OdooObjectType):
 
     def resolve_currency(self, info):
         return self.currency_id or None
+
+    def resolve_company(self, info):
+        return self.company_id or None
 
     def resolve_meta_title(self, info):
         return self.website_meta_title or None
