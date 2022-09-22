@@ -35,7 +35,7 @@ class WishlistQuery(graphene.ObjectType):
         # request.website = website
         # wishlist_items = env['product.wishlist'].current()
 
-        wish = self.search([("partner_id", "=", env.user.partner_id.id)])
+        wish = env['product.wishlist'].search([("partner_id", "=", env.user.partner_id.id)])
         wishlist_items.filtered(lambda x: x.sudo().product_id.product_tmpl_id.website_published and x.sudo().product_id.product_tmpl_id.sale_ok)
         
         return WishlistData(wishlist_items=wishlist_items)
