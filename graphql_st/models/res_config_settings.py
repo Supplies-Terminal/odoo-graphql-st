@@ -22,7 +22,11 @@ class ResConfigSettings(models.TransientModel):
 
     st_sms_api_url = fields.Char('SMS API Url', required=True)
     st_sms_api_key = fields.Char('SMS API Key', required=True)
-    st_sms_number = fields.Char('SMS API Out Number', required=True)
+    st_sms_number = fields.Char('SMS API Out Number', required=False)
+
+    st_aws_access_key_id = fields.Char('Access Key ID', required=True)
+    st_aws_access_key_secret = fields.Char('Access Key Secret', required=True)
+    st_aws_region = fields.Char('Region ', required=True)
 
     st_cache_invalidation_key = fields.Char('Cache Invalidation Key', required=True)
     st_cache_invalidation_url = fields.Char('Cache Invalidation Url', required=True)
@@ -40,6 +44,9 @@ class ResConfigSettings(models.TransientModel):
             st_sms_api_url=ICP.get_param('st_sms_api_url'),
             st_sms_api_key=ICP.get_param('st_sms_api_key'),
             st_sms_number=ICP.get_param('st_sms_number'),
+            st_aws_access_key_id=ICP.get_param('st_aws_access_key_id'),
+            st_aws_access_key_secret=ICP.get_param('st_aws_access_key_secret'),
+            st_aws_region=ICP.get_param('st_aws_region'),
             st_cache_invalidation_key=ICP.get_param('st_cache_invalidation_key'),
             st_cache_invalidation_url=ICP.get_param('st_cache_invalidation_url'),
             st_image_quality=int(ICP.get_param('st_image_quality', 100)),
@@ -61,6 +68,9 @@ class ResConfigSettings(models.TransientModel):
         ICP.set_param('st_sms_api_url', self.st_sms_api_url)
         ICP.set_param('st_sms_api_key', self.st_sms_api_key)
         ICP.set_param('st_sms_number', self.st_sms_number)
+        ICP.set_param('st_aws_access_key_id', self.st_aws_access_key_id)
+        ICP.set_param('st_aws_access_key_secret', self.st_aws_access_key_secret)
+        ICP.set_param('st_aws_region', self.st_aws_region)
         ICP.set_param('st_cache_invalidation_key', self.st_cache_invalidation_key)
         ICP.set_param('st_cache_invalidation_url', self.st_cache_invalidation_url)
         ICP.set_param('st_image_quality', self.st_image_quality)
