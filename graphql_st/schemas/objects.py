@@ -132,6 +132,14 @@ class StPurchasecard(OdooObjectType):
     id = graphene.Int(required=True)
     uuid = graphene.String()
     data = graphene.String()
+    supplier = graphene.Field(lambda: Partner)
+    member = graphene.Field(lambda: Partner)
+    
+    def resolve_supplier(self, info):
+        return self.supplier_id or None
+    
+    def resolve_member(self, info):
+        return self.member_id or None
 
 class Partner(OdooObjectType):
     id = graphene.Int(required=True)

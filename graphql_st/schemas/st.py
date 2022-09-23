@@ -5,6 +5,8 @@
 import json
 import boto3
 import base64
+import uuid
+
 import graphene
 from graphql import GraphQLError
 from odoo import _
@@ -54,43 +56,6 @@ class StQuery(graphene.ObjectType):
         purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('supplier_id', '=', supplier_id)], limit=1)
         return purchasecard
 
-### purchase card ###
-class UpdatePurchasecardParams(graphene.InputObjectType):
-    supplier_id = graphene.Int(required=True)
-    data = graphene.String(required=True)
-
-class UpdatePurchasecard(graphene.Mutation):
-    class Arguments:
-        params = UpdatePurchasecardParams()
-
-    Output = StPurchasecard
-
-    @staticmethod
-    def mutate(self, info, params):
-        uid = request.session.uid
-        env = info.context["env"]
-        user = env['res.users'].sudo().browse(uid)
-        if not user:
-            raise GraphQLError(_('User does not exist.'))
-
-        partner = user.partner_id
-        if not partner:
-            raise GraphQLError(_('Partner does not exist.'))
-
-        values = {}
-        values.update({'data': params['data']})
-            
-        purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('supplier_id', '=', params.supplier_id)], limit=1)
-        if purchasecard:
-            purchasecard.write(values)
-        else:
-            values.update({'uuid': ''})
-            values.update({'member_id': partner.id})
-            values.update({'supplier_id': params.supplier_id})
-            purchasecard = env['st.purchasecard'].create(values)
-            
-        return purchasecard
-
 ### preference ###
 class UpdatePreferenceParams(graphene.InputObjectType):
     preferredLanguage = graphene.String()
@@ -136,19 +101,16 @@ class UpdatePreference(graphene.Mutation):
         preference = env['st.preference'].search([('member_id', '=', partner.id)], limit=1)
         return preference
 
-### purchase card OCR ###
-class ocrPurchasecardParams(graphene.InputObjectType):
-    supplier_id = graphene.Int(required=True)
-    image_base64 = graphene.String(required=True)
-
-class OcrPurchasecard(graphene.Mutation):
+### purchase card ###
+class UpdatePurchasecard(graphene.Mutation):
     class Arguments:
-        params = ocrPurchasecardParams()
+        supplier_id = graphene.Int(required=True)
+        json_card = graphene.String(required=True)
 
     Output = StPurchasecard
 
     @staticmethod
-    def mutate(self, info, params):
+    def mutate(self, info, supplier_id, json_card):
         uid = request.session.uid
         env = info.context["env"]
         user = env['res.users'].sudo().browse(uid)
@@ -159,12 +121,46 @@ class OcrPurchasecard(graphene.Mutation):
         if not partner:
             raise GraphQLError(_('Partner does not exist.'))
 
-        purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('supplier_id', '=', params.supplier_id)], limit=1)
+        values = {}
+        values.update({'data': json_card})
+            
+        purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('supplier_id', '=', supplier_id)], limit=1)
+        if purchasecard:
+            purchasecard.write(values)
+        else:
+            values.update({'uuid': uuid.uuid4()})
+            values.update({'member_id': partner.id})
+            values.update({'supplier_id': supplier_id})
+            purchasecard = env['st.purchasecard'].create(values)
+            
+        return purchasecard
+
+### purchase card OCR ###
+class OcrPurchasecard(graphene.Mutation):
+    class Arguments:
+        supplier_id = graphene.Int(required=True)
+        image_base64 = graphene.String(required=True)
+
+    Output = StPurchasecard
+
+    @staticmethod
+    def mutate(self, info, supplier_id, image_base64):
+        uid = request.session.uid
+        env = info.context["env"]
+        user = env['res.users'].sudo().browse(uid)
+        if not user:
+            raise GraphQLError(_('User does not exist.'))
+
+        partner = user.partner_id
+        if not partner:
+            raise GraphQLError(_('Partner does not exist.'))
+
+        purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('supplier_id', '=', supplier_id)], limit=1)
 
         if not purchasecard:
             raise GraphQLError(_('Purchase Card does not exist.'))
 
-        imageBase64 = params.image_base64
+        imageBase64 = image_base64
         
         # Amazon Textract client
         textractClient = boto3.client('textract',
