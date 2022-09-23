@@ -13,33 +13,13 @@ from odoo import _
 from odoo.http import request
 
 from odoo.addons.graphql_st.schemas.objects import (
-    StPreference, StPurchasecard
+    StPurchasecard
 )
 
-class StQuery(graphene.ObjectType):
-    preference = graphene.Field(
-        StPreference
-    )
-    
+class PurchasecardQuery(graphene.ObjectType):
     purchasecard = graphene.Field(
         StPurchasecard,
-        supplier_id = graphene.Int()
     )
-
-    @staticmethod
-    def resolve_preference(self, info):
-        uid = request.session.uid
-        env = info.context["env"]
-        user = env['res.users'].sudo().browse(uid)
-        if not user:
-            raise GraphQLError(_('User does not exist.'))
-
-        partner = user.partner_id
-        if not partner:
-            raise GraphQLError(_('Partner does not exist.'))
-        
-        preference = env['st.preference'].search([('member_id', '=', partner.id)], limit=1)
-        return preference
 
     @staticmethod
     def resolve_purchasecard(self, info, supplier_id):
@@ -56,52 +36,6 @@ class StQuery(graphene.ObjectType):
         purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('supplier_id', '=', supplier_id)], limit=1)
         return purchasecard
 
-### preference ###
-class UpdatePreferenceParams(graphene.InputObjectType):
-    preferredLanguage = graphene.String()
-    subscribeOrderNotice = graphene.Boolean()
-    subscribeOther = graphene.Boolean()
-    subscribeTo = graphene.String()
-
-class UpdatePreference(graphene.Mutation):
-    class Arguments:
-        params = UpdatePreferenceParams(required=True)
-
-    Output = StPreference
-
-    @staticmethod
-    def mutate(self, info, params):
-        uid = request.session.uid
-        env = info.context["env"]
-        user = env['res.users'].sudo().browse(uid)
-        if not user:
-            raise GraphQLError(_('User does not exist.'))
-
-        partner = user.partner_id
-        if not partner:
-            raise GraphQLError(_('Partner does not exist.'))
-        
-        values = {}
-        if params.get('preferredLanguage'):
-            values.update({'preferred_language': params['preferredLanguage']})
-        if params.get('subscribeOrderNotice'):
-            values.update({'subscribe_order_notice': params['subscribeOrderNotice']})
-        if params.get('subscribeOther'):
-            values.update({'subscribe_other': params['subscribeOther']})
-        if params.get('subscribeTo'):
-            values.update({'subscribe_to': params['subscribeTo']})
-
-        preference = env['st.preference'].search([('member_id', '=', partner.id)], limit=1)
-        if preference:
-            preference.write(values)
-        else:
-            values.update({'member_id': partner.id})
-            preference = env['st.preference'].create(values)
-
-        preference = env['st.preference'].search([('member_id', '=', partner.id)], limit=1)
-        return preference
-
-### purchase card ###
 class UpdatePurchasecard(graphene.Mutation):
     class Arguments:
         supplier_id = graphene.Int(required=True)
@@ -135,7 +69,6 @@ class UpdatePurchasecard(graphene.Mutation):
             
         return purchasecard
 
-### purchase card OCR ###
 class OcrPurchasecard(graphene.Mutation):
     class Arguments:
         supplier_id = graphene.Int(required=True)
@@ -188,7 +121,6 @@ class OcrPurchasecard(graphene.Mutation):
         purchasecard.data = json.encode(blocks)
         return purchasecard
     
-class StMutation(graphene.ObjectType):
-    update_Preference = UpdatePreference.Field(description='Update user preferrences on App')
+class PurchasecardMutation(graphene.ObjectType):
     update_purchasecard = UpdatePurchasecard.Field(description='Set purchase card for a specific supplier')
     ocr_purchasecard = OcrPurchasecard.Field(description='Textract purchase card image')

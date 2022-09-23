@@ -14,3 +14,5 @@ from . import shop
 from . import payment
 from . import wishlist
 from . import website
+from . import preference
+from . import purchasecard
