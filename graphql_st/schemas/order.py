@@ -103,11 +103,11 @@ class OrderQuery(graphene.ObjectType):
             domain += [('invoice_status', 'in', invoice_status)]
 
         if filter.get('date_from', False):
-            const dateFrom = new Date(filter['date_from'])
+            dateFrom = new Date(filter['date_from'])
             domain += [('date_order', '>=', dateFrom)]
 
         if filter.get('date_to', False):
-            const dateTo = new Date(filter['date_to'])
+            dateTo = new Date(filter['date_to'])
             domain += [('date_order', '<=', dateTo)]
 
         # First offset is 0 but first page is 1
