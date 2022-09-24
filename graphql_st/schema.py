@@ -30,7 +30,6 @@ class Query(
 ):
     pass
 
-
 class Mutation(
     OdooObjectType,
     user_profile.UserProfileMutation,
@@ -45,7 +44,6 @@ class Mutation(
     purchasecard.PurchasecardMutation,
 ):
     pass
-
 
 schema = graphene.Schema(
     query=Query,

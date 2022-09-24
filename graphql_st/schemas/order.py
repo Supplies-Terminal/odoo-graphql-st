@@ -33,6 +33,8 @@ def get_search_order(sort):
 class OrderFilterInput(graphene.InputObjectType):
     stages = graphene.List(OrderStage)
     invoice_status = graphene.List(InvoiceStatus)
+    date_from = graphene.String()
+    date_to = graphene.String()
 
 
 class OrderSortInput(graphene.InputObjectType):
@@ -99,6 +101,14 @@ class OrderQuery(graphene.ObjectType):
         if filter.get('invoice_status', False):
             invoice_status = [invoice_status.value for invoice_status in filter['invoice_status']]
             domain += [('invoice_status', 'in', invoice_status)]
+
+        if filter.get('date_from', False):
+            const dateFrom = new Date(filter['date_from'])
+            domain += [('date_order', '>=', dateFrom)]
+
+        if filter.get('date_to', False):
+            const dateTo = new Date(filter['date_to'])
+            domain += [('date_order', '<=', dateTo)]
 
         # First offset is 0 but first page is 1
         if current_page > 1:
