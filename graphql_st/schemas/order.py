@@ -104,12 +104,12 @@ class OrderQuery(graphene.ObjectType):
             domain += [('invoice_status', 'in', invoice_status)]
 
         if filter.get('date_from', False):
-            dateFrom = datetime.strptime(filter['date_from', '%Y-%m-%d')
+            dateFrom = datetime.strptime(filter['date_from'], '%Y-%m-%d')
             domain += [('date_order', '>=', dateFrom)]
 
         if filter.get('date_to', False):
-            dateTo = datetime.strptime(filter['date_to', '%Y-%m-%d')
-            domain += [('date_order', '<=', dateTo)]
+            dateTo = datetime.strptime(filter['date_to'], '%Y-%m-%d')
+            domain += [('date_order', '<', dateTo)]
 
         # First offset is 0 but first page is 1
         if current_page > 1:
