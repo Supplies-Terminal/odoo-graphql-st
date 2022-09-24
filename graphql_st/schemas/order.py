@@ -6,6 +6,7 @@ import graphene
 from graphql import GraphQLError
 from odoo.http import request
 from odoo import _
+from datetime import datetime
 
 from odoo.addons.graphql_st.schemas.objects import (
     SortEnum, OrderStage, InvoiceStatus, Order, ShippingMethod,
@@ -103,11 +104,11 @@ class OrderQuery(graphene.ObjectType):
             domain += [('invoice_status', 'in', invoice_status)]
 
         if filter.get('date_from', False):
-            dateFrom = new Date(filter['date_from'])
+            dateFrom = datetime.strptime(filter['date_from', '%Y-%m-%d')
             domain += [('date_order', '>=', dateFrom)]
 
         if filter.get('date_to', False):
-            dateTo = new Date(filter['date_to'])
+            dateTo = datetime.strptime(filter['date_to', '%Y-%m-%d')
             domain += [('date_order', '<=', dateTo)]
 
         # First offset is 0 but first page is 1
