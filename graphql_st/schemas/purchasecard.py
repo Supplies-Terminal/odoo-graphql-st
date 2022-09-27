@@ -74,7 +74,7 @@ class OcrPurchasecard(graphene.Mutation):
         supplier_id = graphene.Int(required=True)
         image_base64 = graphene.String(required=True)
 
-    Output = StPurchasecard
+    Output = graphene.String
 
     @staticmethod
     def mutate(self, info, supplier_id, image_base64):
@@ -118,8 +118,8 @@ class OcrPurchasecard(graphene.Mutation):
         # allWords = [] # 所有类别
         # allCells = []
         
-        purchasecard.data = json.encode(blocks)
-        return purchasecard
+        dataJSON = json.encode(blocks)
+        return dataJSON
     
 class PurchasecardMutation(graphene.ObjectType):
     update_purchasecard = UpdatePurchasecard.Field(description='Set purchase card for a specific supplier')
