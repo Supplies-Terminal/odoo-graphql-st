@@ -107,12 +107,12 @@ class OcrPurchasecard(graphene.Mutation):
         #     region_name=regionName
         # )
 
-        # imageBase64 = image_base64
-        # s3 = session.resource('s3')
+        imageBase64 = image_base64
+        s3 = session.resource('s3')
         bucket_name = 'purchasecard'
-        # file_name_with_extention = purchasecard['uuid'] + '.jpg'
-        # obj = s3.Object(bucket_name,file_name_with_extention)
-        # obj.put(Body=image_base64)
+        file_name_with_extention = purchasecard['uuid'] + '.jpg'
+        obj = s3.Object(bucket_name,file_name_with_extention)
+        obj.put(Body=base64.b64decode(image_base64))
         # location = s3.get_bucket_location(Bucket=bucket_name)['LocationConstraint']
         # object_url = "https://%s.s3-%s.amazonaws.com/%s" % (bucket_name, location, file_name_with_extention)
         
@@ -128,7 +128,7 @@ class OcrPurchasecard(graphene.Mutation):
             Document={
                 'S3Object': {
                     'Bucket': bucket_name, 
-                    'Name': 'table_no_format.jpg'
+                    'Name': file_name_with_extention
                 }
             },
             FeatureTypes=[
