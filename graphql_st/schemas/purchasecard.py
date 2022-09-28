@@ -22,7 +22,7 @@ class PurchasecardQuery(graphene.ObjectType):
     )
 
     @staticmethod
-    def resolve_purchasecard(self, info, supplier_id):
+    def resolve_purchasecard(self, info, website_id):
         uid = request.session.uid
         env = info.context["env"]
         user = env['res.users'].sudo().browse(uid)
@@ -33,18 +33,18 @@ class PurchasecardQuery(graphene.ObjectType):
         if not partner:
             raise GraphQLError(_('Partner does not exist.'))
 
-        purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('supplier_id', '=', supplier_id)], limit=1)
+        purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('website_id', '=', website_id)], limit=1)
         return purchasecard
 
 class UpdatePurchasecard(graphene.Mutation):
     class Arguments:
-        supplier_id = graphene.Int(required=True)
+        website_id = graphene.Int(required=True)
         json_card = graphene.String(required=True)
 
     Output = StPurchasecard
 
     @staticmethod
-    def mutate(self, info, supplier_id, json_card):
+    def mutate(self, info, website_id, json_card):
         uid = request.session.uid
         env = info.context["env"]
         user = env['res.users'].sudo().browse(uid)
@@ -58,26 +58,26 @@ class UpdatePurchasecard(graphene.Mutation):
         values = {}
         values.update({'data': json_card})
             
-        purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('supplier_id', '=', supplier_id)], limit=1)
+        purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('website_id', '=', website_id)], limit=1)
         if purchasecard:
             purchasecard.write(values)
         else:
             values.update({'uuid': uuid.uuid4()})
             values.update({'member_id': partner.id})
-            values.update({'supplier_id': supplier_id})
+            values.update({'website_id': website_id})
             purchasecard = env['st.purchasecard'].create(values)
             
         return purchasecard
 
 class OcrPurchasecard(graphene.Mutation):
     class Arguments:
-        supplier_id = graphene.Int(required=True)
+        website_id = graphene.Int(required=True)
         image_base64 = graphene.String(required=True)
 
     Output = graphene.String
 
     @staticmethod
-    def mutate(self, info, supplier_id, image_base64):
+    def mutate(self, info, website_id, image_base64):
         uid = request.session.uid
         env = info.context["env"]
         user = env['res.users'].sudo().browse(uid)
@@ -88,7 +88,7 @@ class OcrPurchasecard(graphene.Mutation):
         if not partner:
             raise GraphQLError(_('Partner does not exist.'))
 
-        purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('supplier_id', '=', supplier_id)], limit=1)
+        purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('website_id', '=', website_id)], limit=1)
 
         if not purchasecard:
             raise GraphQLError(_('Purchase Card does not exist.'))
