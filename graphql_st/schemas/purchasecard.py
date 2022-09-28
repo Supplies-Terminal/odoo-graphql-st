@@ -109,7 +109,7 @@ class OcrPurchasecard(graphene.Mutation):
 
         # imageBase64 = image_base64
         # s3 = session.resource('s3')
-        # bucket_name = 'purchasecard'
+        bucket_name = 'purchasecard'
         # file_name_with_extention = purchasecard['uuid'] + '.jpg'
         # obj = s3.Object(bucket_name,file_name_with_extention)
         # obj.put(Body=image_base64)
