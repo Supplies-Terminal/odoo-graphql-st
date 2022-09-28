@@ -84,8 +84,6 @@ class OcrPurchasecard(graphene.Mutation):
         awsAccessKeyId = ICP.get_param('aws_access_key_id', "")
         awsSecretAccessKey = ICP.get_param('aws_secret_access_key', "")
         regionName = ICP.get_param('region_name', "")
-        if not partner:
-            raise GraphQLError(_('Partner does not exist.'))
        
         user = env['res.users'].sudo().browse(uid)
         if not user:
@@ -104,9 +102,9 @@ class OcrPurchasecard(graphene.Mutation):
 
         # Amazon Textract client
         textractClient = boto3.client('textract',
-                                aws_access_key_id='AKIASNQ3NZMG2Y3UEBKL',
-                                aws_secret_access_key='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',
-                                region_name='ca-central-1')
+                                aws_access_key_id=awsAccessKeyId,
+                                aws_secret_access_key=awsSecretAccessKey,
+                                region_name=regionName)
         # Call Amazon Textract
         analyzeDocumentResponse = textractClient.analyze_document(
             Document={
