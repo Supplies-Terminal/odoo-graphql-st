@@ -81,10 +81,13 @@ class OcrPurchasecard(graphene.Mutation):
         uid = request.session.uid
         env = info.context["env"]
         ICP = env['ir.config_parameter'].sudo()
-        awsAccessKeyId = ICP.get_param('aws_access_key_id', "")
-        awsSecretAccessKey = ICP.get_param('aws_secret_access_key', "")
-        regionName = ICP.get_param('region_name', "")
-       
+        awsAccessKeyId = ICP.get_param('st_aws_access_key_id', "")
+        awsSecretAccessKey = ICP.get_param('st_aws_access_key_secret', "")
+        regionName = ICP.get_param('st_aws_region', "")
+        print(awsAccessKeyId)
+        print(awsSecretAccessKey)
+        print(regionName)
+        
         user = env['res.users'].sudo().browse(uid)
         if not user:
             raise GraphQLError(_('User does not exist.'))
@@ -117,7 +120,7 @@ class OcrPurchasecard(graphene.Mutation):
         print(analyzeDocumentResponse)
 
         blocks = analyzeDocumentResponse['Blocks']
-        print(analyzeDocumentResponse)
+        print(blocks)
 
         # tables = [] # 所有tables
         # allWords = [] # 所有类别
