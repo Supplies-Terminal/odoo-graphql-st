@@ -6,6 +6,7 @@ import json
 import boto3
 import base64
 import uuid
+import io
 
 import graphene
 from graphql import GraphQLError
@@ -115,7 +116,8 @@ class OcrPurchasecard(graphene.Mutation):
         )
         bucket_name = 'purchasecard'
         file_name_with_extention = purchasecard['uuid'] + '.jpg'
-        obj = s3.upload_fileobj(base64.b64decode(image_base64), bucket_name,file_name_with_extention)
+        file = io.BytesIO(base64.b64decode(image_base64))
+        obj = s3.upload_fileobj(file, bucket_name,file_name_with_extention, ExtraArgs={'ACL': 'public-read'})
         # location = s3.get_bucket_location(Bucket=bucket_name)['LocationConstraint']
         # object_url = "https://%s.s3-%s.amazonaws.com/%s" % (bucket_name, location, file_name_with_extention)
         
