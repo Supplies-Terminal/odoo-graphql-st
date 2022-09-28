@@ -144,7 +144,7 @@ class OcrPurchasecard(graphene.Mutation):
         # allWords = [] # 所有类别
         # allCells = []
         
-        dataJSON = json.encode(blocks)
+        dataJSON = json.dumps(blocks)
         return dataJSON
     
 class PurchasecardMutation(graphene.ObjectType):
