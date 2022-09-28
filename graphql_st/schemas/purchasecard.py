@@ -20,6 +20,7 @@ from odoo.addons.graphql_st.schemas.objects import (
 class PurchasecardQuery(graphene.ObjectType):
     purchasecard = graphene.Field(
         StPurchasecard,
+        website_id=graphene.Int(default_value=None),
     )
 
     @staticmethod
