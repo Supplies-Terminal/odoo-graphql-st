@@ -108,7 +108,11 @@ class OcrPurchasecard(graphene.Mutation):
         # )
 
         imageBase64 = image_base64
-        s3 = session.resource('s3')
+        s3 = boto3.client('s3',
+            aws_access_key_id=awsAccessKeyId,
+            aws_secret_access_key=awsSecretAccessKey,
+            region_name=regionName
+        )
         bucket_name = 'purchasecard'
         file_name_with_extention = purchasecard['uuid'] + '.jpg'
         obj = s3.Object(bucket_name,file_name_with_extention)
