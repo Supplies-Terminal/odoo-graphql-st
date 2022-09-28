@@ -80,6 +80,13 @@ class OcrPurchasecard(graphene.Mutation):
     def mutate(self, info, website_id, image_base64):
         uid = request.session.uid
         env = info.context["env"]
+        ICP = env['ir.config_parameter'].sudo()
+        awsAccessKeyId = ICP.get_param('aws_access_key_id', "")
+        awsSecretAccessKey = ICP.get_param('aws_secret_access_key', "")
+        regionName = ICP.get_param('region_name', "")
+        if not partner:
+            raise GraphQLError(_('Partner does not exist.'))
+       
         user = env['res.users'].sudo().browse(uid)
         if not user:
             raise GraphQLError(_('User does not exist.'))
@@ -94,7 +101,7 @@ class OcrPurchasecard(graphene.Mutation):
             raise GraphQLError(_('Purchase Card does not exist.'))
 
         imageBase64 = image_base64
-        
+
         # Amazon Textract client
         textractClient = boto3.client('textract',
                                 aws_access_key_id='AKIASNQ3NZMG2Y3UEBKL',
@@ -103,7 +110,7 @@ class OcrPurchasecard(graphene.Mutation):
         # Call Amazon Textract
         analyzeDocumentResponse = textractClient.analyze_document(
             Document={
-                'Bytes': content
+                'Bytes': imageBase64
             },
             FeatureTypes=[
                 'TABLES'
