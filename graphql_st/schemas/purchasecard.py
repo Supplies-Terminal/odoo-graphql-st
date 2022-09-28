@@ -101,11 +101,11 @@ class OcrPurchasecard(graphene.Mutation):
         if not purchasecard:
             raise GraphQLError(_('Purchase Card does not exist.'))
 
-        session = boto3.Session(
-            aws_access_key_id=awsAccessKeyId,
-            aws_secret_access_key=awsSecretAccessKey,
-            region_name=regionName
-        )
+        # session = boto3.Session(
+        #     aws_access_key_id=awsAccessKeyId,
+        #     aws_secret_access_key=awsSecretAccessKey,
+        #     region_name=regionName
+        # )
 
         # imageBase64 = image_base64
         # s3 = session.resource('s3')
@@ -117,7 +117,11 @@ class OcrPurchasecard(graphene.Mutation):
         # object_url = "https://%s.s3-%s.amazonaws.com/%s" % (bucket_name, location, file_name_with_extention)
         
         # Amazon Textract client
-        textractClient = session.resource('textract')
+        textractClient = boto3.client('textract',
+            aws_access_key_id=awsAccessKeyId,
+            aws_secret_access_key=awsSecretAccessKey,
+            region_name=regionName
+        )
 
         # Call Amazon Textract
         analyzeDocumentResponse = textractClient.analyze_document(
