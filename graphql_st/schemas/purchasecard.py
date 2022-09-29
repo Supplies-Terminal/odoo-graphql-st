@@ -7,7 +7,6 @@ import boto3
 import base64
 import uuid
 import io
-import html
 
 import graphene
 from graphql import GraphQLError
@@ -37,7 +36,6 @@ class PurchasecardQuery(graphene.ObjectType):
             raise GraphQLError(_('Partner does not exist.'))
 
         purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('website_id', '=', website_id)], limit=1)
-        purchasecard['data'] = html.unescape(purchasecard['data'])
         return purchasecard
 
 class UpdatePurchasecard(graphene.Mutation):
