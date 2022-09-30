@@ -47,9 +47,8 @@ class UpdatePurchasecard(graphene.Mutation):
 
     @staticmethod
     def mutate(self, info, website_id, json_card):
-        uid = request.session.uid
         env = info.context["env"]
-        user = env['res.users'].sudo().browse(uid)
+        user = env['res.users'].search([('id', '=', env.uid)])
         if not user:
             raise GraphQLError(_('User does not exist.'))
 

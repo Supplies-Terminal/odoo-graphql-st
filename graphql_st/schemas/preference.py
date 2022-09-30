@@ -45,9 +45,8 @@ class UpdatePreference(graphene.Mutation):
 
     @staticmethod
     def mutate(self, info, params):
-        uid = request.session.uid
         env = info.context["env"]
-        user = env['res.users'].sudo().browse(uid)
+        user = env['res.users'].search([('id', '=', env.uid)])
         if not user:
             raise GraphQLError(_('User does not exist.'))
 
