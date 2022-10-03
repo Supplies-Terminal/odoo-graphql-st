@@ -213,7 +213,9 @@ class OcrPurchasecard(graphene.Mutation):
                         'number': textDigit,
                         'orginal': text,
                         'confidence': 'floatval($confidence)',
-                        'is_number': isNumber
+                        'is_number': isNumber,
+                        'hints': '',
+                        'warning': 0
                     }
 
             # We assume that the first row corresponds to the column names
@@ -222,29 +224,24 @@ class OcrPurchasecard(graphene.Mutation):
 
         for tableId in dataframes.keys():
             table = dataframes[tableId]
-            print(tableId)
             for row in table:
-                print(table[row])
-            
                 # 对照预设采购卡资料
                 if purchaseCardGrid[tableId - 1]['items'][row]:  #如果存在对应的cell
                     gridProduct = purchaseCardGrid[tableId - 1]['items'][row]
                     dataframes[tableId][row]['product_id'] = gridProduct['product_id'];
                     dataframes[tableId][row]['title'] = gridProduct['name'];
 
-                    # productInfo = get_info(D('ProductView'), array('id'=>$gridProduct['product_id'],'language_id'=>$lang_id))
-                    # if ($product) { //如果有设置商品
-                    #     $product['product_id'] = $productInfo['id'];
-                    #     $product['title'] = $productInfo['cate_desc_title'];
-                    #     $product['des'] = $productInfo['des'];
-                    #     $product['unit'] = $productInfo['unit'];
-                    #     $product['min_qty'] = $productInfo['min_qty'];
-                    #     $product['sku'] = $productInfo['sku'];
-                    # } else { //没有预设商品
-                    #     $product['product_id'] = $gridProduct['product_id'];
-                    #     $product['hints'] = "No Product";
-                    #     $product['warning'] = 1;
-                    # }
+                    if not gridProduct['product_id']:
+                        dataframes[tableId][row]['hints'] = "No Product";
+                        dataframes[tableId][row]['warning'] = 1;
+                    else:
+                        product = env['product.product'].browse( gridProduct['product_id'])
+
+                        if not product:
+                            dataframes[tableId][row]['hints'] = "Product not available";
+                            dataframes[tableId][row]['warning'] = 1;
+                        else:
+                            dataframes[tableId][row]['title'] = product['name'];
                     
         dataJSON = json.dumps(dataframes)
         return dataJSON
