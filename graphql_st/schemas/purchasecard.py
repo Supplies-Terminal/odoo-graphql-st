@@ -226,7 +226,7 @@ class OcrPurchasecard(graphene.Mutation):
             table = dataframes[tableId]
             for row in table:
                 # 对照预设采购卡资料
-                if purchaseCardGrid[tableId - 1]['items'][row]:  #如果存在对应的cell
+                try:  #如果存在对应的cell
                     gridProduct = purchaseCardGrid[tableId - 1]['items'][row]
                     dataframes[tableId][row]['product_id'] = gridProduct['product_id'];
                     dataframes[tableId][row]['title'] = gridProduct['name'];
@@ -242,6 +242,8 @@ class OcrPurchasecard(graphene.Mutation):
                             dataframes[tableId][row]['warning'] = 1;
                         else:
                             dataframes[tableId][row]['title'] = product['name'];
+                except IndexError as e:
+                    print ('not exsits')
                     
         dataJSON = json.dumps(dataframes)
         return dataJSON
