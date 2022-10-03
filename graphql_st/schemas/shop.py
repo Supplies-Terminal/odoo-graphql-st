@@ -34,6 +34,33 @@ class ShoppingCartQuery(graphene.ObjectType):
             order.order_line.filtered(lambda l: not l.product_id.active).unlink()
         return CartData(order=order)
 
+class CartAddItemParams(graphene.InputObjectType):
+    product_id = graphene.Int(required=True)
+    website_id = graphene.Int(required=True)
+    quantity = graphene.Int(required=True)
+
+class CartAddItems(graphene.Mutation):
+    class Arguments:
+        list: graphene.List(graphene.NonNull(CartAddItemParams))
+        empty_cart = graphene.Boolean(required=True)
+
+    Output = CartData
+
+    @staticmethod
+    def mutate(self, info, list, empty_cart):
+        env = info.context["env"]
+        website = env['website'].get_current_website()
+        request.website = website
+        order = website.sale_get_order(force_create=1)
+
+        if empty_cart==True:
+            order.order_line.sudo().unlink()
+            
+        order.write({'website_id': item.website.id})
+        for item in list:
+            order._cart_update(product_id=item.product_id, add_qty=item.quantity)
+            
+        return CartData(order=order)
 
 class CartAddItem(graphene.Mutation):
     class Arguments:
