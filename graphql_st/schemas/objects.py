@@ -207,6 +207,10 @@ class Currency(OdooObjectType):
     name = graphene.String()
     symbol = graphene.String()
 
+class UoM(OdooObjectType):
+    id = graphene.Int(required=True)
+    name = graphene.String()
+
 
 class Category(OdooObjectType):
     id = graphene.Int(required=True)
@@ -308,6 +312,7 @@ class Product(OdooObjectType):
     barcode = graphene.String()
     description = graphene.String()
     currency = graphene.Field(lambda: Currency)
+    uom = graphene.Field(lambda: UoM)
     weight = graphene.Float()
     meta_title = graphene.String()
     meta_keyword = graphene.String()
@@ -373,6 +378,9 @@ class Product(OdooObjectType):
 
     def resolve_currency(self, info):
         return self.currency_id or None
+
+    def resolve_uom(self, info):
+        return self.product_uom_id or None
 
     def resolve_company(self, info):
         return self.company_id or None
