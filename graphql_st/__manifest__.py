@@ -20,6 +20,8 @@
         'contacts',
         'theme_default',
         'payment_adyen_og',
+        'website',
+        'odoo-enhance-st',
     ],
     'data': [
         'data/website_data.xml',
