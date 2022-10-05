@@ -21,7 +21,7 @@
         'theme_default',
         'payment_adyen_og',
         'website',
-        'odoo-enhance-st',
+        'odoo_enhance_st',
     ],
     'data': [
         'data/website_data.xml',
