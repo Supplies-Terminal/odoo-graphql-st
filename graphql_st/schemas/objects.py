@@ -116,10 +116,18 @@ class Country(OdooObjectType):
     def resolve_states(self, info):
         return self.state_ids or None
 
+class Company(OdooObjectType):
+    id = graphene.Int()
+    x_service = graphene.String()
+
 class Website(OdooObjectType):
     id = graphene.Int()
     name = graphene.String()
     domain = graphene.String()
+    company = graphene.Field(lambda: Company)
+
+    def resolve_company(self, info):
+        return self.company_id or None
     
 class StPreference(OdooObjectType):
     id = graphene.Int(required=True)
