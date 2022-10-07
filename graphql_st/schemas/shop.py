@@ -8,7 +8,7 @@ from odoo.http import request
 
 
 class Cart(graphene.Interface):
-    order = graphene.Field(Order)
+    orders = graphene.List(Order)
 
 
 class CartData(graphene.ObjectType):
@@ -24,99 +24,123 @@ class ShoppingCartQuery(graphene.ObjectType):
     @staticmethod
     def resolve_cart(self, info):
         env = info.context["env"]
-        website = env['website'].get_current_website()
-        request.website = website
-        order = website.sale_get_order(force_create=True)
-        if order and order.state != 'draft':
-            request.session['sale_order_id'] = None
+        # 改为合并多个网站的cart
+        # website = env['website'].get_current_website()
+        websites = Website.search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        orders = []
+        for website in websites:
+            request.website = website
             order = website.sale_get_order(force_create=True)
-        if order:
-            order.order_line.filtered(lambda l: not l.product_id.active).unlink()
-        return CartData(order=order)
-
-class CartAddItemParams(graphene.InputObjectType):
-    product_id = graphene.Int(required=True)
-    website_id = graphene.Int(required=True)
-    quantity = graphene.Int(required=True)
-
-class CartAddItems(graphene.Mutation):
-    class Arguments:
-        list: graphene.List(graphene.NonNull(CartAddItemParams))
-        empty_cart = graphene.Boolean(required=True)
-
-    Output = CartData
-
-    @staticmethod
-    def mutate(self, info, list, empty_cart):
-        env = info.context["env"]
-        website = env['website'].get_current_website()
-        request.website = website
-        order = website.sale_get_order(force_create=1)
-
-        if empty_cart==True:
-            order.order_line.sudo().unlink()
-            
-        order.write({'website_id': item.website.id})
-        for item in list:
-            order._cart_update(product_id=item.product_id, add_qty=item.quantity)
-            
-        return CartData(order=order)
+            if order and order.state != 'draft':
+                request.session['sale_order_id'] = None
+                order = website.sale_get_order(force_create=True)
+            if order:
+                order.order_line.filtered(lambda l: not l.product_id.active).unlink()
+            orders.append(order)
+        return CartData(orders=orders)
 
 class CartAddItem(graphene.Mutation):
     class Arguments:
+        website_id = graphene.Int(required=True)
         product_id = graphene.Int(required=True)
         quantity = graphene.Int(required=True)
 
     Output = CartData
 
     @staticmethod
-    def mutate(self, info, product_id, quantity):
+    def mutate(self, info, website_id, product_id, quantity):
         env = info.context["env"]
-        website = env['website'].get_current_website()
-        request.website = website
-        order = website.sale_get_order(force_create=1)
-        # Forcing the website_id to be passed to the Order
-        order.write({'website_id': website.id})
-        order._cart_update(product_id=product_id, add_qty=quantity)
-        return CartData(order=order)
+        # 改为根据参数指定网站
+        # website = env['website'].get_current_website()
+        websites = Website.search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        orders = []
+        for website in websites:
+            request.website = website
+            order = website.sale_get_order(force_create=True)
+
+            if website.id == website_id:
+                # 写入/更新商品
+                order.write({'website_id': website.id})
+                order._cart_update(product_id=product_id, add_qty=quantity)
+
+            if order and order.state != 'draft':
+                request.session['sale_order_id'] = None
+                order = website.sale_get_order(force_create=True)
+            if order:
+                order.order_line.filtered(lambda l: not l.product_id.active).unlink()
+                
+            orders.append(order)
+        return CartData(orders=orders)
 
 
 class CartUpdateItem(graphene.Mutation):
     class Arguments:
+        website_id = graphene.Int(required=True)
         line_id = graphene.Int(required=True)
         quantity = graphene.Int(required=True)
 
     Output = CartData
 
     @staticmethod
-    def mutate(self, info, line_id, quantity):
+    def mutate(self, info, website_id, line_id, quantity):
         env = info.context["env"]
-        website = env['website'].get_current_website()
-        request.website = website
-        order = website.sale_get_order(force_create=1)
-        line = order.order_line.filtered(lambda rec: rec.id == line_id)
-        # Reset Warning Stock Message always before a new update
-        line.warning_stock = ""
-        order._cart_update(product_id=line.product_id.id, line_id=line.id, set_qty=quantity)
-        return CartData(order=order)
+        # 改为根据参数指定网站
+        # website = env['website'].get_current_website()
+        websites = Website.search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        orders = []
+        for website in websites:
+            request.website = website
+            order = website.sale_get_order(force_create=True)
+
+            if website.id == website_id:
+                # 写入/更新商品
+                line = order.order_line.filtered(lambda rec: rec.id == line_id)
+                # Reset Warning Stock Message always before a new update
+                line.warning_stock = ""
+                order._cart_update(product_id=line.product_id.id, line_id=line.id, set_qty=quantity)
+
+            if order and order.state != 'draft':
+                request.session['sale_order_id'] = None
+                order = website.sale_get_order(force_create=True)
+            if order:
+                order.order_line.filtered(lambda l: not l.product_id.active).unlink()
+                
+            orders.append(order)
+        return CartData(orders=orders)
 
 
 class CartRemoveItem(graphene.Mutation):
     class Arguments:
+        website_id = graphene.Int(required=True)
         line_id = graphene.Int(required=True)
 
     Output = CartData
 
     @staticmethod
-    def mutate(self, info, line_id):
+    def mutate(self, info, website_id, line_id):
         env = info.context["env"]
-        website = env['website'].get_current_website()
-        request.website = website
-        order = website.sale_get_order(force_create=1)
-        line = order.order_line.filtered(lambda rec: rec.id == line_id)
-        line.unlink()
-        return CartData(order=order)
+        # 改为根据参数指定网站
+        # website = env['website'].get_current_website()
 
+        websites = Website.search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        orders = []
+        for website in websites:
+            request.website = website
+            order = website.sale_get_order(force_create=True)
+
+            if website.id == website_id:
+                # 写入/更新商品
+                line = order.order_line.filtered(lambda rec: rec.id == line_id)
+                line.unlink()
+
+            if order and order.state != 'draft':
+                request.session['sale_order_id'] = None
+                order = website.sale_get_order(force_create=True)
+            if order:
+                order.order_line.filtered(lambda l: not l.product_id.active).unlink()
+                
+            orders.append(order)
+        return CartData(orders=orders)
 
 class CartClear(graphene.Mutation):
     Output = Order
@@ -124,29 +148,49 @@ class CartClear(graphene.Mutation):
     @staticmethod
     def mutate(self, info):
         env = info.context["env"]
-        website = env['website'].get_current_website()
-        request.website = website
-        order = website.sale_get_order(force_create=1)
-        order.order_line.sudo().unlink()
-        return order
+        # 改为根据参数指定网站
+        # website = env['website'].get_current_website()
+        websites = Website.search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        orders = []
+        for website in websites:
+            request.website = website
+            order = website.sale_get_order(force_create=1)
+            order.order_line.sudo().unlink()
+            orders.append(order)
+        return orders
 
 
 class SetShippingMethod(graphene.Mutation):
     class Arguments:
+        website_id = graphene.Int(required=True)
         shipping_method_id = graphene.Int(required=True)
 
     Output = CartData
 
     @staticmethod
-    def mutate(self, info, shipping_method_id):
+    def mutate(self, info, website_id, shipping_method_id):
         env = info.context["env"]
-        website = env['website'].get_current_website()
-        request.website = website
-        order = website.sale_get_order(force_create=1)
+        # 改为根据参数指定网站
+        # website = env['website'].get_current_website()
 
-        order._check_carrier_quotation(force_carrier_id=shipping_method_id)
+        websites = Website.search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        orders = []
+        for website in websites:
+            request.website = website
+            order = website.sale_get_order(force_create=True)
 
-        return CartData(order=order)
+            if website.id == website_id:
+                # 写入/更新商品
+                order._check_carrier_quotation(force_carrier_id=shipping_method_id)
+
+            if order and order.state != 'draft':
+                request.session['sale_order_id'] = None
+                order = website.sale_get_order(force_create=True)
+            if order:
+                order.order_line.filtered(lambda l: not l.product_id.active).unlink()
+                
+            orders.append(order)
+        return CartData(orders=orders)
 
 
 # ---------------------------------------------------#
@@ -155,11 +199,13 @@ class SetShippingMethod(graphene.Mutation):
 
 class ProductInput(graphene.InputObjectType):
     id = graphene.Int(required=True)
+    website_id = graphene.Int(required=True)
     quantity = graphene.Int(required=True)
 
 
 class CartLineInput(graphene.InputObjectType):
     id = graphene.Int(required=True)
+    website_id = graphene.Int(required=True)
     quantity = graphene.Int(required=True)
 
 
@@ -172,16 +218,26 @@ class CartAddMultipleItems(graphene.Mutation):
     @staticmethod
     def mutate(self, info, products):
         env = info.context["env"]
-        website = env['website'].get_current_website()
-        request.website = website
-        order = website.sale_get_order(force_create=1)
-        # Forcing the website_id to be passed to the Order
-        order.write({'website_id': website.id})
-        for product in products:
-            product_id = product['id']
-            quantity = product['quantity']
-            order._cart_update(product_id=product_id, add_qty=quantity)
-        return CartData(order=order)
+        websites = Website.search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        orders = []
+        for website in websites:
+            request.website = website
+            order = website.sale_get_order(force_create=True)
+
+            productsInWebsite = filter(lambda rec: rec['website_id'] == website.id, products)
+            for product in productsInWebsite:
+                product_id = product['id']
+                quantity = product['quantity']
+                order._cart_update(product_id=product_id, add_qty=quantity)
+
+            if order and order.state != 'draft':
+                request.session['sale_order_id'] = None
+                order = website.sale_get_order(force_create=True)
+            if order:
+                order.order_line.filtered(lambda l: not l.product_id.active).unlink()
+                
+            orders.append(order)
+        return CartData(orders=orders)
 
 
 class CartUpdateMultipleItems(graphene.Mutation):
@@ -193,17 +249,29 @@ class CartUpdateMultipleItems(graphene.Mutation):
     @staticmethod
     def mutate(self, info, lines):
         env = info.context["env"]
-        website = env['website'].get_current_website()
-        request.website = website
-        order = website.sale_get_order(force_create=1)
-        for line in lines:
-            line_id = line['id']
-            quantity = line['quantity']
-            line = order.order_line.filtered(lambda rec: rec.id == line_id)
-            # Reset Warning Stock Message always before a new update
-            line.warning_stock = ""
-            order._cart_update(product_id=line.product_id.id, line_id=line.id, set_qty=quantity)
-        return CartData(order=order)
+        websites = Website.search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        orders = []
+        for website in websites:
+            request.website = website
+            order = website.sale_get_order(force_create=True)
+
+            linesInWebsite = filter(lambda rec: rec['website_id'] == website.id, lines)
+            for line in linesInWebsite:
+                line_id = line['id']
+                quantity = line['quantity']
+                line = order.order_line.filtered(lambda rec: rec.id == line_id)
+                # Reset Warning Stock Message always before a new update
+                line.warning_stock = ""
+                order._cart_update(product_id=line.product_id.id, line_id=line.id, set_qty=quantity)
+
+            if order and order.state != 'draft':
+                request.session['sale_order_id'] = None
+                order = website.sale_get_order(force_create=True)
+            if order:
+                order.order_line.filtered(lambda l: not l.product_id.active).unlink()
+                
+            orders.append(order)
+        return CartData(orders=orders)
 
 
 class CartRemoveMultipleItems(graphene.Mutation):
@@ -215,13 +283,26 @@ class CartRemoveMultipleItems(graphene.Mutation):
     @staticmethod
     def mutate(self, info, line_ids):
         env = info.context["env"]
-        website = env['website'].get_current_website()
-        request.website = website
-        order = website.sale_get_order(force_create=1)
-        for line_id in line_ids:
-            line = order.order_line.filtered(lambda rec: rec.id == line_id)
-            line.unlink()
-        return CartData(order=order)
+
+        websites = Website.search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        orders = []
+        for website in websites:
+            request.website = website
+            order = website.sale_get_order(force_create=True)
+
+            linesInWebsite = filter(lambda rec: rec['website_id'] == website.id, lines)
+            for line in linesInWebsite:
+                line = order.order_line.filtered(lambda rec: rec.id == line_id)
+                line.unlink()
+
+            if order and order.state != 'draft':
+                request.session['sale_order_id'] = None
+                order = website.sale_get_order(force_create=True)
+            if order:
+                order.order_line.filtered(lambda l: not l.product_id.active).unlink()
+                
+            orders.append(order)
+        return CartData(orders=orders)
 
 
 class CreateUpdatePartner(graphene.Mutation):

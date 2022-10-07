@@ -596,6 +596,7 @@ class Order(OdooObjectType):
     id = graphene.Int(required=True)
     name = graphene.String()
     partner = graphene.Field(lambda: Partner)
+    website = graphene.Field(lambda: Website)
     partner_shipping = graphene.Field(lambda: Partner)
     partner_invoice = graphene.Field(lambda: Partner)
     date_order = graphene.String()
@@ -623,6 +624,9 @@ class Order(OdooObjectType):
 
     def resolve_partner(self, info):
         return self.partner_id or None
+
+    def resolve_website(self, info):
+        return self.website_id or None
 
     def resolve_partner_shipping(self, info):
         return self.partner_shipping_id or None
