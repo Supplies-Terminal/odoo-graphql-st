@@ -26,7 +26,7 @@ class ShoppingCartQuery(graphene.ObjectType):
         env = info.context["env"]
         # 改为合并多个网站的cart
         # website = env['website'].get_current_website()
-        websites = env['website'].search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        websites = env['website'].search([], limit=255, offset=0, order='id ASC')  # 获取所有的站点
         orders = []
         for website in websites:
             request.website = website
@@ -52,7 +52,7 @@ class CartAddItem(graphene.Mutation):
         env = info.context["env"]
         # 改为根据参数指定网站
         # website = env['website'].get_current_website()
-        websites = env['website'].search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        websites = env['website'].search([], limit=255, offset=0, order='id ASC')  # 获取所有的站点
         orders = []
         for website in websites:
             request.website = website
@@ -86,7 +86,7 @@ class CartUpdateItem(graphene.Mutation):
         env = info.context["env"]
         # 改为根据参数指定网站
         # website = env['website'].get_current_website()
-        websites = env['website'].search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        websites = env['website'].search([], limit=255, offset=0, order='id ASC')  # 获取所有的站点
         orders = []
         for website in websites:
             request.website = website
@@ -122,7 +122,7 @@ class CartRemoveItem(graphene.Mutation):
         # 改为根据参数指定网站
         # website = env['website'].get_current_website()
 
-        websites = env['website'].search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        websites = env['website'].search([], limit=255, offset=0, order='id ASC')  # 获取所有的站点
         orders = []
         for website in websites:
             request.website = website
@@ -150,7 +150,7 @@ class CartClear(graphene.Mutation):
         env = info.context["env"]
         # 改为根据参数指定网站
         # website = env['website'].get_current_website()
-        websites = env['website'].search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        websites = env['website'].search([], limit=255, offset=0, order='id ASC')  # 获取所有的站点
         orders = []
         for website in websites:
             request.website = website
@@ -173,7 +173,7 @@ class SetShippingMethod(graphene.Mutation):
         # 改为根据参数指定网站
         # website = env['website'].get_current_website()
 
-        websites = env['website'].search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        websites = env['website'].search([], limit=255, offset=0, order='id ASC')  # 获取所有的站点
         orders = []
         for website in websites:
             request.website = website
@@ -218,7 +218,7 @@ class CartAddMultipleItems(graphene.Mutation):
     @staticmethod
     def mutate(self, info, products):
         env = info.context["env"]
-        websites = env['website'].search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        websites = env['website'].search([], limit=255, offset=0, order='id ASC')  # 获取所有的站点
         orders = []
         for website in websites:
             request.website = website
@@ -249,7 +249,7 @@ class CartUpdateMultipleItems(graphene.Mutation):
     @staticmethod
     def mutate(self, info, lines):
         env = info.context["env"]
-        websites = env['website'].search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        websites = env['website'].search([], limit=255, offset=0, order='id ASC')  # 获取所有的站点
         orders = []
         for website in websites:
             request.website = website
@@ -284,7 +284,7 @@ class CartRemoveMultipleItems(graphene.Mutation):
     def mutate(self, info, line_ids):
         env = info.context["env"]
 
-        websites = env['website'].search([], limit=page_size, offset=offset, order=order)  # 获取所有的站点
+        websites = env['website'].search([], limit=255, offset=0, order='id ASC')  # 获取所有的站点
         orders = []
         for website in websites:
             request.website = website
