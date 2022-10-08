@@ -170,7 +170,7 @@ class Partner(OdooObjectType):
     signup_valid = graphene.String()
     parent_id = graphene.Field(lambda: Partner)
     image = graphene.String()
-    websites = graphene.Field(lambda: Website)
+    websites = graphene.List(lambda: Website)
 
     def resolve_country(self, info):
         return self.country_id or None
