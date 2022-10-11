@@ -44,16 +44,37 @@ class Logout(graphene.Mutation):
         return True
 
 
+class contactInput(graphene.InputObjectType):
+    name = graphene.String(required=True)
+    phone = graphene.String(required=True)
+    position = graphene.String(required=True)
+
+class addressInput(graphene.InputObjectType):
+    name = graphene.String(required=True)
+    street = graphene.String(required=True)
+    street2 = graphene.String()
+    zip = graphene.String(required=True)
+    city = graphene.String()
+    state_id = graphene.Int()
+    country_id = graphene.Int(required=True)
+    phone = graphene.String(required=True)
+    email = graphene.String()
+    
 class Register(graphene.Mutation):
     class Arguments:
         name = graphene.String(required=True)
+        operating_name = graphene.String(required=True)
+        vat = graphene.String(required=True)
         email = graphene.String(required=True)
         password = graphene.String(required=True)
+        contact = contactInput(required=True)
+        billding_address = addressInput(required=True)
+        delivery_address = addressInput(required=True)
 
     Output = User
 
     @staticmethod
-    def mutate(self, info, name, email, password):
+    def mutate(self, info, name, operating_name, vat, email, password, contact, billding_address, delivery_address):
         env = info.context['env']
 
         data = {
@@ -66,6 +87,8 @@ class Register(graphene.Mutation):
             raise GraphQLError(_('Another user is already registered using this email address.'))
 
         env['res.users'].sudo().signup(data)
+
+        # 创建用户后，再创建partner，然后进行关联
 
         return env['res.users'].sudo().search([('login', '=', data['login'])], limit=1)
 
