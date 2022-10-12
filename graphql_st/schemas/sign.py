@@ -65,6 +65,7 @@ class Register(graphene.Mutation):
         name = graphene.String(required=True)
         operating_name = graphene.String(required=True)
         vat = graphene.String(required=True)
+        phone = graphene.String(required=True)
         email = graphene.String(required=True)
         password = graphene.String(required=True)
         contact = contactInput(required=True)
@@ -74,7 +75,7 @@ class Register(graphene.Mutation):
     Output = User
 
     @staticmethod
-    def mutate(self, info, name, operating_name, vat, email, password, contact, billding_address, delivery_address):
+    def mutate(self, info, name, operating_name, vat, phone, email, password, contact, billding_address, delivery_address):
         env = info.context['env']
 
         data = {
