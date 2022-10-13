@@ -324,6 +324,7 @@ class Product(OdooObjectType):
     barcode = graphene.String()
     description = graphene.String()
     currency = graphene.Field(lambda: Currency)
+    website = graphene.Field(lambda: Website)
     uom_id = graphene.Int()
     uom_name = graphene.String()
     weight = graphene.Float()
@@ -492,6 +493,9 @@ class Product(OdooObjectType):
 
     def resolve_product_template(self, info):
         return self.product_tmpl_id or None
+
+    def resolve_website(self, info):
+        return self.website_id or None
 
     # Specific to use in Product Template
     def resolve_combination_info(self, info):
