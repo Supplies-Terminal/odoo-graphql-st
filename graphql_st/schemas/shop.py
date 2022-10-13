@@ -26,7 +26,7 @@ class ShoppingCartQuery(graphene.ObjectType):
         env = info.context["env"]
         # 改为合并多个网站的cart
         # website = env['website'].get_current_website()
-        websites = env['website'].search([], limit=255, offset=0, order='id ASC')  # 获取所有的站点
+        websites = env.user.partner_id.websites #env['website'].search([], limit=255, offset=0, order='id ASC')  # 获取所有的站点
         orders = []
         for website in websites:
             request.website = website
