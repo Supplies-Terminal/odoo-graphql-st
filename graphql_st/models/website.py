@@ -55,6 +55,7 @@ class Website(models.Model):
             
             pricelist = self.env['product.pricelist'].browse(pricelist_id).sudo()
             so_data = self._prepare_sale_order_values(partner, pricelist)
+            so_data['state'] = 'draft'
             sale_order = self.env['sale.order'].with_company(request.website.company_id.id).with_user(SUPERUSER_ID).create(so_data)
 
             # set fiscal position
