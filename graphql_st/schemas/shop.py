@@ -36,7 +36,7 @@ class ShoppingCartQuery(graphene.ObjectType):
                 order = website.sale_get_order(force_create=True)
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
-            orders.append(order)
+                orders.append(order)
         return CartData(orders=orders)
 
 class CartAddItem(graphene.Mutation):
@@ -68,8 +68,7 @@ class CartAddItem(graphene.Mutation):
                 order = website.sale_get_order(force_create=True)
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
-                
-            orders.append(order)
+                orders.append(order)
         return CartData(orders=orders)
 
 
@@ -104,8 +103,7 @@ class CartUpdateItem(graphene.Mutation):
                 order = website.sale_get_order(force_create=True)
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
-                
-            orders.append(order)
+                orders.append(order)
         return CartData(orders=orders)
 
 
@@ -138,8 +136,7 @@ class CartRemoveItem(graphene.Mutation):
                 order = website.sale_get_order(force_create=True)
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
-                
-            orders.append(order)
+                orders.append(order)
         return CartData(orders=orders)
 
 class CartClear(graphene.Mutation):
@@ -188,8 +185,7 @@ class SetShippingMethod(graphene.Mutation):
                 order = website.sale_get_order(force_create=True)
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
-                
-            orders.append(order)
+                orders.append(order)
         return CartData(orders=orders)
 
 
@@ -235,8 +231,7 @@ class CartAddMultipleItems(graphene.Mutation):
                 order = website.sale_get_order(force_create=True)
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
-                
-            orders.append(order)
+                orders.append(order)
         return CartData(orders=orders)
 
 
@@ -269,8 +264,7 @@ class CartUpdateMultipleItems(graphene.Mutation):
                 order = website.sale_get_order(force_create=True)
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
-                
-            orders.append(order)
+                orders.append(order)
         return CartData(orders=orders)
 
 
@@ -300,8 +294,7 @@ class CartRemoveMultipleItems(graphene.Mutation):
                 order = website.sale_get_order(force_create=True)
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
-                
-            orders.append(order)
+                orders.append(order)
         return CartData(orders=orders)
 
 
