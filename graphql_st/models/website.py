@@ -76,6 +76,7 @@ class Website(models.Model):
         sale_order = self.env['sale.order'].search([
             ('partner_id', '=', partner.id),
             ('website_id', '=', request.website.id)
+            ('state', '=', 'draft'),
         ], order='write_date desc', limit=1)
 
         # cart creation was requested (either explicitly or to configure a promo code)
