@@ -26,38 +26,6 @@ class Website(models.Model):
         ICP.set_param('auth_signup.invitation_scope', 'b2c')
         ICP.set_param('auth_signup.reset_password', True)
 
-
-class WebsiteRewrite(models.Model):
-    _inherit = 'website.rewrite'
-
-    def _get_st_tags(self):
-        tags = 'WR%s' % self.id
-        return tags
-
-    def _st_request_cache_invalidation(self):
-        ICP = self.env['ir.config_parameter'].sudo()
-        url = ICP.get_param('st_cache_invalidation_url', False)
-        key = ICP.get_param('st_cache_invalidation_key', False)
-
-        if url and key:
-            try:
-                for website_rewrite in self:
-                    tags = website_rewrite._get_st_tags()
-
-                    # Make the GET request to the /cache-invalidate
-                    requests.get(url, params={'key': key, 'tags': tags}, timeout=5)
-            except:
-                pass
-
-    def write(self, vals):
-        res = super(WebsiteRewrite, self).write(vals)
-        self._st_request_cache_invalidation()
-        return res
-
-    def unlink(self):
-        self._st_request_cache_invalidation()
-        return super(WebsiteRewrite, self).unlink()
-
     def get_cart_order(self, update_pricelist=False):
         """ Return the current sales order after mofications specified by params.
         :param bool force_create: Create sales order if not already existing
@@ -108,3 +76,35 @@ class WebsiteRewrite(models.Model):
         #             sale_order._cart_update(product_id=line.product_id.id, line_id=line.id, add_qty=0)
 
         return sale_order
+    
+class WebsiteRewrite(models.Model):
+    _inherit = 'website.rewrite'
+
+    def _get_st_tags(self):
+        tags = 'WR%s' % self.id
+        return tags
+
+    def _st_request_cache_invalidation(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        url = ICP.get_param('st_cache_invalidation_url', False)
+        key = ICP.get_param('st_cache_invalidation_key', False)
+
+        if url and key:
+            try:
+                for website_rewrite in self:
+                    tags = website_rewrite._get_st_tags()
+
+                    # Make the GET request to the /cache-invalidate
+                    requests.get(url, params={'key': key, 'tags': tags}, timeout=5)
+            except:
+                pass
+
+    def write(self, vals):
+        res = super(WebsiteRewrite, self).write(vals)
+        self._st_request_cache_invalidation()
+        return res
+
+    def unlink(self):
+        self._st_request_cache_invalidation()
+        return super(WebsiteRewrite, self).unlink()
+
