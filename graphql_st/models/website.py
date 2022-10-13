@@ -31,6 +31,37 @@ class Website(models.Model):
         ICP.set_param('auth_signup.invitation_scope', 'b2c')
         ICP.set_param('auth_signup.reset_password', True)
 
+    def _site_sale_get_payment_term(self, website, partner):
+        pt = self.env.ref('account.account_payment_term_immediate', False).sudo()
+        if pt:
+            pt = (not pt.company_id.id or website.company_id.id == pt.company_id.id) and pt
+        return (
+            partner.property_payment_term_id or
+            pt or
+            self.env['account.payment.term'].sudo().search([('company_id', '=', website.company_id.id)], limit=1)
+        ).id
+        
+    def _site_prepare_sale_order_values(self, partner, pricelist):
+        self.ensure_one()
+        salesperson_id = request.website.salesperson_id.id
+        addr = partner.address_get(['delivery'])
+        default_user_id = partner.parent_id.user_id.id or partner.user_id.id
+        values = {
+            'partner_id': partner.id,
+            'pricelist_id': pricelist.id,
+            'payment_term_id': self._site_sale_get_payment_term(request.website, partner),
+            'team_id': self.salesteam_id.id or partner.parent_id.team_id.id or partner.team_id.id,
+            'partner_invoice_id': partner.id,
+            'partner_shipping_id': addr['delivery'],
+            'user_id': salesperson_id or self.salesperson_id.id or default_user_id,
+            'website_id': request.website.id,
+            'company_id': request.website.company_id.id,
+        }
+        if self.env['ir.config_parameter'].sudo().get_param('sale.use_sale_note'):
+            values['note'] = request.website.company_id.sale_note or ""
+
+        return values
+
     def get_cart_order(self, update_pricelist=False):
         """ Return the current sales order after mofications specified by params.
         :param bool force_create: Create sales order if not already existing
@@ -54,7 +85,7 @@ class Website(models.Model):
             pricelist_id = request.session.get('website_sale_current_pl') or self.get_current_pricelist().id
             
             pricelist = self.env['product.pricelist'].browse(pricelist_id).sudo()
-            so_data = self._prepare_sale_order_values(partner, pricelist)
+            so_data = self._site_prepare_sale_order_values(partner, pricelist)
             so_data['state'] = 'draft'
             sale_order = self.env['sale.order'].with_company(request.website.company_id.id).with_user(SUPERUSER_ID).create(so_data)
 
