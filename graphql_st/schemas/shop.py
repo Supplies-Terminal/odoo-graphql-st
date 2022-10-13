@@ -30,8 +30,6 @@ class ShoppingCartQuery(graphene.ObjectType):
         orders = []
         for website in websites:
             request.website = website
-            # order = website.sale_get_order(force_create=True)
-            # if order and order.state != 'draft':
             order = website.get_cart_order()
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()

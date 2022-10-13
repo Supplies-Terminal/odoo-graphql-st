@@ -85,12 +85,9 @@ def product_is_in_wishlist(env, product):
 def product_is_in_cart(env, product):
     website = env['website'].get_current_website()
     request.website = website
-    order = website.sale_get_order(force_create=True)
+    order = website.get_cart_order()
 
     filteredArr = []
-    if order and order.state != 'draft':
-        request.session['sale_order_id'] = None
-        order = website.sale_get_order(force_create=True)
     if order:
         filteredArr = order.order_line.filtered(lambda l: l.product.id == product.id)
 
