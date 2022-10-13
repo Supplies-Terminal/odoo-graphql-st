@@ -2,9 +2,14 @@
 # Copyright 2022 ODOOGAP/PROMPTEQUATION LDA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+import logging
 import requests
 from odoo import api, fields, models, tools, SUPERUSER_ID, _
+from odoo.http import request
+from odoo.addons.website.models import ir_http
+from odoo.addons.http_routing.models.ir_http import url_for
 
+_logger = logging.getLogger(__name__)
 
 class Website(models.Model):
     _inherit = 'website'
