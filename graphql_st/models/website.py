@@ -79,7 +79,6 @@ class Website(models.Model):
             ('state', '=', 'draft'),
         ], order='write_date desc', limit=1)
 
-
         # cart creation was requested (either explicitly or to configure a promo code)
         if not sale_order:
             pricelist_id = request.session.get('website_sale_current_pl') or self.get_current_pricelist().id
