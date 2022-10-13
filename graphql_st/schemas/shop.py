@@ -32,8 +32,7 @@ class ShoppingCartQuery(graphene.ObjectType):
             request.website = website
             # order = website.sale_get_order(force_create=True)
             # if order and order.state != 'draft':
-            request.session['sale_order_id'] = None
-            order = website.sale_get_order(force_create=True)
+            order = website.get_cart_order()
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
                 orders.append(order)
@@ -56,16 +55,13 @@ class CartAddItem(graphene.Mutation):
         orders = []
         for website in websites:
             request.website = website
-            order = website.sale_get_order(force_create=True)
+            order = website.get_cart_order()
 
             if website.id == website_id:
                 # 写入/更新商品
                 order.write({'website_id': website.id})
                 order._cart_update(product_id=product_id, add_qty=quantity)
 
-            if order and order.state != 'draft':
-                request.session['sale_order_id'] = None
-                order = website.sale_get_order(force_create=True)
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
                 orders.append(order)
@@ -89,7 +85,7 @@ class CartUpdateItem(graphene.Mutation):
         orders = []
         for website in websites:
             request.website = website
-            order = website.sale_get_order(force_create=True)
+            order = website.get_cart_order()
 
             if website.id == website_id:
                 # 写入/更新商品
@@ -98,9 +94,6 @@ class CartUpdateItem(graphene.Mutation):
                 line.warning_stock = ""
                 order._cart_update(product_id=line.product_id.id, line_id=line.id, set_qty=quantity)
 
-            if order and order.state != 'draft':
-                request.session['sale_order_id'] = None
-                order = website.sale_get_order(force_create=True)
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
                 orders.append(order)
@@ -124,16 +117,13 @@ class CartRemoveItem(graphene.Mutation):
         orders = []
         for website in websites:
             request.website = website
-            order = website.sale_get_order(force_create=True)
+            order = website.get_cart_order()
 
             if website.id == website_id:
                 # 写入/更新商品
                 line = order.order_line.filtered(lambda rec: rec.id == line_id)
                 line.unlink()
 
-            if order and order.state != 'draft':
-                request.session['sale_order_id'] = None
-                order = website.sale_get_order(force_create=True)
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
                 orders.append(order)
@@ -151,7 +141,7 @@ class CartClear(graphene.Mutation):
         orders = []
         for website in websites:
             request.website = website
-            order = website.sale_get_order(force_create=1)
+            order = website.get_cart_order()
             order.order_line.sudo().unlink()
             orders.append(order)
         return orders
@@ -174,15 +164,12 @@ class SetShippingMethod(graphene.Mutation):
         orders = []
         for website in websites:
             request.website = website
-            order = website.sale_get_order(force_create=True)
+            order = website.get_cart_order()
 
             if website.id == website_id:
                 # 写入/更新商品
                 order._check_carrier_quotation(force_carrier_id=shipping_method_id)
 
-            if order and order.state != 'draft':
-                request.session['sale_order_id'] = None
-                order = website.sale_get_order(force_create=True)
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
                 orders.append(order)
@@ -218,7 +205,7 @@ class CartAddMultipleItems(graphene.Mutation):
         orders = []
         for website in websites:
             request.website = website
-            order = website.sale_get_order(force_create=True)
+            order = website.get_cart_order()
 
             productsInWebsite = filter(lambda rec: rec['website_id'] == website.id, products)
             for product in productsInWebsite:
@@ -226,9 +213,6 @@ class CartAddMultipleItems(graphene.Mutation):
                 quantity = product['quantity']
                 order._cart_update(product_id=product_id, add_qty=quantity)
 
-            if order and order.state != 'draft':
-                request.session['sale_order_id'] = None
-                order = website.sale_get_order(force_create=True)
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
                 orders.append(order)
@@ -248,7 +232,7 @@ class CartUpdateMultipleItems(graphene.Mutation):
         orders = []
         for website in websites:
             request.website = website
-            order = website.sale_get_order(force_create=True)
+            order = website.get_cart_order()
 
             linesInWebsite = filter(lambda rec: rec['website_id'] == website.id, lines)
             for line in linesInWebsite:
@@ -259,9 +243,6 @@ class CartUpdateMultipleItems(graphene.Mutation):
                 line.warning_stock = ""
                 order._cart_update(product_id=line.product_id.id, line_id=line.id, set_qty=quantity)
 
-            if order and order.state != 'draft':
-                request.session['sale_order_id'] = None
-                order = website.sale_get_order(force_create=True)
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
                 orders.append(order)
@@ -282,16 +263,13 @@ class CartRemoveMultipleItems(graphene.Mutation):
         orders = []
         for website in websites:
             request.website = website
-            order = website.sale_get_order(force_create=True)
+            order = website.get_cart_order()
 
             linesInWebsite = filter(lambda rec: rec['website_id'] == website.id, lines)
             for line in linesInWebsite:
                 line = order.order_line.filtered(lambda rec: rec.id == line_id)
                 line.unlink()
 
-            if order and order.state != 'draft':
-                request.session['sale_order_id'] = None
-                order = website.sale_get_order(force_create=True)
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
                 orders.append(order)
@@ -311,7 +289,7 @@ class CreateUpdatePartner(graphene.Mutation):
         env = info.context['env']
         website = env['website'].get_current_website()
         request.website = website
-        order = website.sale_get_order(force_create=1)
+        order = website.get_cart_order()
 
         data = {
             'name': name,

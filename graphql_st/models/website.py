@@ -3,7 +3,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import requests
-from odoo import models, fields, api
+from odoo import api, fields, models, tools, SUPERUSER_ID, _
 
 
 class Website(models.Model):
@@ -57,3 +57,54 @@ class WebsiteRewrite(models.Model):
     def unlink(self):
         self._st_request_cache_invalidation()
         return super(WebsiteRewrite, self).unlink()
+
+    def get_cart_order(self, update_pricelist=False):
+        """ Return the current sales order after mofications specified by params.
+        :param bool force_create: Create sales order if not already existing
+        :param bool update_pricelist: Force to recompute all the lines from sales order to adapt the price with the current pricelist.
+        :returns: browse record for the current sales order
+        """
+        self.ensure_one()
+        partner = self.env.user.partner_id
+        check_fpos = False
+        
+        # 获取该站点最后一张订单（=购物车）
+        sale_order = self.env['sale.order'].search([
+            ('partner_id', '=', partner.id),
+            ('website_id', '=', request.website.id),
+            ('state', '=', 'draft'),
+        ], order='write_date desc', limit=1)
+
+
+        # cart creation was requested (either explicitly or to configure a promo code)
+        if not sale_order:
+            pricelist_id = request.session.get('website_sale_current_pl') or self.get_current_pricelist().id
+            
+            pricelist = self.env['product.pricelist'].browse(pricelist_id).sudo()
+            so_data = self._prepare_sale_order_values(partner, pricelist)
+            sale_order = self.env['sale.order'].with_company(request.website.company_id.id).with_user(SUPERUSER_ID).create(so_data)
+
+            # set fiscal position
+            if request.website.partner_id.id != partner.id:
+                sale_order.onchange_partner_shipping_id()
+            else: # For public user, fiscal position based on geolocation
+                country_code = request.session['geoip'].get('country_code')
+                if country_code:
+                    country_id = request.env['res.country'].search([('code', '=', country_code)], limit=1).id
+                    sale_order.fiscal_position_id = request.env['account.fiscal.position'].sudo().with_company(request.website.company_id.id)._get_fpos_by_region(country_id)
+                else:
+                    # if no geolocation, use the public user fp
+                    sale_order.onchange_partner_shipping_id()
+
+            request.session['sale_order_id'] = sale_order.id
+
+        # # update the pricelist
+        # if update_pricelist:
+        #     request.session['website_sale_current_pl'] = pricelist_id
+        #     values = {'pricelist_id': pricelist_id}
+        #     sale_order.write(values)
+        #     for line in sale_order.order_line:
+        #         if line.exists():
+        #             sale_order._cart_update(product_id=line.product_id.id, line_id=line.id, add_qty=0)
+
+        return sale_order
