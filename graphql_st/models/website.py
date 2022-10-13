@@ -41,24 +41,24 @@ class Website(models.Model):
             self.env['account.payment.term'].sudo().search([('company_id', '=', website.company_id.id)], limit=1)
         ).id
         
-    def _site_prepare_sale_order_values(self, partner, pricelist):
+    def _site_prepare_sale_order_values(self, website, partner, pricelist):
         self.ensure_one()
-        salesperson_id = request.website.salesperson_id.id
+        salesperson_id = website.salesperson_id.id
         addr = partner.address_get(['delivery'])
         default_user_id = partner.parent_id.user_id.id or partner.user_id.id
         values = {
             'partner_id': partner.id,
             'pricelist_id': pricelist.id,
-            'payment_term_id': self._site_sale_get_payment_term(request.website, partner),
+            'payment_term_id': self._site_sale_get_payment_term(website, partner),
             'team_id': self.salesteam_id.id or partner.parent_id.team_id.id or partner.team_id.id,
             'partner_invoice_id': partner.id,
             'partner_shipping_id': addr['delivery'],
             'user_id': salesperson_id or self.salesperson_id.id or default_user_id,
-            'website_id': request.website.id,
-            'company_id': request.website.company_id.id,
+            'website_id': website.id,
+            'company_id': website.company_id.id,
         }
         if self.env['ir.config_parameter'].sudo().get_param('sale.use_sale_note'):
-            values['note'] = request.website.company_id.sale_note or ""
+            values['note'] = website.company_id.sale_note or ""
 
         return values
 
@@ -85,7 +85,7 @@ class Website(models.Model):
             pricelist_id = request.session.get('website_sale_current_pl') or self.get_current_pricelist().id
             
             pricelist = self.env['product.pricelist'].browse(pricelist_id).sudo()
-            so_data = self._site_prepare_sale_order_values(partner, pricelist)
+            so_data = self._site_prepare_sale_order_values(request.website, partner, pricelist)
             so_data['state'] = 'draft'
             sale_order = self.env['sale.order'].with_company(request.website.company_id.id).with_user(SUPERUSER_ID).create(so_data)
 
