@@ -75,7 +75,7 @@ class Website(models.Model):
         # 获取该站点最后一张订单（=购物车）
         sale_order = self.env['sale.order'].search([
             ('partner_id', '=', partner.id),
-            ('website_id', '=', request.website.id)
+            ('website_id', '=', request.website.id),
             ('state', '=', 'draft'),
         ], order='write_date desc', limit=1)
 
@@ -85,7 +85,7 @@ class Website(models.Model):
             
             pricelist = self.env['product.pricelist'].browse(pricelist_id).sudo()
             so_data = self._site_prepare_sale_order_values(request.website, partner, pricelist)
-            # so_data['state'] = 'draft'
+            so_data['state'] = 'draft'
             sale_order = self.env['sale.order'].with_company(request.website.company_id.id).with_user(SUPERUSER_ID).create(so_data)
 
             # set fiscal position
