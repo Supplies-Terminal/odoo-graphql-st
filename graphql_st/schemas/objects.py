@@ -72,26 +72,41 @@ def get_document_count_with_check_access(model, domain):
 
 
 def get_product_pricing_info(env, product):
-    website = env['website'].get_current_website()
-    pricelist = website.get_current_pricelist()
-    return product._get_combination_info_variant(pricelist=pricelist)
+    # 改为商品所在的站点
+    # website = env['website'].get_current_website()
+    website = product.website_id
+    if website:
+        pricelist = website.get_current_pricelist()
+        return product._get_combination_info_variant(pricelist=pricelist)
+    else:
+        return None
 
 
 def product_is_in_wishlist(env, product):
-    website = env['website'].get_current_website()
-    request.website = website
-    return product._is_in_wishlist()
+    # 改为查看所有wishlist
+    # website = env['website'].get_current_website()
+    wishlist_items = env['product.wishlist'].search([("partner_id", "=", env.user.partner_id.id), ("product_id", "=", product.id)])
+    wishlist_items.filtered(lambda x: x.sudo().product_id.product_tmpl_id.website_published and x.sudo().product_id.product_tmpl_id.sale_ok)
+
+    return wishlist_items.length > 0
 
 def product_is_in_cart(env, product):
-    website = env['website'].get_current_website()
-    request.website = website
-    order = website.get_cart_order()
+    # 改为在所有购物车中查看
+    # website = env['website'].get_current_website()
+    found = False
+    websites = env.user.partner_id.website_ids
+    for website in websites:
+        request.website = website
+        order = website.get_cart_order()
 
-    filteredArr = []
-    if order:
-        filteredArr = order.order_line.filtered(lambda l: l.product.id == product.id)
+        filteredArr = []
+        if order:
+            filteredArr = order.order_line.filtered(lambda l: l.product.id == product.id)
 
-    return filteredArr.length > 0
+        if filteredArr.length > 0:
+            found = True
+
+    return found
 
 # --------------------- #
 #       Objects         #
@@ -585,6 +600,7 @@ class GiftCard(OdooObjectType):
     code = graphene.String()
 
 
+# 这在订单里面用到，怎么会跟current website有关呢？不是应该从订单所在website获取？
 class ShippingMethod(OdooObjectType):
     id = graphene.Int(required=True)
     name = graphene.String()

@@ -44,3 +44,35 @@ To report a problem please [contact us](https://www.odoogap.com/page/contactus/)
 
 Commercial support is available, please email [info@odoogap.com](info@odoogap.com)
 or call tel:+351 917848501 for further information.
+
+
+
+Payment Success Return Url
+http://localhost:3000/checkout/thank-you
+Payment Error Return Url
+http://localhost:3000/checkout/payment-error
+Cache Invalidation Key
+d0ae2265-0c24-47e9-9571-631644d3e43d
+Cache Invalidation Url
+http://localhost:3000/cache-invalidate
+Vue Storefront SMS API
+SMS API Url
+http://suppliesterminal.api.genvoice.net
+SMS API Key
+53f88bc22a4ca1613ddcd1568b4fff02
+SMS API Out Number
+AWS Access (Textract, S3)
+Access Key ID
+AKIASNQ3NZMG67JQ2D4Y
+Access Key Secret
+IlGrnQozYeqA4489Vi8Rc4NV1KsS4AS9agnv+5RS
+Region
+ca-central-1
+Vue Storefront Images
+Quality
+100
+ %
+Background RGBA
+(255, 255, 255, 255)
+Resize Whitelist
+[128, 140, 176, 180, 200, 216, 236, 256, 288, 422, 644]
