@@ -80,7 +80,7 @@ class Register(graphene.Mutation):
         data = {
             'name': name,
             'login': email,
-            'password': email,
+            'password': password,
         }
 
         if env['res.users'].sudo().search([('login', '=', data['login'])], limit=1):
@@ -90,7 +90,21 @@ class Register(graphene.Mutation):
 
         user = env['res.users'].sudo().search([('login', '=', data['login'])], limit=1)
         # 创建用户后，再创建partner，然后进行关联
-
+        partner = user.partner_id
+        if partner:
+            partner.write({
+                'name': name,
+                'ref': operating_name,
+                'phone': phone,
+                'email': email,
+                'street': billing_address.street,
+                'street2': billing_address.street2,
+                'zip': billing_address.zip,
+                'city': billing_address.city,
+                'state_id': billing_address.state_id,
+                'country_id': billing_address.country_id,
+            })
+    
         return user
 
 
