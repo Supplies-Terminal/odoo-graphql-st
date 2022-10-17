@@ -69,19 +69,19 @@ class Register(graphene.Mutation):
         email = graphene.String(required=True)
         password = graphene.String(required=True)
         contact = contactInput(required=True)
-        billding_address = addressInput(required=True)
+        billing_address = addressInput(required=True)
         delivery_address = addressInput(required=True)
 
     Output = User
 
     @staticmethod
-    def mutate(self, info, name, operating_name, vat, phone, email, password, contact, billding_address, delivery_address):
+    def mutate(self, info, name, operating_name, vat, phone, email, password, contact, billing_address, delivery_address):
         env = info.context['env']
 
         data = {
             'name': name,
             'login': email,
-            'password': password,
+            'password': email,
         }
 
         if env['res.users'].sudo().search([('login', '=', data['login'])], limit=1):
@@ -89,9 +89,10 @@ class Register(graphene.Mutation):
 
         env['res.users'].sudo().signup(data)
 
+        user = env['res.users'].sudo().search([('login', '=', data['login'])], limit=1)
         # 创建用户后，再创建partner，然后进行关联
 
-        return env['res.users'].sudo().search([('login', '=', data['login'])], limit=1)
+        return user
 
 
 class ResetPassword(graphene.Mutation):
