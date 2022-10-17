@@ -95,6 +95,7 @@ class Register(graphene.Mutation):
             partner.write({
                 'name': name,
                 'ref': operating_name,
+                'vat': vat,
                 'phone': phone,
                 'email': email,
                 'street': billing_address.street,
@@ -104,6 +105,38 @@ class Register(graphene.Mutation):
                 'state_id': billing_address.state_id,
                 'country_id': billing_address.country_id,
             })
+
+            # 创建地址
+            ResPartner = env['res.partner'].sudo().with_context(tracking_disable=True)
+            values = {
+                'name': billing_address.name,
+                'phone': billing_address.phone,
+                'street': billing_address.street,
+                'street2': billing_address.street2,
+                'zip': billing_address.zip,
+                'city': billing_address.city,
+                'state_id': billing_address.state_id,
+                'country_id': billing_address.country_id,
+                'email': email,
+                'type': 'invoice',
+                'parent_id': partner.id,
+            }
+            ResPartner.create(values)
+            
+            values2 = {
+                'name': delivery_address.name,
+                'phone': delivery_address.phone,
+                'street': delivery_address.street,
+                'street2': delivery_address.street2,
+                'zip': delivery_address.zip,
+                'city': delivery_address.city,
+                'state_id': delivery_address.state_id,
+                'country_id': delivery_address.country_id,
+                'email': email,
+                'type': 'delivery',
+                'parent_id': partner.id,
+            }
+            ResPartner.create(values2)
     
         return user
 
