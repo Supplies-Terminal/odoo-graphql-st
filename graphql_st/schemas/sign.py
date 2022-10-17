@@ -51,14 +51,14 @@ class contactInput(graphene.InputObjectType):
 
 class addressInput(graphene.InputObjectType):
     name = graphene.String(required=True)
+    phone = graphene.String(required=True)
+    email = graphene.String()
     street = graphene.String(required=True)
     street2 = graphene.String()
     zip = graphene.String(required=True)
     city = graphene.String()
     state_id = graphene.Int()
     country_id = graphene.Int(required=True)
-    phone = graphene.String(required=True)
-    email = graphene.String()
     
 class Register(graphene.Mutation):
     class Arguments:
@@ -68,14 +68,13 @@ class Register(graphene.Mutation):
         phone = graphene.String(required=True)
         email = graphene.String(required=True)
         password = graphene.String(required=True)
-        contact = contactInput(required=True)
         billing_address = addressInput(required=True)
         delivery_address = addressInput(required=True)
 
     Output = User
 
     @staticmethod
-    def mutate(self, info, name, operating_name, vat, phone, email, password, contact, billing_address, delivery_address):
+    def mutate(self, info, name, operating_name, vat, phone, email, password, billing_address, delivery_address):
         env = info.context['env']
 
         data = {
