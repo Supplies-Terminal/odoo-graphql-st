@@ -89,6 +89,15 @@ class Register(graphene.Mutation):
         env['res.users'].sudo().signup(data)
 
         user = env['res.users'].sudo().search([('login', '=', data['login'])], limit=1)
+
+        # 添加审核记录
+        approval = env['res.users.approval']
+        partner.write({
+            'user_id': user.id,
+            'approved_user': False,
+            'first_approval_status': False,
+            'block_user': False,
+        })
         # 创建用户后，再创建partner，然后进行关联
         partner = user.partner_id
         if partner:
