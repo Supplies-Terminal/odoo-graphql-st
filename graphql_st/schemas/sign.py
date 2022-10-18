@@ -32,9 +32,10 @@ class Login(graphene.Mutation):
                 approval = env['res.users.approval'].sudo().search([('user_id', '=', user['id'])], limit=1)
                 # 如果没有审核记录（也就是后台创建的），跳过检查
                 if approval:
-                    if !approval['approved_user'] and !approval['block_user']:
+                    # 审核中
+                    if not approval['approved_user'] and not approval['block_user']:
                         raise GraphQLError(_('Waiting for approval.'))
-                    elif !approval['block_user']:
+                    elif not approval['block_user']:
                         raise GraphQLError(_('Your account is not approved, please contact with adminstrator.'))
         except odoo.exceptions.AccessDenied as e:
             if e.args == odoo.exceptions.AccessDenied().args:
