@@ -43,6 +43,7 @@ class Login(graphene.Mutation):
                             raise GraphQLError(_('您的账号审核未通过，请联系管理员'))
                         else:
                             raise GraphQLError(_('Your account is not approved, please contact with adminstrator.'))
+                return user
         except odoo.exceptions.AccessDenied as e:
             if e.args == odoo.exceptions.AccessDenied().args:
                 if info.context["lang"] == 'zh-CN':
