@@ -34,19 +34,19 @@ class Login(graphene.Mutation):
                 if approval:
                     # 审核中
                     if not approval['approved_user'] and not approval['block_user']:
-                        if info.context.get('lang', 'en_US') == 'zh-CN':
+                        if env.lang == 'zh-CN':
                             raise GraphQLError(_('账号在审核中，请稍候！'))
                         else:
                             raise GraphQLError(_('Waiting for approval.'))
                     elif approval['block_user']:
-                        if info.context.get('lang', 'en_US') == 'zh-CN':
+                        if env.lang == 'zh-CN':
                             raise GraphQLError(_('您的账号审核未通过，请联系管理员'))
                         else:
                             raise GraphQLError(_('Your account is not approved, please contact with adminstrator.'))
                 return user
         except odoo.exceptions.AccessDenied as e:
             if e.args == odoo.exceptions.AccessDenied().args:
-                if info.context.get('lang', 'en_US') == 'zh-CN':
+                if env.lang == 'zh-CN':
                     raise GraphQLError(_('Wrong email or password.'))
                 else:
                     raise GraphQLError(_('账号和密码不匹配'))
@@ -184,7 +184,7 @@ class ResetPassword(graphene.Mutation):
         if not user:
             user = ResUsers.search([('email', '=', email)])
         if len(user) != 1:
-            if info.context.get('lang', 'en_US') == 'zh-CN': 
+            if env.lang == 'zh-CN': 
                 raise GraphQLError(_('Email已经被其他账号使用'))
             else: 
                 raise GraphQLError(_('Email is used by an existing account.'))
