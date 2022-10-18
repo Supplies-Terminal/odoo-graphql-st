@@ -92,7 +92,7 @@ class Register(graphene.Mutation):
 
         # 添加审核记录
         approval = env['res.users.approval']
-        partner.write({
+        approval.write({
             'user_id': user.id,
             'approved_user': False,
             'first_approval_status': False,
