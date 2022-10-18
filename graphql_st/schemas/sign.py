@@ -24,8 +24,6 @@ class Login(graphene.Mutation):
     def mutate(self, info, email, password):
         env = info.context['env']
 
-        locale = get_nearest_lang(locale)
-        
         try:
             uid = request.session.authenticate(request.session.db, email, password)
 
