@@ -12,6 +12,9 @@ from odoo.addons.auth_signup.models.res_users import SignupError
 from odoo.addons.graphql_st.schemas.objects import User
 import requests
 import json
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class Login(graphene.Mutation):
     class Arguments:
@@ -33,6 +36,8 @@ class Login(graphene.Mutation):
                 # 如果没有审核记录（也就是后台创建的），跳过检查
                 if approval:
                     # 审核中
+                    _logger.info("------current lang-----")
+                    _logger.info(env.lang)
                     if not approval['approved_user'] and not approval['block_user']:
                         if env.lang == 'zh-CN':
                             raise GraphQLError(_('账号在审核中，请稍候！'))
