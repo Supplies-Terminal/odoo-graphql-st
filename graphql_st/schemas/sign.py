@@ -26,7 +26,16 @@ class Login(graphene.Mutation):
 
         try:
             uid = request.session.authenticate(request.session.db, email, password)
-            return env['res.users'].sudo().browse(uid)
+
+            user = env['res.users'].sudo().browse(uid)
+            if user:
+                approval = env['res.users.approval'].sudo().search([('user_id', '=', user['id'])], limit=1)
+                # 如果没有审核记录（也就是后台创建的），跳过检查
+                if approval:
+                    if !approval['approved_user'] and !approval['block_user']:
+                        raise GraphQLError(_('Waiting for approval.'))
+                    elif !approval['block_user']:
+                        raise GraphQLError(_('Your account is not approved, please contact with adminstrator.'))
         except odoo.exceptions.AccessDenied as e:
             if e.args == odoo.exceptions.AccessDenied().args:
                 raise GraphQLError(_('Wrong email or password.'))
@@ -89,7 +98,6 @@ class Register(graphene.Mutation):
         env['res.users'].sudo().signup(data)
 
         user = env['res.users'].sudo().search([('login', '=', data['login'])], limit=1)
-
         # 添加审核记录
         approval = env['res.users.approval']
         approval.create({
