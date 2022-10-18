@@ -24,6 +24,8 @@ class Login(graphene.Mutation):
     def mutate(self, info, email, password):
         env = info.context['env']
 
+        locale = get_nearest_lang(locale)
+        
         try:
             uid = request.session.authenticate(request.session.db, email, password)
 
@@ -34,12 +36,21 @@ class Login(graphene.Mutation):
                 if approval:
                     # 审核中
                     if not approval['approved_user'] and not approval['block_user']:
-                        raise GraphQLError(_('Waiting for approval.'))
+                        if info.context.get('lang', 'en_US') == 'zh-CN':
+                            raise GraphQLError(_('账号在审核中，请稍候！'))
+                        else:
+                            raise GraphQLError(_('Waiting for approval.'))
                     elif not approval['block_user']:
-                        raise GraphQLError(_('Your account is not approved, please contact with adminstrator.'))
+                        if info.context.get('lang', 'en_US') == 'zh-CN':
+                            raise GraphQLError(_('Your account is not approved, please contact with adminstrator.'))
+                        else:
+                            raise GraphQLError(_('您的账号审核未通过，请联系管理员'))
         except odoo.exceptions.AccessDenied as e:
             if e.args == odoo.exceptions.AccessDenied().args:
-                raise GraphQLError(_('Wrong email or password.'))
+                if info.context.get('lang', 'en_US') == 'zh-CN':
+                    raise GraphQLError(_('Wrong email or password.'))
+                else:
+                    raise GraphQLError(_('账号和密码不匹配'))
             else:
                 raise GraphQLError(_(e.args[0]))
 
