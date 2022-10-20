@@ -128,7 +128,7 @@ class CartRemoveItem(graphene.Mutation):
         return CartData(orders=orders)
 
 class CartClear(graphene.Mutation):
-    Output = Order
+    Output = CartData
 
     @staticmethod
     def mutate(self, info):
