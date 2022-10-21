@@ -2,11 +2,14 @@
 # Copyright 2022 ODOOGAP/PROMPTEQUATION LDA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+import logging
 import graphene
 from graphql import GraphQLError
 from odoo.http import request
 from odoo import _
 from datetime import datetime
+
+_logger = logging.getLogger(__name__)
 
 from odoo.addons.graphql_st.schemas.objects import (
     SortEnum, OrderStage, InvoiceStatus, Order, ShippingMethod,
@@ -88,7 +91,8 @@ class OrderQuery(graphene.ObjectType):
         partner = user.partner_id
         sort_order = get_search_order(sort)
         domain = [
-        #     ('message_partner_ids', 'child_of', [partner.commercial_partner_id.id]),
+            # ('message_partner_ids', 'child_of', [partner.commercial_partner_id.id]),
+            ('partner_id', '=', partner.id),
         ]
 
         # Filter by stages or default to sales and done
@@ -117,6 +121,9 @@ class OrderQuery(graphene.ObjectType):
         else:
             offset = 0
 
+        _logger.info("------order search domain-----")
+        _logger.info(domain)
+                    
         SaleOrder = env["sale.order"]
         orders = get_document_with_check_access(SaleOrder, domain, sort_order, page_size, offset,
                                                 error_msg='Sale Order does not exist.')
