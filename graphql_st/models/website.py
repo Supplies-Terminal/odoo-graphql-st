@@ -56,6 +56,7 @@ class Website(models.Model):
             'user_id': salesperson_id or self.salesperson_id.id or default_user_id,
             'website_id': website.id,
             'company_id': website.company_id.id,
+            'tag_ids': [2]
         }
         if self.env['ir.config_parameter'].sudo().get_param('sale.use_sale_note'):
             values['note'] = website.company_id.sale_note or ""
