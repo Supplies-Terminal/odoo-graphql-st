@@ -96,7 +96,7 @@ class OrderQuery(graphene.ObjectType):
             stages = [stage.value for stage in filter['stages']]
             domain += [('state', 'in', stages)]
         else:
-            domain += [('state', 'in', ['sale', 'done'])]
+            domain += [('state', 'in', ['quote', 'sale', 'done'])]
 
         # Filter by invoice status
         if filter.get('invoice_status', False):
