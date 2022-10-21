@@ -87,9 +87,9 @@ class OrderQuery(graphene.ObjectType):
         user = request.env.user
         partner = user.partner_id
         sort_order = get_search_order(sort)
-        # domain = [
+        domain = [
         #     ('message_partner_ids', 'child_of', [partner.commercial_partner_id.id]),
-        # ]
+        ]
 
         # Filter by stages or default to sales and done
         if filter.get('stages', False):
