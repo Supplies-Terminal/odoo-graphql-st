@@ -334,7 +334,7 @@ class CartCheckout(graphene.Mutation):
             order = website.get_cart_order()
 
             # cart非空才checkout
-            if order.order_lines:
+            if order.order_line:
                 ordersInCheckout = list(filter(lambda rec: rec['order_id'] == order.id, orders))
                 if (ordersInCheckout.length>0):
                     # 更新order的tag_ids 和 delivery_time 和 notes (ordersInCheckout[0].)
