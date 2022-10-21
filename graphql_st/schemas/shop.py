@@ -339,7 +339,8 @@ class CartCheckout(graphene.Mutation):
                 if (len(ordersInCheckout)>0):
                     # 更新order的tag_ids 和 delivery_time 和 notes (ordersInCheckout[0].)
                     order.write({
-                        'tag_ids': [1]
+                        'tag_ids': [1],
+                        'note': order.note + ' ' + delivery_memo
                         })
 
         newOrders = []
