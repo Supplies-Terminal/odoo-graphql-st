@@ -56,6 +56,7 @@ class Website(models.Model):
             'partner_shipping_id': addr['delivery'],
             'user_id': salesperson_id or self.salesperson_id.id or default_user_id,
             'website_id': website.id,
+            'currency_id': website.currency_id.id,
             'company_id': website.company_id.id,
             'message_partner_ids': [partner.commercial_partner_id.id],
             'tag_ids': [2]
