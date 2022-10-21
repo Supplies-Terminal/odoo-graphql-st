@@ -313,8 +313,10 @@ class CreateUpdatePartner(graphene.Mutation):
 
 class CheckoutInput(graphene.InputObjectType):
     order_id = graphene.Int(required=True)
+    delivery_address_id = graphene.Int(required=True)
+    delivery_date = graphene.String(required=True)
     delivery_time = graphene.String(required=True)
-    notes = graphene.String(required=True)
+    delivery_memo = graphene.String(required=True)
 
 class CartCheckout(graphene.Mutation):
     class Arguments:
