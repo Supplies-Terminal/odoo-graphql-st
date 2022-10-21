@@ -65,7 +65,7 @@ class OrderQuery(graphene.ObjectType):
         Orders,
         filter=graphene.Argument(OrderFilterInput, default_value={}),
         current_page=graphene.Int(default_value=1),
-        page_size=graphene.Int(default_value=10),
+        page_size=graphene.Int(default_value=1000),
         sort=graphene.Argument(OrderSortInput, default_value={})
     )
     delivery_methods = graphene.List(
