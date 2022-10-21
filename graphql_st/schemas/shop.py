@@ -358,5 +358,6 @@ class ShopMutation(graphene.ObjectType):
     cart_add_multiple_items = CartAddMultipleItems.Field(description="Add Multiple Items")
     cart_update_multiple_items = CartUpdateMultipleItems.Field(description="Update Multiple Items")
     cart_remove_multiple_items = CartRemoveMultipleItems.Field(description="Remove Multiple Items")
+    cart_checkout = CartCheckout.Field(description="Place Order")
     set_shipping_method = SetShippingMethod.Field(description="Set Shipping Method on Cart")
     create_update_partner = CreateUpdatePartner.Field(description="Create or update a partner for guest checkout")
