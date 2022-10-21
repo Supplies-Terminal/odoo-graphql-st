@@ -189,7 +189,6 @@ class CartLineInput(graphene.InputObjectType):
     website_id = graphene.Int(required=True)
     quantity = graphene.Int(required=True)
 
-
 class CartAddMultipleItems(graphene.Mutation):
     class Arguments:
         products = graphene.List(ProductInput, default_value={}, required=True)
@@ -311,6 +310,45 @@ class CreateUpdatePartner(graphene.Mutation):
 
         return partner
 
+
+class CheckoutInput(graphene.InputObjectType):
+    order_id = graphene.Int(required=True)
+    delivery_time = graphene.String(required=True)
+    notes = graphene.String(required=True)
+
+class CartCheckout(graphene.Mutation):
+    class Arguments:
+        orders = graphene.List(CheckoutInput, default_value={}, required=True)
+
+    Output = CartData
+
+    @staticmethod
+    def mutate(self, info, orders):
+        env = info.context["env"]
+        websites = env.user.partner_id.website_ids  # 获取所有的站点
+
+        for website in websites:
+            request.website = website
+            order = website.get_cart_order()
+
+            # cart非空才checkout
+            if order.order_lines:
+                ordersInCheckout = list(filter(lambda rec: rec['order_id'] == order.id, orders))
+                if (ordersInCheckout.length>0):
+                    # 更新order的tag_ids 和 delivery_time 和 notes (ordersInCheckout[0].)
+                    order.write({
+                        'tag_ids': [1]
+                        })
+
+        newOrders = []
+        for website in websites:
+            request.website = website
+            order = website.get_cart_order()
+            if order:
+                order.order_line.filtered(lambda l: not l.product_id.active).unlink()
+                newOrders.append(order)
+                
+        return CartData(orders=newOrders)
 
 class ShopMutation(graphene.ObjectType):
     cart_add_item = CartAddItem.Field(description="Add Item")

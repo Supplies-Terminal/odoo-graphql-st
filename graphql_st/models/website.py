@@ -46,6 +46,7 @@ class Website(models.Model):
         salesperson_id = website.salesperson_id.id
         addr = partner.address_get(['delivery'])
         default_user_id = partner.parent_id.user_id.id or partner.user_id.id
+        # tag 2: requirement collecting
         values = {
             'partner_id': partner.id,
             'pricelist_id': pricelist.id,
@@ -78,6 +79,7 @@ class Website(models.Model):
             ('partner_id', '=', partner.id),
             ('website_id', '=', request.website.id),
             ('state', '=', 'draft'),
+            ('tag_ids', '=', [2]),
         ], order='write_date desc', limit=1)
 
         # cart creation was requested (either explicitly or to configure a promo code)
