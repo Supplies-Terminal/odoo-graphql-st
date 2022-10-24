@@ -18,8 +18,8 @@ class UserProfileQuery(graphene.ObjectType):
 
     @staticmethod
     def resolve_partner(self, info):
-        uid = request.session.uid
-        user = info.context['env']['res.users'].sudo().browse(uid)
+        env = info.context["env"]
+        user = env.user
         if user:
             partner = user.partner_id
             if not partner:
