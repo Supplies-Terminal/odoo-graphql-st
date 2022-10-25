@@ -96,7 +96,9 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
     @http.route("/graphql/st", auth="public", cors="https://webapp2.suppliesterminal.com", csrf=False, website=True)
     def graphql(self, **kwargs):
         self._set_website_context()
-        return self._handle_graphql_request(schema.graphql_schema)
+        response = self._handle_graphql_request(schema.graphql_schema)
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
+        return response
 
     @http.route('/st/categories', type='http', auth='public', csrf=False, cors='*')
     def stcategories(self):
