@@ -10,9 +10,11 @@ from odoo.addons.graphql_base import GraphQLControllerMixin
 from odoo.http import request, Response
 from odoo.tools.safe_eval import safe_eval
 from urllib.parse import urlparse
+import logging
 
 from ..schema import schema
 
+_logger = logging.getLogger(__name__)
 
 class STBinary(Binary):
     @http.route(['/web/image',
@@ -95,10 +97,13 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
     # (such as origin restrictions) to this route.
     @http.route("/graphql/st", auth="public", cors="https://webapp2.suppliesterminal.com", csrf=False, website=True)
     def graphql(self, **kwargs):
+        _logger.info("------graphql/st-----")
+        
         self._set_website_context()
         response = self._handle_graphql_request(schema.graphql_schema)
         response.headers['Access-Control-Allow-Credentials'] = 'true'
         response.headers['Access-Control-Allow-Origin'] = 'https://webapp2.suppliesterminal.com'
+        _logger.info(response.headers)
         return response
 
     @http.route('/st/categories', type='http', auth='public', csrf=False, cors='*')
