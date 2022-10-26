@@ -4,7 +4,7 @@
 
 import os
 import json
-from odoo import http,
+from odoo import http
 from odoo.addons.web.controllers.main import Binary
 from odoo.addons.graphql_base import GraphQLControllerMixin
 from odoo.http import request, Response, HttpRequest
