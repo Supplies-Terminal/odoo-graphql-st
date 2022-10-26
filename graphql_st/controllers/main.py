@@ -9,6 +9,8 @@ from odoo.addons.web.controllers.main import Binary
 from odoo.addons.graphql_base import GraphQLControllerMixin
 from odoo.http import request, Root, Response, HttpRequest
 from odoo.tools.safe_eval import safe_eval
+from odoo.service import security
+
 from urllib.parse import urlparse
 import logging
 
