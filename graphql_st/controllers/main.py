@@ -310,7 +310,8 @@ def get_response2(self, httprequest, result, explicit_session):
         end = time.gmtime(time.time() + maxAge)
         expires = time.strftime("%a, %d-%b-%Y %T GMT", end)
         response.headers['Set-Cookie'] = "session_id=" + httprequest.session.sid + "; Domain=webapp2.suppliesterminal.com Expires=" + expires + "; Max-Age=" + str(maxAge) + "; Secure; SameSite=None; HttpOnly; Path=/"
-        response.headers['Session-Id'] = httprequest.session.sid
+        response.headers['Authorization'] = httprequest.session.sid
+        response.headers['Access-Control-Expose-Headers'] = 'Authorization'
     return response
 
 Root.get_response = get_response2
