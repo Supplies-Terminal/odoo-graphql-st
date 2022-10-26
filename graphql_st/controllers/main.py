@@ -11,7 +11,6 @@ from odoo.http import request, Response, HttpRequest
 from odoo.tools.safe_eval import safe_eval
 from urllib.parse import urlparse
 import logging
-import {getCookie, setCookie, deleteCookie} from 'web.utils.cookies';
 
 from ..schema import schema
 
@@ -106,7 +105,7 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
         # resp.headers['Access-Control-Allow-Origin'] = 'https://webapp2.suppliesterminal.com'
         # resp.headers['Access-Control-Allow-Methods'] = 'GET, POST'
         resp.headers['Access-Control-Allow-Credentials'] = 'true'
-        setCookie('SameSite', 'none')
+        resp.headers['set-cookie'] = resp.headers['set-cookie'] + ';SameSite=None'
         return resp
 
     @http.route('/st/categories', type='http', auth='public', csrf=False, cors='*')
