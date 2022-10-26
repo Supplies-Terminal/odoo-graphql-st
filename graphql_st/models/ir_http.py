@@ -11,6 +11,9 @@ from odoo import api, http, models
 from odoo.http import request
 from odoo.tools import image_process
 from odoo.tools.safe_eval import safe_eval
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class Http(models.AbstractModel):
@@ -100,4 +103,7 @@ class Dispatcher(ABC):
             set_header('Access-Control-Allow-Credentials', 'true')
             set_header('Access-Control-Allow-Headers',
                        'Origin, X-Requested-With, Content-Type, Accept, Authorization')
+
+            _logger.info("------ ***** Dispatcher ***** -----")
+            
             werkzeug.exceptions.abort(Response(status=204))
