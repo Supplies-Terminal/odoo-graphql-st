@@ -303,7 +303,7 @@ def get_response2(self, httprequest, result, explicit_session):
     if not explicit_session and hasattr(response, 'set_cookie'):
         _logger.info("------ ***** response.set_cookie ***** -----")
         response.set_cookie(
-            'session_id', httprequest.session.sid, max_age=90 * 24 * 60 * 60, httponly=True, secure=True, samesite=None)
+            'session_id', httprequest.session.sid, max_age=90 * 24 * 60 * 60, httponly=True, secure=True, domain="*.suppliesterminal.com", samesite=None)
 
     return response
 
