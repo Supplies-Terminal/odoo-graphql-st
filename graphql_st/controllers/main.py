@@ -105,7 +105,7 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
         # resp.headers['Access-Control-Allow-Origin'] = 'https://webapp2.suppliesterminal.com'
         # resp.headers['Access-Control-Allow-Methods'] = 'GET, POST'
         resp.headers['Access-Control-Allow-Credentials'] = 'true'
-        resp.headers['set-cookie'] = resp.headers['set-cookie'] + ';SameSite=None'
+        resp.headers['set-cookie'] = 'SameSite=None'
         return resp
 
     @http.route('/st/categories', type='http', auth='public', csrf=False, cors='*')
