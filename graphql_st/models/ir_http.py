@@ -6,6 +6,11 @@ import base64
 import codecs
 import io
 
+import collections
+import collections.abc
+
+from abc import ABC, abstractmethod
+
 from PIL.WebPImagePlugin import Image
 from odoo import api, http, models
 from odoo.http import request
