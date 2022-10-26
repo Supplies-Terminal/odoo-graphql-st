@@ -264,6 +264,7 @@ HttpRequest.dispatch = dispatch
 
 
 def get_response2(self, httprequest, result, explicit_session):
+    _logger.info("------ ***** get_response2 ***** -----")
     if isinstance(result, Response) and result.is_qweb:
         try:
             result.flatten()
@@ -299,7 +300,8 @@ def get_response2(self, httprequest, result, explicit_session):
     # - It could allow session fixation attacks.
     if not explicit_session and hasattr(response, 'set_cookie'):
         response.set_cookie(
-            'session_id', httprequest.session.sid, max_age=90 * 24 * 60 * 60, httponly=True)
+            'session_id', httprequest.session.sid, max_age=90 * 24 * 60 * 60, httponly=True, secure=True, samesite=None)
 
     return response
+
 Root.get_response = get_response2
