@@ -301,17 +301,19 @@ def get_response2(self, httprequest, result, explicit_session):
     #   session on top of an already existing session and we don't want to create a mess with the 'normal' session
     #   (the one using the cookie). That is a special feature of the Session Javascript class.
     # - It could allow session fixation attacks.
-    if not explicit_session and hasattr(response, 'set_cookie'):
-        _logger.info("------ ***** response.set_cookie ***** -----")
-        response.set_cookie(
-            'session_id', httprequest.session.sid, max_age=90 * 24 * 60 * 60, httponly=True, secure=True, samesite=None)
+    if not explicit_session:
+        if hasattr(response, 'set_cookie'):
+            _logger.info("------ ***** response.set_cookie ***** -----")
+            response.set_cookie(
+                'session_id', httprequest.session.sid, max_age=90 * 24 * 60 * 60, httponly=True, secure=True, samesite=None)
 
-        maxAge=90 * 24 * 60 * 60
-        end = time.gmtime(time.time() + maxAge)
-        expires = time.strftime("%a, %d-%b-%Y %T GMT", end)
-        response.headers['Set-Cookie'] = "session_id=" + httprequest.session.sid + "; Expires=" + expires + "; Max-Age=" + str(maxAge) + "; Secure; SameSite=None; HttpOnly; Path=/"
-        response.headers['Authorization'] = httprequest.session.sid
-        response.headers['Access-Control-Expose-Headers'] = 'Authorization'
+    maxAge=90 * 24 * 60 * 60
+    end = time.gmtime(time.time() + maxAge)
+    expires = time.strftime("%a, %d-%b-%Y %T GMT", end)
+    response.headers['Set-Cookie'] = "session_id=" + httprequest.session.sid + "; Expires=" + expires + "; Max-Age=" + str(maxAge) + "; Secure; SameSite=None; HttpOnly; Path=/"
+    response.headers['Authorization'] = httprequest.session.sid
+    response.headers['Access-Control-Expose-Headers'] = 'Authorization'
+    
     return response
 
 Root.get_response = get_response2
