@@ -105,7 +105,7 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
         # resp.headers['Access-Control-Allow-Origin'] = 'https://webapp2.suppliesterminal.com'
         # resp.headers['Access-Control-Allow-Methods'] = 'GET, POST'
         resp.headers['Access-Control-Allow-Credentials'] = 'true'
-        cookies = resp.headers.get('Set-Cookie')
+        cookies = resp.headers.get('****** Set-Cookie ******')
         _logger.info(cookies)
         # resp.headers.add('Set-Cookie', cookie + '; SameSite=None; Secure')
         # resp.set_cookie('cookie2', 'value2', samesite=None, secure=True)
