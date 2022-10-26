@@ -7,7 +7,7 @@ import json
 from odoo import http
 from odoo.addons.web.controllers.main import Binary
 from odoo.addons.graphql_base import GraphQLControllerMixin
-from odoo.http import request, Request, Response, HttpRequest
+from odoo.http import request, Root, Response, HttpRequest
 from odoo.tools.safe_eval import safe_eval
 from urllib.parse import urlparse
 import logging
@@ -232,32 +232,74 @@ passing the `csrf=False` parameter to the `route` decorator.
 HttpRequest.dispatch = dispatch
 
 
-def _save_session2(self):
-    _logger.info("------ ***** _save_session2 ***** -----")
-    """ Save a modified session on disk. """
-    sess = self.session
+# def _save_session2(self):
+#     _logger.info("------ ***** _save_session2 ***** -----")
+#     """ Save a modified session on disk. """
+#     sess = self.session
 
-    if not sess.can_save:
-        return
+#     if not sess.can_save:
+#         return
 
-    if sess.should_rotate:
-        sess['_geoip'] = self.geoip
-        root.session_store.rotate(sess, self.env)  # it saves
-    elif sess.is_dirty:
-        sess['_geoip'] = self.geoip
-        root.session_store.save(sess)
+#     if sess.should_rotate:
+#         sess['_geoip'] = self.geoip
+#         root.session_store.rotate(sess, self.env)  # it saves
+#     elif sess.is_dirty:
+#         sess['_geoip'] = self.geoip
+#         root.session_store.save(sess)
 
-    # We must not set the cookie if the session id was specified
-    # using a http header or a GET parameter.
-    # There are two reasons to this:
-    # - When using one of those two means we consider that we are
-    #   overriding the cookie, which means creating a new session on
-    #   top of an already existing session and we don't want to
-    #   create a mess with the 'normal' session (the one using the
-    #   cookie). That is a special feature of the Javascript Session.
-    # - It could allow session fixation attacks.
-    cookie_sid = self.httprequest.cookies.get('session_id')
-    if not sess.is_explicit and (sess.is_dirty or cookie_sid != sess.sid):
-        self.future_response.set_cookie('session_id', sess.sid, max_age=SESSION_LIFETIME, httponly=True, secure=True, samesite=None)
+#     # We must not set the cookie if the session id was specified
+#     # using a http header or a GET parameter.
+#     # There are two reasons to this:
+#     # - When using one of those two means we consider that we are
+#     #   overriding the cookie, which means creating a new session on
+#     #   top of an already existing session and we don't want to
+#     #   create a mess with the 'normal' session (the one using the
+#     #   cookie). That is a special feature of the Javascript Session.
+#     # - It could allow session fixation attacks.
+#     cookie_sid = self.httprequest.cookies.get('session_id')
+#     if not sess.is_explicit and (sess.is_dirty or cookie_sid != sess.sid):
+#         self.future_response.set_cookie('session_id', sess.sid, max_age=SESSION_LIFETIME, httponly=True, secure=True, samesite=None)
             
-Request._save_session = _save_session2
+# Request._save_session = _save_session2
+
+
+def get_response2(self, httprequest, result, explicit_session):
+    if isinstance(result, Response) and result.is_qweb:
+        try:
+            result.flatten()
+        except Exception as e:
+            if request.db:
+                result = request.registry['ir.http']._handle_exception(e)
+            else:
+                raise
+
+    if isinstance(result, (bytes, str)):
+        response = Response(result, mimetype='text/html')
+    else:
+        response = result
+        self.set_csp(response)
+
+    save_session = (not request.endpoint) or request.endpoint.routing.get('save_session', True)
+    if not save_session:
+        return response
+
+    if httprequest.session.should_save:
+        if httprequest.session.rotate:
+            self.session_store.delete(httprequest.session)
+            httprequest.session.sid = self.session_store.generate_key()
+            if httprequest.session.uid:
+                httprequest.session.session_token = security.compute_session_token(httprequest.session, request.env)
+            httprequest.session.modified = True
+        self.session_store.save(httprequest.session)
+    # We must not set the cookie if the session id was specified using a http header or a GET parameter.
+    # There are two reasons to this:
+    # - When using one of those two means we consider that we are overriding the cookie, which means creating a new
+    #   session on top of an already existing session and we don't want to create a mess with the 'normal' session
+    #   (the one using the cookie). That is a special feature of the Session Javascript class.
+    # - It could allow session fixation attacks.
+    if not explicit_session and hasattr(response, 'set_cookie'):
+        response.set_cookie(
+            'session_id', httprequest.session.sid, max_age=90 * 24 * 60 * 60, httponly=True)
+
+    return response
+Root.get_response = get_response2
