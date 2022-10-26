@@ -176,6 +176,7 @@ def dispatch(self):
     if self._is_cors_preflight(request.endpoint):
         _logger.info("------ ***** Dispatcher ***** -----")
         headers = {
+            'Access-Control-Allow-Origin': request.endpoint.routing['cors'],
             'Access-Control-Max-Age': 60 * 60 * 24,
             'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
             'Access-Control-Allow-Credentials': 'true'
