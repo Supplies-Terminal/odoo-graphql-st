@@ -304,7 +304,7 @@ def get_response2(self, httprequest, result, explicit_session):
         _logger.info("------ ***** response.set_cookie ***** -----")
         response.set_cookie(
             'session_id', httprequest.session.sid, max_age=90 * 24 * 60 * 60, httponly=True, secure=True, samesite=None)
-        response.headers['Set-Cookie'] = "session_id=" + httprequest.session.sid + "; Domain=*.suppliesterminal.com; Expires=Tue, 24-Jan-2023 08:35:11 GMT; Max-Age=7776000; Secure; SameSite=None; HttpOnly; Path=/"
+        response.headers['Set-Cookie'] = "session_id=" + httprequest.session.sid + "; Expires=Tue, 24-Jan-2023 08:35:11 GMT; Max-Age=7776000; Secure; SameSite=None; HttpOnly; Path=/"
     return response
 
 Root.get_response = get_response2
