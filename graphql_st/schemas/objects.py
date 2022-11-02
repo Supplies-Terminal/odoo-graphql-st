@@ -2,6 +2,7 @@
 # Copyright 2022 ODOOGAP/PROMPTEQUATION LDA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+import logging
 import graphene
 from graphene.types import generic
 from graphql import GraphQLError
@@ -12,6 +13,7 @@ from odoo.addons.graphql_base import OdooObjectType
 from odoo.exceptions import AccessError
 from odoo.http import request
 
+_logger = logging.getLogger(__name__)
 
 # --------------------- #
 #       ENUMS           #
@@ -50,6 +52,14 @@ class SortEnum(graphene.Enum):
 
 def get_document_with_check_access(model, domain, order=None, limit=20, offset=0,
                                    error_msg='This document does not exist.'):
+
+    _logger.info("------get_document_with_check_access-----")
+    _logger.info(model)
+    _logger.info(domain)
+    _logger.info(order)
+    _logger.info(limit)
+    _logger.info(offset)
+    
     document = model.search(domain, order=order, limit=limit, offset=offset)
     document_sudo = document.with_user(SUPERUSER_ID).exists()
     if document and not document_sudo:
