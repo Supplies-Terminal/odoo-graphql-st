@@ -2,10 +2,12 @@
 # Copyright 2022 ODOOGAP/PROMPTEQUATION LDA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+import logging
 import graphene
 from odoo.addons.graphql_st.schemas.objects import Order, Partner
 from odoo.http import request
 
+_logger = logging.getLogger(__name__)
 
 class Cart(graphene.Interface):
     orders = graphene.List(Order)
@@ -333,6 +335,10 @@ class CartCheckout(graphene.Mutation):
             request.website = website
             order = website.get_cart_order()
 
+            _logger.info("------order for checkout-----")
+            _logger.info(order)
+            _logger.info(order.date_order)
+            
             # cart非空才checkout
             if order.order_line:
                 ordersInCheckout = list(filter(lambda rec: rec['order_id'] == order.id, orders))

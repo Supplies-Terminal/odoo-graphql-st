@@ -81,7 +81,7 @@ class Website(models.Model):
             ('partner_id', '=', partner.id),
             ('website_id', '=', request.website.id),
             ('state', '=', 'draft'),
-            ('tag_ids', '=', [2]),
+            ('tag_ids', 'in', [2]),
         ], order='write_date desc', limit=1)
 
         # cart creation was requested (either explicitly or to configure a promo code)
