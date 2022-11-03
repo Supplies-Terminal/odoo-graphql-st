@@ -122,8 +122,6 @@ class Register(graphene.Mutation):
             'first_approval_status': False,
             'block_user': False,
         })
-        approval.save()
-        
         # 创建用户后，再创建partner，然后进行关联
         partner = user.partner_id
         if partner:
@@ -140,7 +138,6 @@ class Register(graphene.Mutation):
                 'state_id': billing_address.state_id,
                 'country_id': billing_address.country_id,
             })
-            partner.save()
 
             # 创建地址
             ResPartner = env['res.partner'].sudo().with_context(tracking_disable=True)
@@ -158,7 +155,6 @@ class Register(graphene.Mutation):
                 'parent_id': partner.id,
             }
             ResPartner.create(values)
-            ResPartner.save()
             
             values2 = {
                 'name': delivery_address.name,
@@ -174,7 +170,6 @@ class Register(graphene.Mutation):
                 'parent_id': partner.id,
             }
             ResPartner.create(values2)
-            ResPartner.save()
     
         return user
 
