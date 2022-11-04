@@ -126,6 +126,8 @@ class Register(graphene.Mutation):
         partner = user.partner_id
         if partner:
             partner.write({
+                'company_type': "company",
+                'is_company': True,
                 'name': name,
                 'ref': operating_name,
                 'vat': vat,
