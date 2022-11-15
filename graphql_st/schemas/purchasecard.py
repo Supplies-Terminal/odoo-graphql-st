@@ -13,9 +13,15 @@ from graphql import GraphQLError
 from odoo import _
 from odoo.http import request
 
+import logging
+
+
 from odoo.addons.graphql_st.schemas.objects import (
     StPurchasecard
 )
+
+
+_logger = logging.getLogger(__name__)
 
 class PurchasecardQuery(graphene.ObjectType):
     purchasecard = graphene.Field(
@@ -36,6 +42,35 @@ class PurchasecardQuery(graphene.ObjectType):
             raise GraphQLError(_('Partner does not exist.'))
 
         purchasecard = env['st.purchasecard'].search([('member_id', '=', partner.id), ('website_id', '=', website_id)], limit=1)
+
+        if not purchasecard:
+            raise GraphQLError(_('Purchase Card does not exist.'))
+
+        if not purchasecard['data']:
+            raise GraphQLError(_('Purchase Card is empty.'))
+
+        # Load product info based on current language
+        purchaseCardGrid = json.loads(purchasecard['data'])  
+        if not purchaseCardGrid:
+            raise GraphQLError(_('Purchase Card is empty.'))
+
+        gridData = []
+        for group in purchaseCardGrid:
+            items = []
+            for product in group['items']:
+                if product['product_id']:
+                    productInfo = env['product.product'].browse(int(product['product_id']))
+                    if productInfo:
+                        product['name'] = productInfo['name']
+                        product['unit'] = productInfo['uom_name']
+                        _logger.info(product)
+                    items.append(product)
+            gridData.append({
+                "items": items
+            })
+            
+        purchasecard['data'] =  json.dumps(gridData)
+        _logger.info(purchasecard)
         return purchasecard
 
 class UpdatePurchasecard(graphene.Mutation):
