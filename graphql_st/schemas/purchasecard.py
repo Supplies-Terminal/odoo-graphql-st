@@ -270,7 +270,7 @@ class OcrPurchasecard(graphene.Mutation):
                         dataframes[tableId][row]['hints'] = "No Product";
                         dataframes[tableId][row]['warning'] = 1;
                     else:
-                        product = env['product.product'].browse( gridProduct['product_id'])
+                        product = env['product.product'].browse( int(gridProduct['product_id']))
 
                         if not product:
                             dataframes[tableId][row]['hints'] = "Product not available";

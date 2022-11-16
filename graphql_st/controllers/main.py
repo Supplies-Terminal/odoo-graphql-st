@@ -188,7 +188,7 @@ def dispatch(self):
         headers = {
             'Access-Control-Allow-Origin': request.endpoint.routing['cors'],
             'Access-Control-Max-Age': 60 * 60 * 24,
-            'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Openerp-Session-Id',
+            'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Openerp-Session-Id, Cookie, X-Frontend-Lang',
             'Access-Control-Allow-Credentials': 'true'
         }
         return Response(status=200, headers=headers)
