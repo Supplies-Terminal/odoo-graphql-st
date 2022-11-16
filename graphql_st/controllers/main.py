@@ -100,8 +100,6 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
     # (such as origin restrictions) to this route.
     @http.route("/graphql/st", auth="public", cors="https://webapp2.suppliesterminal.com", csrf=False, website=True)
     def graphql(self, **kwargs):
-        _logger.info("------graphql/st-----")
-        
         self._set_website_context()
         resp = self._handle_graphql_request(schema.graphql_schema)
 
@@ -111,7 +109,7 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
         # cookies = resp.headers.get('Set-Cookie')
         # _logger.info(cookies)
         # sessionId = resp.cookies.get('session_id')  没有cookies
-        _logger.info(resp.headers)
+        # _logger.info(resp.headers)
         # resp.headers.add('Set-Cookie', cookie + '; SameSite=None; Secure')
         # resp.set_cookie('cookie2', 'value2', samesite=None, secure=True)
         # resp.headers.add('Set-Cookie','cookie3=value3; SameSite=None; Secure')
@@ -267,7 +265,6 @@ HttpRequest.dispatch = dispatch
 
 
 def get_response2(self, httprequest, result, explicit_session):
-    _logger.info("------ ***** get_response2 ***** -----")
     if isinstance(result, Response) and result.is_qweb:
         try:
             result.flatten()
@@ -303,7 +300,6 @@ def get_response2(self, httprequest, result, explicit_session):
     # - It could allow session fixation attacks.
     if not explicit_session:
         if hasattr(response, 'set_cookie'):
-            _logger.info("------ ***** response.set_cookie ***** -----")
             response.set_cookie(
                 'session_id', httprequest.session.sid, max_age=90 * 24 * 60 * 60, httponly=True, secure=True, samesite=None)
 
