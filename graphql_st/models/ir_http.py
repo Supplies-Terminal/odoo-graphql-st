@@ -5,6 +5,7 @@
 import base64
 import codecs
 import io
+import logging
 
 from PIL.WebPImagePlugin import Image
 from odoo import api, http, models
@@ -12,6 +13,7 @@ from odoo.http import request
 from odoo.tools import image_process
 from odoo.tools.safe_eval import safe_eval
 
+_logger = logging.getLogger(__name__)
 
 class Http(models.AbstractModel):
     _inherit = 'ir.http'
@@ -74,3 +76,41 @@ class Http(models.AbstractModel):
         return super(Http, self)._content_image_get_response(
             status, headers, image_base64, model=model, field=field, download=download, width=width, height=height,
             crop=crop, quality=quality)
+    
+    @classmethod
+    def _add_dispatch_parameters(cls, func):
+        Lang = request.env['res.lang']
+        # only called for is_frontend request
+        if request.routing_iteration == 1:
+            context = dict(request.context)
+            path = request.httprequest.path.split('/')
+            is_a_bot = cls.is_a_bot()
+
+            lang_codes = [code for code, *_ in Lang.get_available()]
+            nearest_lang = not func and cls.get_nearest_lang(Lang._lang_get_code(path[1]))
+            _logger.info(nearest_lang)
+            cook_lang = request.httprequest.cookies.get('frontend_lang')
+            if not cook_lang:
+                cook_lang = request.httprequest.headers.get('X-Frontend-Lang')
+            if not cook_lang:
+                cook_lang = request.httprequest.headers.get('x-frontend-lang')
+            _logger.info(cook_lang)
+            _logger.info(lang_codes)
+        
+            cook_lang = cook_lang in lang_codes and cook_lang
+
+            _logger.info(cook_lang)
+            if nearest_lang:
+                lang = Lang._lang_get(nearest_lang)
+            else:
+                _logger.info("------4-----")
+                nearest_ctx_lg = not is_a_bot and cls.get_nearest_lang(request.env.context.get('lang'))
+                nearest_ctx_lg = nearest_ctx_lg in lang_codes and nearest_ctx_lg
+                preferred_lang = Lang._lang_get(cook_lang or nearest_ctx_lg)
+                lang = preferred_lang or cls._get_default_lang()
+            _logger.info(lang)
+            request.lang = lang
+            context['lang'] = lang._get_cached('code')
+
+            # bind modified context
+            request.context = context
