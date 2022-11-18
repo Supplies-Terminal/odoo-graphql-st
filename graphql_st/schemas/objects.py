@@ -645,6 +645,7 @@ class Order(OdooObjectType):
     order_lines = graphene.List(graphene.NonNull(lambda: OrderLine))
     website_order_line = graphene.List(graphene.NonNull(lambda: OrderLine))
     stage = OrderStage()
+    state = graphene.String()
     order_url = graphene.String()
     transactions = graphene.List(graphene.NonNull(lambda: PaymentTransaction))
     last_transaction = graphene.Field(lambda: PaymentTransaction)
