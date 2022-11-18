@@ -124,7 +124,9 @@ class OrderQuery(graphene.ObjectType):
         _logger.info("------order search domain-----")
         _logger.info(domain)
                     
-        SaleOrder = env["sale.order"]
+        SaleOrder = env["sale.order"].sudo()
+#         orders = SaleOrder.sudo().search(domain, order=sort_order, limit=page_size, offset=offset)
+#         total_count = SaleOrder.sudo().search_count(domain)
         orders = get_document_with_check_access(SaleOrder, domain, sort_order, page_size, offset,
                                                 error_msg='Sale Order does not exist.')
         total_count = get_document_count_with_check_access(SaleOrder, domain)
