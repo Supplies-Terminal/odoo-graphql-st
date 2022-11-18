@@ -6,6 +6,7 @@ import logging
 import graphene
 from odoo.addons.graphql_st.schemas.objects import Order, Partner
 from odoo.http import request
+from odoo import fields
 
 _logger = logging.getLogger(__name__)
 
@@ -346,7 +347,8 @@ class CartCheckout(graphene.Mutation):
                     # 更新order的tag_ids 和 delivery_time 和 notes (ordersInCheckout[0].)
                     order.write({
                         'tag_ids': [1],
-                        'note': order.note + ' ' + ordersInCheckout[0].delivery_memo
+                        'note': order.note + ' ' + ordersInCheckout[0].delivery_memo,
+                        'date_order': fields.Date.today()
                         })
 
         newOrders = []
