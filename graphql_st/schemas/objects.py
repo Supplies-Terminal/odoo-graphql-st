@@ -252,6 +252,7 @@ class Category(OdooObjectType):
     parent = graphene.Field(lambda: Category)
     childs = graphene.List(graphene.NonNull(lambda: Category))
     slug = graphene.String()
+    sequence = graphene.Int()
     products = graphene.List(graphene.NonNull(lambda: Product))
 
     def resolve_parent(self, info):
