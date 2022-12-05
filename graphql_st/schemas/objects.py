@@ -591,7 +591,7 @@ class OrderLine(OdooObjectType):
     gift_card = graphene.Field(lambda: GiftCard)
     coupon = graphene.Field(lambda: Coupon)
     secondary_qty = graphene.Float()
-    secondary_uom_id = graphene.Integral()
+    secondary_uom_id = graphene.Int()
     secondary_uom_name = graphene.String()
     secondary_uom_enabled = graphene.Boolean()
 
