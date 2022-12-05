@@ -350,6 +350,11 @@ class Product(OdooObjectType):
     website = graphene.Field(lambda: Website)
     uom_id = graphene.Int()
     uom_name = graphene.String()
+    secondary_uom_enabled = graphene.Boolean()
+    secondary_uom_id = graphene.Int()
+    secondary_uom_name = graphene.String()
+    secondary_uom_desc = graphene.String()
+    secondary_uom_rate = graphene.Float()
     weight = graphene.Float()
     meta_title = graphene.String()
     meta_keyword = graphene.String()
@@ -585,6 +590,10 @@ class OrderLine(OdooObjectType):
     warning_stock = graphene.String()
     gift_card = graphene.Field(lambda: GiftCard)
     coupon = graphene.Field(lambda: Coupon)
+    secondary_qty = graphene.Float()
+    secondary_uom_id = graphene.Integral()
+    secondary_uom_name = graphene.String()
+    secondary_uom_enabled = graphene.Boolean()
 
     def resolve_product(self, info):
         return self.product_id or None
