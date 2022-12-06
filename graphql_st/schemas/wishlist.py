@@ -50,17 +50,29 @@ class WishlistAddItem(graphene.Mutation):
     @staticmethod
     def mutate(self, info, product_id):
         env = info.context["env"]
-        website = env['website'].get_current_website()
-        request.website = website
+        
 
         values = env['product.wishlist'].with_context(display_default_code=False).current()
         if values.filtered(lambda v: v.product_id.id == product_id):
-            raise GraphQLError(_('Product already exists in the Wishlist.'))
+            # Product already exists in the Wishlist
+            wishlist_items = env['product.wishlist'].search([("partner_id", "=", env.user.partner_id.id)])
+            wishlist_items.filtered(lambda x: x.sudo().product_id.product_tmpl_id.website_published and x.sudo().product_id.product_tmpl_id.sale_ok)
 
-        WebsiteSaleWishlist().add_to_wishlist(product_id)
+            return WishlistData(wishlist_items=wishlist_items)
+        else:
+            product = request.env['product.product'].browse(product_id)
+            if product and product.website_id:
+                request.website = product.website_id
+            else:
+                website = env['website'].get_current_website()
+                request.website = website
+            
+            WebsiteSaleWishlist().add_to_wishlist(product_id)
 
-        wishlist_items = env['product.wishlist'].current()
-        return WishlistData(wishlist_items=wishlist_items)
+            wishlist_items = env['product.wishlist'].search([("partner_id", "=", env.user.partner_id.id)])
+            wishlist_items.filtered(lambda x: x.sudo().product_id.product_tmpl_id.website_published and x.sudo().product_id.product_tmpl_id.sale_ok)
+
+            return WishlistData(wishlist_items=wishlist_items)
 
 
 class WishlistRemoveItem(graphene.Mutation):
@@ -77,9 +89,8 @@ class WishlistRemoveItem(graphene.Mutation):
         wish_id = Wishlist.search([('id', '=', wish_id)], limit=1)
         wish_id.unlink()
 
-        website = env['website'].get_current_website()
-        request.website = website
-        wishlist_items = env['product.wishlist'].current()
+        wishlist_items = env['product.wishlist'].search([("partner_id", "=", env.user.partner_id.id)])
+        wishlist_items.filtered(lambda x: x.sudo().product_id.product_tmpl_id.website_published and x.sudo().product_id.product_tmpl_id.sale_ok)
 
         return WishlistData(wishlist_items=wishlist_items)
 

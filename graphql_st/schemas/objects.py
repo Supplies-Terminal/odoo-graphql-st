@@ -347,10 +347,12 @@ class Product(OdooObjectType):
     barcode = graphene.String()
     description = graphene.String()
     currency = graphene.Field(lambda: Currency)
-    website = graphene.Field(lambda: Website)
+    website = graphene.Field(lambda: Website) 
+    uom = graphene.Field(lambda: UoM)
     uom_id = graphene.Int()
     uom_name = graphene.String()
     secondary_uom_enabled = graphene.Boolean()
+    secondary_uom = graphene.Field(lambda: UoM)
     secondary_uom_id = graphene.Int()
     secondary_uom_name = graphene.String()
     secondary_uom_desc = graphene.String()
@@ -411,6 +413,12 @@ class Product(OdooObjectType):
             return 1
         else:
             return 0
+
+    def resolve_uom(self, info):
+        return self.default_uom_id or None
+
+    def resolve_secondary_uom(self, info):
+        return self.secondary_uom_id or None
 
     def resolve_sku(self, info):
         return self.default_code or None
@@ -590,10 +598,12 @@ class OrderLine(OdooObjectType):
     warning_stock = graphene.String()
     gift_card = graphene.Field(lambda: GiftCard)
     coupon = graphene.Field(lambda: Coupon)
+    product_uom = graphene.Field(lambda: UoM)
     secondary_qty = graphene.Float()
-    secondary_uom_id = graphene.Int()
+    secondary_uom = graphene.Field(lambda: UoM)
     secondary_uom_name = graphene.String()
     secondary_uom_enabled = graphene.Boolean()
+    secondary_uom_rate = graphene.Float()
 
     def resolve_product(self, info):
         return self.product_id or None
@@ -609,6 +619,11 @@ class OrderLine(OdooObjectType):
             lambda c: self.product_id and c.discount_line_product_id and c.discount_line_product_id.id == self.product_id.id)
         return coupons and coupons[0] or None
 
+    def resolve_product_uom(self, info):
+        return self.product_uom or None
+
+    def resolve_secondary_uom(self, info):
+        return self.secondary_uom_id or None
 
 class Coupon(OdooObjectType):
     id = graphene.Int(required=True)
