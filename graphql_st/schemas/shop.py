@@ -61,8 +61,25 @@ class CartAddItem(graphene.Mutation):
             if website.id == website_id:
                 # 写入/更新商品
                 order.write({'website_id': website.id})
-                order._cart_update(product_id=product_id, add_qty=quantity)
 
+                # 根据商品转换计量单位为计费单位
+                product = env['product.product'].browse(product_id)
+                qty = quantity
+                useSecondaryUom = False
+                if product and product.secondary_uom_enabled and product.secondary_uom_rate>0:
+                    qty = quantity * product.secondary_uom_rate
+                    useSecondaryUom = True
+                
+                orderline = order._cart_update(product_id=product_id, add_qty=qty)
+        
+                # 补充写入计量数值（其它信息已经通过
+                if useSecondaryUom:
+                    rec = env['sale.order.line'].sudo().browse(orderline['line_id'])
+                    if rec:
+                        rec.write({'secondary_qty': quantity})
+
+            # 添加完毕后重新获取一次
+            order = website.get_cart_order()
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
                 orders.append(order)
@@ -80,6 +97,7 @@ class CartUpdateItem(graphene.Mutation):
     @staticmethod
     def mutate(self, info, website_id, line_id, quantity):
         env = info.context["env"]
+
         # 改为根据参数指定网站
         # website = env['website'].get_current_website()
         websites = env.user.partner_id.website_ids  # 获取所有的站点
@@ -93,8 +111,25 @@ class CartUpdateItem(graphene.Mutation):
                 line = order.order_line.filtered(lambda rec: rec.id == line_id)
                 # Reset Warning Stock Message always before a new update
                 line.warning_stock = ""
-                order._cart_update(product_id=line.product_id.id, line_id=line.id, set_qty=quantity)
 
+                # 根据商品转换计量单位为计费单位
+                product = env['product.product'].browse(line.product_id.id)
+                qty = quantity
+                useSecondaryUom = False
+                if product and product.secondary_uom_enabled and product.secondary_uom_rate>0:
+                    qty = quantity * product.secondary_uom_rate
+                    useSecondaryUom = True
+                
+                orderline = order._cart_update(product_id=line.product_id.id, line_id=line.id, set_qty=qty)
+
+                # 补充写入计量数值（其它信息已经通过
+                if useSecondaryUom:
+                    rec = env['sale.order.line'].sudo().browse(orderline['line_id'])
+                    if rec:
+                        rec.write({'secondary_qty': quantity})
+
+            # 添加完毕后重新获取一次
+            order = website.get_cart_order()
             if order:
                 order.order_line.filtered(lambda l: not l.product_id.active).unlink()
                 orders.append(order)
