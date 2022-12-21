@@ -306,10 +306,11 @@ def get_response2(self, httprequest, result, explicit_session):
     maxAge=90 * 24 * 60 * 60
     end = time.gmtime(time.time() + maxAge)
     expires = time.strftime("%a, %d-%b-%Y %T GMT", end)
-    response.headers['Set-Cookie'] = "session_id=" + httprequest.session.sid + "; Expires=" + expires + "; Max-Age=" + str(maxAge) + "; Secure; SameSite=None; HttpOnly; Path=/"
-    response.headers['Authorization'] = httprequest.session.sid
-    response.headers['Access-Control-Expose-Headers'] = 'Authorization'
-    
+    if response.headers:
+        response.headers['Set-Cookie'] = "session_id=" + httprequest.session.sid + "; Expires=" + expires + "; Max-Age=" + str(maxAge) + "; Secure; SameSite=None; HttpOnly; Path=/"
+        response.headers['Authorization'] = httprequest.session.sid
+        response.headers['Access-Control-Expose-Headers'] = 'Authorization'
+        
     return response
 
 Root.get_response = get_response2
