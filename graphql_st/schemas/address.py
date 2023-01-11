@@ -62,6 +62,8 @@ class AddressQuery(graphene.ObjectType):
                 raise GraphQLError(_('Partner does not exist.'))
             
             partner_id = env.user.partner_id.commercial_partner_id.id
+
+            ResPartner = env['res.partner'].with_context(show_address=1).sudo()
             
             # Get all addresses of a specific addressType - delivery or/and shipping
             if filter.get('address_type'):
