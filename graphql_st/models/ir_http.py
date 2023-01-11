@@ -89,11 +89,12 @@ class Http(models.AbstractModel):
 
             lang_codes = [code for code, *_ in Lang.get_available()]
             nearest_lang = not func and cls.get_nearest_lang(Lang._lang_get_code(path[1]))
-            cook_lang = request.httprequest.cookies.get('frontend_lang')
-            if not cook_lang:
-                cook_lang = request.httprequest.headers.get('X-Frontend-Lang')
+
+            cook_lang = request.httprequest.headers.get('X-Frontend-Lang')
             if not cook_lang:
                 cook_lang = request.httprequest.headers.get('x-frontend-lang')
+            if not cook_lang:
+                cook_lang = request.httprequest.cookies.get('frontend_lang')
         
             cook_lang = cook_lang in lang_codes and cook_lang
 
