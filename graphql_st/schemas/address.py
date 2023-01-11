@@ -55,37 +55,33 @@ class AddressQuery(graphene.ObjectType):
     @staticmethod
     def resolve_addresses(self, info, filter):
         env = info.context["env"]
-        ResPartner = env['res.partner'].with_context(show_address=1).sudo()
-        website = env['website'].get_current_website()
-        request.website = website
-        order = website.sale_get_order()
-
-        if not order:
-            raise GraphQLError(_('Shopping cart not found.'))
-
-        # Is public user
-        if not order.partner_id.user_ids or order.partner_id.id == website.user_id.sudo().partner_id.id:
-            partner_id = order.partner_id.id
-        else:
+        user = env.user
+        if user:
+            partner = user.partner_id
+            if not partner:
+                raise GraphQLError(_('Partner does not exist.'))
+            
             partner_id = env.user.partner_id.commercial_partner_id.id
+            
+            # Get all addresses of a specific addressType - delivery or/and shipping
+            if filter.get('address_type'):
+                types = [address_type.value for address_type in filter.get('address_type', [])]
 
-        # Get all addresses of a specific addressType - delivery or/and shipping
-        if filter.get('address_type'):
-            types = [address_type.value for address_type in filter.get('address_type', [])]
+                domain = [
+                    ("id", "child_of", partner_id),
+                    ("type", "in", types),
+                ]
+            # Get all addresses with addressType delivery and invoice
+            else:
+                domain = [
+                    ("id", "child_of", partner_id),
+                    '|', ("type", "in", ['delivery', 'invoice']),
+                    ("id", "=", partner_id),
+                ]
 
-            domain = [
-                ("id", "child_of", partner_id),
-                ("type", "in", types),
-            ]
-        # Get all addresses with addressType delivery and invoice
+            return ResPartner.search(domain, order='id desc')
         else:
-            domain = [
-                ("id", "child_of", partner_id),
-                '|', ("type", "in", ['delivery', 'invoice']),
-                ("id", "=", partner_id),
-            ]
-
-        return ResPartner.search(domain, order='id desc')
+            raise GraphQLError(_('User does not exist.'))
 
 
 class AddAddressInput(graphene.InputObjectType):
