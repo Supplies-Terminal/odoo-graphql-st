@@ -98,12 +98,12 @@ class GraphQLController(http.Controller, GraphQLControllerMixin):
     # The graphql route, for applications.
     # Note csrf=False: you may want to apply extra security
     # (such as origin restrictions) to this route.
-    @http.route("/graphql/st", auth="public", cors="https://webapp2.suppliesterminal.com", csrf=False, website=True)
+    @http.route("/graphql/st", auth="public", cors="https://mob.suppliesterminal.com", csrf=False, website=True)
     def graphql(self, **kwargs):
         self._set_website_context()
         resp = self._handle_graphql_request(schema.graphql_schema)
 
-        # resp.headers['Access-Control-Allow-Origin'] = 'https://webapp2.suppliesterminal.com'
+        # resp.headers['Access-Control-Allow-Origin'] = 'https://mob.suppliesterminal.com'
         # resp.headers['Access-Control-Allow-Methods'] = 'GET, POST'
         resp.headers['Access-Control-Allow-Credentials'] = 'true'
         # cookies = resp.headers.get('Set-Cookie')
