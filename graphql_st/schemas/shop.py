@@ -380,11 +380,27 @@ class CartCheckout(graphene.Mutation):
                 ordersInCheckout = list(filter(lambda rec: rec['order_id'] == order.id, orders))
                 if (len(ordersInCheckout)>0):
                     # 更新order的tag_ids 和 delivery_time 和 notes (ordersInCheckout[0].)
-                    order.write({
-                        'tag_ids': [1],
-                        'note': order.note + ' ' + ordersInCheckout[0].delivery_memo,
-                        'date_order': fields.Datetime.now()
-                        })
+                    deliveryDateTime = ""
+                    if ordersInCheckout[0].delivery_date:
+                        deliveryDateTime = ordersInCheckout[0].delivery_date
+                        if ordersInCheckout[0].delivery_time:
+                            deliveryDateTime = deliveryDateTime + ' ' + ordersInCheckout[0].delivery_time
+                        else:
+                            deliveryDateTime = deliveryDateTime + ' 23:59:59'
+                        _logger.info(deliveryDateTime)  
+                    if deliveryDateTime:
+                        order.write({
+                            'tag_ids': [1],
+                            'note': order.note + ' ' + ordersInCheckout[0].delivery_memo,
+                            'date_order': fields.Datetime.now()
+                            'commitment_date': deliveryDateTime
+                            })
+                    else:
+                        order.write({
+                            'tag_ids': [1],
+                            'note': order.note + ' ' + ordersInCheckout[0].delivery_memo,
+                            'date_order': fields.Datetime.now()
+                            })
 
         newOrders = []
         for website in websites:
