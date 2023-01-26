@@ -382,7 +382,7 @@ class CartCheckout(graphene.Mutation):
                     # 更新order的tag_ids 和 delivery_time 和 notes (ordersInCheckout[0].)
                     deliveryDateTime = ""
                     if ordersInCheckout[0].delivery_date:
-                        deliveryDateTime = ordersInCheckout[0].delivery_date
+                        deliveryDateTime = ordersInCheckout[0].delivery_date.replace("/", "-")
                         if ordersInCheckout[0].delivery_time:
                             deliveryDateTime = deliveryDateTime + ' ' + ordersInCheckout[0].delivery_time
                         else:
