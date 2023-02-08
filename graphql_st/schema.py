@@ -38,7 +38,6 @@ class Mutation(
     wishlist.WishlistMutation,
     shop.ShopMutation,
     payment.PaymentMutation,
-    payment.AdyenPaymentMutation,
     order.OrderMutation,
     preference.PreferenceMutation,
     purchasecard.PurchasecardMutation,

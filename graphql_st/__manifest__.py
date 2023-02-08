@@ -4,7 +4,7 @@
 
 {
     'name': 'ST Api',
-    'version': '15.0.3.0.0',
+    'version': '16.0.3.0.0',
     'summary': 'ST API',
     'description': """ST API Integration""",
     'category': 'Website',
@@ -18,7 +18,6 @@
         'auth_signup',
         'contacts',
         'theme_default',
-        'payment_adyen_og',
         'website',
         'odoo_enhance_st',
     ],
