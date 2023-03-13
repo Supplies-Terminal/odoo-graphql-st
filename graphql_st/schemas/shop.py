@@ -393,13 +393,15 @@ class CartCheckout(graphene.Mutation):
                             'tag_ids': [1],
                             'note': order.note + ' ' + ordersInCheckout[0].delivery_memo,
                             'date_order': fields.Datetime.now(),
+                            'create_date': fields.Datetime.now(),
                             'commitment_date': deliveryDateTime
                             })
                     else:
                         order.write({
                             'tag_ids': [1],
                             'note': order.note + ' ' + ordersInCheckout[0].delivery_memo,
-                            'date_order': fields.Datetime.now()
+                            'date_order': fields.Datetime.now(),
+                            'create_date': fields.Datetime.now()
                             })
 
         newOrders = []
