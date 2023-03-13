@@ -93,7 +93,7 @@ class OrderQuery(graphene.ObjectType):
         domain = [
             # ('message_partner_ids', 'child_of', [partner.commercial_partner_id.id]),
             ('partner_id', '=', partner.id), 
-            ('tag_ids', '!=', [2])
+            ('tag_ids', 'not in', [2])
         ]
 
         # Filter by stages or default to sales and done
