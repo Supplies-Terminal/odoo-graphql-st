@@ -4,6 +4,7 @@
 
 import logging
 import graphene
+from graphql import GraphQLError
 from odoo.addons.graphql_st.schemas.objects import Order, Partner
 from odoo.http import request
 from odoo import fields
@@ -64,12 +65,20 @@ class CartAddItem(graphene.Mutation):
 
                 # 根据商品转换计量单位为计费单位
                 product = env['product.product'].browse(product_id)
+
                 qty = quantity
                 useSecondaryUom = False
                 if product and product.secondary_uom_enabled and product.secondary_uom_rate>0:
                     qty = quantity * product.secondary_uom_rate
                     useSecondaryUom = True
                 
+                if not product.allow_out_of_stock_order:
+                    if qty > product.free_qty:
+                        if env.lang == 'zh_CN':
+                            raise GraphQLError(('库存不足，当前库存为{}').format(product.free_qty))
+                        else:
+                            raise GraphQLError(('Not enough stock. Current stock is {}').format(product.free_qty))
+                    
                 orderline = order._cart_update(product_id=product_id, add_qty=qty)
         
                 # 补充写入计量数值（其它信息已经通过
@@ -119,7 +128,14 @@ class CartUpdateItem(graphene.Mutation):
                 if product and product.secondary_uom_enabled and product.secondary_uom_rate>0:
                     qty = quantity * product.secondary_uom_rate
                     useSecondaryUom = True
-                
+                                      
+                if not product.allow_out_of_stock_order:
+                    if qty > product.free_qty:
+                        if env.lang == 'zh_CN':
+                            raise GraphQLError(('库存不足，当前库存为 {}').format(product.free_qty))
+                        else:
+                            raise GraphQLError(('Not enough stock. Current stock is {}').format(product.free_qty))
+                    
                 orderline = order._cart_update(product_id=line.product_id.id, line_id=line.id, set_qty=qty)
 
                 # 补充写入计量数值（其它信息已经通过
@@ -371,10 +387,6 @@ class CartCheckout(graphene.Mutation):
             request.website = website
             order = website.get_cart_order()
 
-            _logger.info("------order for checkout-----")
-            _logger.info(order)
-            _logger.info(order.date_order)
-            
             # cart非空才checkout
             if order.order_line:
                 ordersInCheckout = list(filter(lambda rec: rec['order_id'] == order.id, orders))
@@ -387,7 +399,6 @@ class CartCheckout(graphene.Mutation):
                             deliveryDateTime = deliveryDateTime + ' ' + ordersInCheckout[0].delivery_time
                         else:
                             deliveryDateTime = deliveryDateTime + ' 23:59:59'
-                        _logger.info(deliveryDateTime)  
                     if deliveryDateTime:
                         order.write({
                             'tag_ids': [1],
