@@ -17,8 +17,7 @@
         'website_sale_delivery',
         'auth_signup',
         'contacts',
-        'theme_default',
-        'payment_adyen_og',
+        'theme_default'
         'website',
         'odoo_enhance_st',
     ],

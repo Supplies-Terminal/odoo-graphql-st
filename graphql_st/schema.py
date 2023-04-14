@@ -8,7 +8,7 @@ from odoo.addons.graphql_base import OdooObjectType
 from odoo.addons.graphql_st.schemas import (
     country, category, product, order, invoice,
     user_profile, sign,
-    address, wishlist, shop, payment, preference, purchasecard, website
+    address, wishlist, shop, preference, purchasecard, website
 )
 
 
@@ -23,7 +23,6 @@ class Query(
     address.AddressQuery,
     wishlist.WishlistQuery,
     shop.ShoppingCartQuery,
-    payment.PaymentQuery,
     preference.PreferenceQuery,
     purchasecard.PurchasecardQuery,
     website.WebsiteQuery,
@@ -37,8 +36,6 @@ class Mutation(
     address.AddressMutation,
     wishlist.WishlistMutation,
     shop.ShopMutation,
-    payment.PaymentMutation,
-    payment.AdyenPaymentMutation,
     order.OrderMutation,
     preference.PreferenceMutation,
     purchasecard.PurchasecardMutation,
