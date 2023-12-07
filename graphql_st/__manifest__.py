@@ -4,7 +4,7 @@
 
 {
     'name': 'ST Api',
-    'version': '16.0.3.0.0',
+    'version': '16.0.3.1.0',
     'summary': 'ST API',
     'description': """ST API Integration""",
     'category': 'Website',
