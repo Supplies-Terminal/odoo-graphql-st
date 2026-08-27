@@ -1,2 +1,2 @@
 graphene
-graphql_server
+graphql-server==3.0.0b7
